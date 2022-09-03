@@ -1,0 +1,41 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message CoinDashInfo {
+    uint32 conf_id = 1;// 此时间配置的ID，用于获取支付项列表
+    uint32 start_at = 2;// 开始时间点，单位秒
+    uint32 end_at = 3;// 结束时间点，单位秒
+    message Goods {
+        uint32 id = 1;// ID 用于购买免费的商品
+        bool is_free = 2;// 是否是免费商品
+        Reward free_rewards = 3;// isFree = true时读取
+        ShopItemConfig shop_item_config = 4;// 支付项，isFree=false时读取
+        bool has_bought = 5;// 是否购买过
+    }
+    repeated Goods goods = 4;// 商品列表,长度为5
+}
+
+message CGetCoinDashInfo {// 获取coindash的配置,此接口合并在CGetInfoBeforeEnterLobby中
+
+}
+
+message SGetCoinDashInfo {
+    CoinDashInfo coin_dash_info = 1;// coinDash，仅将来及现在有该活动时不为null
+    uint32 server_time_seconds = 2;// 服务端时间
+}
+
+message CBuyCoinDashFreeGoods {// 购买coindash的免费商品
+    uint32 goods_id = 1;// 商品ID
+}
+
+message SBuyCoinDashFreeGoods {
+    Reward reward = 1;
+    CoinDashInfo coin_dash_info = 2;
+    uint32 server_time_seconds = 3;
+    UserProfile user_profile = 4;
+}

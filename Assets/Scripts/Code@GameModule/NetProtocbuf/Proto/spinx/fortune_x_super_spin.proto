@@ -1,0 +1,21 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+// superspin 系统
+// item中增加道具： superspin的机台游戏 
+// wild活动对客户端透明，服务端修改游戏中的words
+// 送卡活动对客户端透明，服务端修改游戏中的card_reward_extra
+
+message CGetSuperSpinPaymentInfo {// 获取superspin系统的支付项信息
+
+}
+
+message SGetSuperSpinPaymentInfo {
+	bool can_buy = 1;// 是否可以买
+	ShopItemConfig shop_item = 2;// 支付项信息，仅can_buy = true时读取该字段
+}

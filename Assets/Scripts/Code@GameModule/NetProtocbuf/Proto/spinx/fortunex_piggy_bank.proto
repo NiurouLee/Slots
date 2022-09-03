@@ -1,0 +1,41 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+
+message PiggyBankInfo {
+  bool enable = 1;              // 是否可用
+  bool can_break = 2;           // 是否可以砸开
+  uint64 current_coins = 3;     // 当前累积的金币
+  uint64 max_coins = 4;         // 最多累积金币数量
+  uint64 first_bonus = 5;       // 首次额外奖励(0表示非首次)
+  uint64 limit_user_level = 6;  // 小猪解锁所需的用户等级
+}
+
+// message PiggyBankPayItemConfig {
+//     string product_id = 1;                          //
+//     商品在GooglePlay/AppStore内的id uint32 payment_id = 2; //
+//     对应的payment_id(payment配置) string product_type = 3; // 商品类型 string
+//     shop_type = 4;                           // 计费点触发类型 string name =
+//     5;                                // 名字 string description = 6; // 描述
+//     string image = 7;                               // 商品图片
+//     float price = 8;                                // 美元价格
+//     repeated Item item_list = 9;                    // 奖励信息
+// }
+
+// 客户端拉去piggyBank信息
+message CGetPiggyBank {}
+// 服务器返回piggyBank信息
+message SGetPiggyBank {
+  PiggyBankInfo pb_info = 1;
+  ShopItemConfig pb_pay_item = 2;
+}
+
+// 每次spin累积内容
+message PiggyBankResult {
+  uint64 current = 1;  // 当前累积数量
+  uint64 max = 2;      // 容量
+  uint64 delta = 3;    // 本次变化值
+}

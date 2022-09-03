@@ -1,0 +1,192 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace="DragonU3DSDK.Network.API.Protocol";
+option go_package="protocols";
+
+import "common.proto";
+
+message CLogin {
+    string device_id = 1;
+    string checksum = 2;
+    string refresh_token = 3;
+    string facebook_token = 4;
+    string email = 5;
+    string password = 6;
+    string old_device_id = 7;
+    string adjust_id = 8;
+    Platform platform = 16;
+    string invite_code = 17;
+    string idfa = 18;
+    string idfv = 19;
+    string mac = 20;
+    string android_id = 21;
+    string gps_adid = 22;
+    string firebase_instance_id = 23;
+    string group_id = 24;
+
+    string apple_identity_token = 25;
+    string apple_authorization_code = 26;
+}
+
+message SLogin {
+    uint64 player_id = 1;
+    string token = 2;
+    string refresh_token = 3;
+    string secret = 4;
+    uint64 timestamp = 5;
+    bool has_unread_messages = 6;
+    map<string, string> abtests = 7;
+    ClientConfig config = 8;
+
+    enum ServerStatus {
+        NORMAL = 0;
+        PREPARE_MAINTAINING = 1;
+        MAINTAINING = 2;
+    }
+    ServerStatus server_status = 9;
+
+    // TODO
+    message Region {
+        string country_code = 1;
+        string country_name = 2;
+        string region_code = 3;
+        string region_name = 4;
+        string city = 5;
+        string time_zone = 6;
+    }
+
+    Region region = 10;
+    string facebook_id = 11;
+    string facebook_name = 12;
+    string facebook_email = 13;
+    uint64 expire = 14;
+    bool has_legacy = 15;
+    string group_id = 16;
+    string apple_account_id = 17;
+}
+
+message CBindFacebook {
+    string facebook_token = 1;
+}
+message SBindFacebook {
+    string facebook_id = 1;
+    string facebook_name = 2;
+    string facebook_email = 3;
+}
+
+message CUnbindFacebook {
+    string device_id = 1;
+}
+message SUnbindFacebook {
+}
+
+message CBindEmail {
+    string email = 1;
+    string password = 2;
+}
+message SBindEmail {
+}
+
+message CUnbindEmail {
+    string device_id = 1;
+}
+message SUnbindEmail {
+}
+
+message CBindApple {
+    string apple_identity_token = 1;
+    string apple_authorization_code = 2;
+}
+message SBindApple {
+    string apple_account_id = 17;
+}
+
+message CUnbindApple {
+    string device_id = 1;
+}
+message SUnbindApple {
+}
+
+message CInviteFinished {
+    string invite_code = 1;
+}
+message SInviteFinished {
+}
+
+message CListInvited {
+}
+
+message SListInvited {
+    message Invited {
+        uint64 player_id = 1;
+        string facebook_id = 2;
+        uint32 finished = 3;
+    }
+    repeated Invited invited = 1;
+}
+
+message CBindFirebase {
+    string firebase_instance_id = 1;
+}
+message SBindFirebase {
+}
+
+message PlayerProperties {
+    string player_id = 1; // 玩家ID
+    uint32 player_type = 2; // 0) 游客玩家：GUEST；1) 绑定 fb：FACEBOOK；2) 注册游戏：EMAIL
+    string app = 3; // 应用名称
+    string country = 4; // 国家地区
+    string platform = 5; // 应用平台
+    uint64 installed_at = 6; // 玩家建号日期
+    string client_version = 7; // 应用版本
+    string res_version = 8; // 资源版本
+    string device_id = 9; // 设备ID
+    string device_memory = 10; // 设备容量
+    string device_model = 11; // 设备机型
+    string device_type = 12; // 设备类型(pad/phone)
+    string device_os_version = 13; // 系统版本号，例：7.1.3
+    string device_language = 14; // 语言
+    string network_type = 15; // 网络类型：2G,edge,3G,4G,LTE,wifi
+    string email = 16; // 注册邮箱
+    string facebook_email = 17; // FB邮箱
+    string facebook_name = 18; // FB昵称
+    string facebook_id = 19; // FB账号ID
+    string source_network = 20; // 渠道广告平台
+    string source_campaign = 21; // 渠道广告活动
+    string source_adgroup = 22; // 渠道广告组
+    string source_creative = 23; // 渠道广告创意组
+    uint64 first_pay_date = 24; // 首次付费时间
+    uint64 last_pay_date = 25; // 最近付费时间
+    uint64 iap_total = 26; // 总消费次数
+    uint64 iap_count = 27; // 总消费金额
+    string most_pay_product_id = 28; // 最多消费商品ID
+    string recent_pay_product_id = 29; // 最近消费商品ID
+    uint64 last_interstitial_ads_date = 30; // 最近观看插屏广告时间
+    string last_interstitial_ads_placement = 31; // 最近观看插屏广告位置
+    uint64 interstitial_ads_count = 32; // 总观看插屏广告次数
+    string most_interstitial_ads_placement = 33; // 最多观看插屏广告位置
+    uint64 last_reward_video_date = 34; // 最近观看激励视频时间
+    string last_reward_video_placement = 35; // 最近观看激励视频位置
+    uint64 reward_video_count = 36; // 总观看激励视频次数
+    string most_reward_video_placement = 37; // 最多观看激励视频位置
+    uint64 last_login_date = 38; // 最近登录日期
+    uint64 login_time = 39; // 登录总时长(s)
+    uint64 login_count = 40; // 登录总次数
+    uint64 login_days = 41; // 登录总天数
+    uint64 last_level_date = 42; // 最近关卡日期
+    uint64 max_level_id = 43; // 最大关卡ID
+}
+
+message CGetPlayerProperties {
+}
+message SGetPlayerProperties {
+    PlayerProperties player_properties = 2;
+}
+
+// ABTest trick（获取玩家参与过的实验分组名称）
+message CGetTestGroups {
+    string group_id = 1;
+}
+message SGetTestGroups {
+    repeated string group_ids = 1;
+}

@@ -1,0 +1,9 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+enum SpinXErrorCode {
+  SPIN_X_BET_PLACEHOLDER_ERROR = 0;      //
+  SPIN_X_BET_LOCKED_ERROR = 1000;        //
+  SPIN_X_NOT_ENOUGH_COINS_ERROR = 1001;  //
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message DailyBonus {
+    uint64 timestamp_left = 1;               // 可领剩余时间
+    uint32 week_step = 2;                    // 周累计步数
+    repeated Reward week_rewards = 3;        // 本周奖励
+    uint32 month_step = 4;                   // 月累计步数
+    uint32 month_stage = 5;                  // 月累计阶段
+    repeated MonthReward month_rewards = 6;  // 月奖励
+    uint32 week_reward_index = 7;            // 周奖励index
+    uint32 for_ad = 8;                       // 给前端展示广告额外百分比
+    string desc = 9;                         // 给前端展示的文案
+}
+
+message MonthReward {
+    Reward reward = 1;
+    uint32 step = 2;
+}
+
+message CGetDailyBonus {}
+
+message SGetDailyBonus {
+    DailyBonus daily_bonus = 1;
+}
+
+message CCollectDailyBonus {
+    bool is_month = 1;  // 请求领取月阶段奖励
+    bool is_ad_watched = 2; // 观看过广告
+    uint64 place_id = 3; // 新加的placeId
+}
+
+message SCollectDailyBonus {
+    DailyBonus daily_bonus = 1;
+    UserProfile user_profile = 2;  // 用户数据
+    repeated Reward rewards = 3; // 奖励
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+
+message BuffLevelUpBurst {
+    uint64 timestamp_left = 1;
+}
+
+message BuffSuperWheel {
+    uint64 timestamp_left = 1;
+}
+
+message BuffDoubleExp {
+    uint64 timestamp_left = 1;
+}
+
+message BuffSeasonQuestStarBoost {
+    uint64 timestamp_left = 1;
+}
+
+message BuffNewbieQuestBoost {
+    uint64 timestamp_left = 1;
+}
+
+message CGetBuff {}
+
+message SGetBuff {
+    repeated AnyStruct buffs = 1;  // buff
+}

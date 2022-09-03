@@ -1,0 +1,1499 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "spinx_game.proto";
+
+/*================= WinsOPlenty ====================================*/
+message WinsOPlentyGameResultExtraInfo {
+    message WildTitle {
+        repeated uint32 last_title = 1; // 上一轮每一列小辣椒数量
+        repeated uint32 current_title = 2; // 本轮每一列小辣椒数量
+        repeated bool active_title = 3; // 本轮每一列是否是sticky wild模式
+    }
+    map<uint64, WildTitle> wild_title_map = 1; // 小辣椒信息
+
+    message WheelBonusInfo {
+        bool chosen = 1; // 轮盘是否选过
+        int32 choice = 2; // 轮盘结果
+        uint64 bet = 3; // 进入轮盘的下注
+        int32 jackpot_id = 4; // jackpot_id
+        int32 free_spin_count = 5; // free spi count
+        bool settled = 6; // wheel bonus是否settle
+    }
+    WheelBonusInfo wheel_bonus_info = 2; // 轮盘信息
+}
+
+/*================= PiggyBank ====================================*/
+/*
+    result结构中fsm可能状态:
+        normal: 普通带jackpot
+        freeSpin: 普通freespin带jackpot
+        superFreeSpin: map中触发的freespin
+        bonusGame: map中轮盘游戏
+*/
+message PiggyBankGameResultExtraInfo {
+    message Pot {
+        uint32 progress = 1; // 当前等级进度
+        uint32 level = 2; // 当前等级
+        uint32 amount = 3; // 当前进度总量
+        uint64 avg_bet = 4; // 平均bet
+    }
+    Pot pot = 1; // 进度条
+
+    message Buff {
+        enum Type {
+            ADD_COINS = 0;
+            ADD_FREE_SPIN = 1;
+            ADD_ROW = 2;
+            ADD_COLUMN = 3;
+            ADD_SYMBOLS = 4;
+            ADD_EXTRA_BONUS = 5;
+        }
+        Type type = 1; // buff类型
+        int32 value = 2; // buff大小值
+        bool acquired = 3; // 已获取
+    }
+
+    message Wheel {
+        bool chosen = 1; // 轮盘是否选过
+        int32 choice = 2; // 轮盘结果
+        uint64 bet = 3; // 进入轮盘的下注
+        Buff.Type wheel_buff_type = 4;
+        repeated uint64 wheel_win_rate = 5;
+    }
+    Wheel wheel = 2; // 轮盘信息
+
+    repeated Buff buffs = 3; // buff信息
+
+    message FreeSpinInfo {
+        uint32 left = 1;
+        uint32 total = 2;
+        uint64 bet = 3;
+        bool is_super_free = 4;
+        uint64 win_rate_this_turn = 5;
+        uint64 win_rate_all_turns = 6;
+        uint32 pot_level = 7;
+        uint64 win_rate = 8;
+        uint64 total_win = 9;
+        bool is_over = 10;
+        repeated Panel panels = 11;
+    }
+    FreeSpinInfo super_free_spin_info = 4; // super free game 信息
+
+    int64 normal_piggy_safe_rate = 5; // 每个猪的win rate
+
+    int64 super_win_rate = 6; // super free win rate
+}
+
+/*================= PiggyBank2 ====================================*/
+/*
+    result结构中fsm可能状态:
+        normal: 普通带jackpot
+        freeSpin: 普通freespin带jackpot
+        superFreeSpin: map中触发的freespin
+        bonusGame: map中轮盘游戏
+*/
+message PiggyBank2GameResultExtraInfo {
+    message Pot {
+        uint32 progress = 1; // 当前等级进度
+        uint32 level = 2; // 当前等级
+        uint32 amount = 3; // 当前进度总量
+        uint64 avg_bet = 4; // 平均bet
+    }
+    Pot pot = 1; // 进度条
+
+    message Buff {
+        enum Type {
+            ADD_COINS = 0;
+            ADD_FREE_SPIN = 1;
+            ADD_ROW = 2;
+            ADD_COLUMN = 3;
+            ADD_SYMBOLS = 4;
+            ADD_EXTRA_BONUS = 5;
+        }
+        Type type = 1; // buff类型
+        int32 value = 2; // buff大小值
+        bool acquired = 3; // 已获取
+    }
+
+    message Wheel {
+        bool chosen = 1; // 轮盘是否选过
+        int32 choice = 2; // 轮盘结果
+        uint64 bet = 3; // 进入轮盘的下注
+        Buff.Type wheel_buff_type = 4;
+        repeated uint64 wheel_win_rate = 5;
+    }
+    Wheel wheel = 2; // 轮盘信息
+
+    repeated Buff buffs = 3; // buff信息
+
+    message FreeSpinInfo {
+        uint32 left = 1;
+        uint32 total = 2;
+        uint64 bet = 3;
+        bool is_super_free = 4;
+        uint64 win_rate_this_turn = 5;
+        uint64 win_rate_all_turns = 6;
+        uint32 pot_level = 7;
+        uint64 win_rate = 8;
+        uint64 total_win = 9;
+        bool is_over = 10;
+    }
+    FreeSpinInfo super_free_spin_info = 4; // super free game 信息
+
+    int64 normal_piggy_safe_rate = 5; // 每个猪的win rate
+
+    int64 super_win_rate = 6; // super free win rate
+}
+
+/*================= BingoClover ====================================*/
+message BingoCloverGameResultExtraInfo {
+    message BingoItem {
+        int32 position_id = 1; // 位置id
+        uint64 win_rate = 2; // 赢钱倍率
+        uint32 jackpot_id = 3; // jackpot id
+        bool is_centre = 4; // 是否是正中间
+        bool is_cross = 5; // 是否是cross飞行物
+        bool is_block = 6; // 是否是block飞行物
+        repeated int32 other_position_ids = 7; // 飞行物影响的其他位置
+        bool is_chosen = 8; // 作为中心wheel是否完成bonus
+        uint64 jackpot_pay = 9; // jackpot pay
+    }
+
+    message BingoLine {
+        int32 line_id = 1; // bingo成功线id， 1～9: 从上往下,从左往右; 10:左上右下; 11:右上左下
+        repeated BingoItem items = 2; // bingo数据队列
+        uint64 total_win_rate = 3; // line 总奖励心奖励
+    }
+
+    message BingoHotLine {
+        int32 line_id = 1; // bingo成功线id， 1～9: 从上往下,从左往右; 10:左上右下; 11:右上左下
+        repeated int32 position_ids = 2; // bingo数据队列
+    }
+
+    message BingoData {
+        repeated BingoItem items = 1; // bingo数据length为25;
+        repeated BingoLine lines = 2; // bingo成功线
+        repeated int32 hot_spots = 3; // 绝胜点
+
+        bool is_cross = 4; // 是否cross类型的bingo
+        bool is_block = 5; // 是否block类型的bingo
+
+        uint64 total_win = 6; // bingo 总奖励
+        repeated BingoItem start_increase = 7; // bingo新局刚开始的items
+        repeated BingoItem random_increase = 8; // bing每局随机加入的items
+        repeated BingoItem panel_increase = 9; // bingo每局panel上增加的items
+
+        bool is_over = 10; // 用于super bingo, 表示FreeSpin已经结束。 注意这里不是指触发bingo
+
+        uint64 bet = 11;
+        int32 current_bonus_line = 12;
+        repeated BingoHotLine hot_lines = 13;
+    }
+
+    map<uint64, BingoData> bingo_map = 1; // bingo数据表，key为bet
+
+    message Pot {
+        uint32 level = 1; // 地图上的进度等级
+    }
+    Pot pot = 2;
+
+    BingoData super_bingo = 3; // 进入地图feature后的bingo数据
+
+    message Wheel {
+        bool chosen = 1; // 轮盘是否选择
+        int32 choice = 2; // 轮盘结果
+        uint64 bet = 3; // 轮盘基础bet
+        bool is_super_free = 4; // 是否是superFree
+
+        message Item {
+            int32 jackpot_id = 1;
+            uint32 win_rate = 2;
+        }
+        repeated Item items = 5;
+    }
+
+    Wheel wheel = 4;
+}
+
+/*================= BingoClover2 ====================================*/
+message BingoClover2GameResultExtraInfo {
+    message BingoItem {
+        int32 position_id = 1; // 位置id
+        uint64 win_rate = 2; // 赢钱倍率
+        uint32 jackpot_id = 3; // jackpot id
+        bool is_centre = 4; // 是否是正中间
+        bool is_cross = 5; // 是否是cross飞行物
+        bool is_block = 6; // 是否是block飞行物
+        repeated int32 other_position_ids = 7; // 飞行物影响的其他位置
+        bool is_chosen = 8; // 作为中心wheel是否完成bonus
+        uint64 jackpot_pay = 9; // jackpot pay
+    }
+
+    message BingoLine {
+        int32 line_id = 1; // bingo成功线id， 1～9: 从上往下,从左往右; 10:左上右下; 11:右上左下
+        repeated BingoItem items = 2; // bingo数据队列
+        uint64 total_win_rate = 3; // line 总奖励心奖励
+    }
+
+    message BingoHotLine {
+        int32 line_id = 1; // bingo成功线id， 1～9: 从上往下,从左往右; 10:左上右下; 11:右上左下
+        repeated int32 position_ids = 2; // bingo数据队列
+    }
+
+    message BingoData {
+        repeated BingoItem items = 1; // bingo数据length为25;
+        repeated BingoLine lines = 2; // bingo成功线
+        repeated int32 hot_spots = 3; // 绝胜点
+
+        bool is_cross = 4; // 是否cross类型的bingo
+        bool is_block = 5; // 是否block类型的bingo
+
+        uint64 total_win = 6; // bingo 总奖励
+        repeated BingoItem start_increase = 7; // bingo新局刚开始的items
+        repeated BingoItem random_increase = 8; // bing每局随机加入的items
+        repeated BingoItem panel_increase = 9; // bingo每局panel上增加的items
+
+        bool is_over = 10; // 用于super bingo, 表示FreeSpin已经结束。 注意这里不是指触发bingo
+
+        uint64 bet = 11;
+        int32 current_bonus_line = 12;
+        repeated BingoHotLine hot_lines = 13;
+    }
+
+    map<uint64, BingoData> bingo_map = 1; // bingo数据表，key为bet
+
+    message Pot {
+        uint32 level = 1; // 地图上的进度等级
+    }
+    Pot pot = 2;
+
+    BingoData super_bingo = 3; // 进入地图feature后的bingo数据
+
+    message Wheel {
+        bool chosen = 1; // 轮盘是否选择
+        int32 choice = 2; // 轮盘结果
+        uint64 bet = 3; // 轮盘基础bet
+        bool is_super_free = 4; // 是否是superFree
+
+        message Item {
+            int32 jackpot_id = 1;
+            uint32 win_rate = 2;
+        }
+        repeated Item items = 5;
+    }
+
+    Wheel wheel = 4;
+}
+
+/*================= Buffalo ====================================*/
+message BuffaloGoldGameResultExtraInfo {
+    int32 buffalo_count = 1;
+    int32 multiplier = 2;
+    int32 buffalo_level = 3;
+    int32 buffalo_left_to_upgrade = 4;
+    int32 buffalo_count_old = 5;
+    int32 buffalo_level_old = 6;
+    int32 buffalo_left_to_upgrade_old = 7;
+
+    message ReelPosition {
+        int32 col = 1;
+        int32 index = 2;
+    }
+    repeated ReelPosition substitutes = 8;
+}
+
+/*================= ColossalPigs ================*/
+message ColossalPigsGameResultExtraInfo {
+    bool finished = 1; // 结算结束
+    uint64 win = 2;    // 结算总赢钱
+    uint32 attempts_counter = 3; // 当前结算到几个图标
+    uint32 attempts_amount = 4;  // 总共需要结算几个图标
+    uint32 current_item_id = 5; // 当前结算到的item id
+
+    // 结算图标的结构
+    message Item {
+        uint32 id = 1; //坐标(9x1)
+        bool selected = 2; // 已经选择
+        uint64 win = 3; // 赢钱
+        uint32 symbol_id = 4; // 图标id
+        bool finished = 5; // 当前item已经结算完成
+        uint32 multiplier = 6; // 翻倍的玩法的倍数
+        bool started = 7; // 当前item游戏已经开始
+    }
+
+    repeated Item items = 6; // 结算进度
+    repeated Position wild_replace_positions = 7; // 第二个模式wild替换的数组
+    uint64 jackpotWin = 8;
+}
+
+/*================= ColossalPigs2 ================*/
+message ColossalPigs2GameResultExtraInfo {
+    bool finished = 1; // 结算结束
+    uint64 win = 2;    // 结算总赢钱
+    uint32 attempts_counter = 3; // 当前结算到几个图标
+    uint32 attempts_amount = 4;  // 总共需要结算几个图标
+    uint32 current_item_id = 5; // 当前结算到的item id
+
+    // 结算图标的结构
+    message Item {
+        uint32 id = 1; //坐标(9x1)
+        bool selected = 2; // 已经选择
+        uint64 win = 3; // 赢钱
+        uint32 symbol_id = 4; // 图标id
+        bool finished = 5; // 当前item已经结算完成
+        uint32 multiplier = 6; // 翻倍的玩法的倍数
+        bool started = 7; // 当前item游戏已经开始
+    }
+
+    repeated Item items = 6; // 结算进度
+    repeated Position wild_replace_positions = 7; // 第二个模式wild替换的数组
+    uint64 jackpotWin = 8;
+}
+
+/*================= GoldMine ================*/
+message GoldMineGameResultExtraInfo {
+    message Adventure {
+        uint32 step_old = 1; // 上次地图地点
+        uint32 number_rolled = 2; // 骰子结果
+        uint32 step = 3; // 本次地图地点
+        bool rolled = 4; // 骰子已用
+        bool step_done = 5; // 本次走图结算完毕
+        uint64 step_win = 6; // 本次走图目的地总赢钱奖励，注意不是win rate
+        uint32 step_plus = 10; // 本次走图目的地次数奖励
+
+        uint64 jackpot_win = 7; // jackpot赢钱
+
+        uint64 total_win = 8; // 总赢钱
+        bool is_over = 9; // 地图玩法结束
+
+        uint64 panel_win = 11; // 初始panel赢钱
+        uint64 letter_win = 12; // 初始字母赢钱
+
+        repeated Panel triggering_panels = 13; // 触发此状态时的panels
+    }
+    Adventure adventure = 1; //地图数据
+    message Collection {
+        repeated uint32 last = 1; // 上一轮
+        repeated uint32 add = 2; // 增量
+        repeated uint32 now = 3; // 本轮
+    }
+    Collection collection = 2;  // 字母收集
+    uint32 luck_count = 3; // freeSpin 马蹄铁数量
+    uint32 luck_count_old = 4; // freeSpin 马蹄铁上次数量
+}
+
+/*================= GoldMine2 ================*/
+message GoldMine2GameResultExtraInfo {
+    message Adventure {
+        uint32 step_old = 1; // 上次地图地点
+        uint32 number_rolled = 2; // 骰子结果
+        uint32 step = 3; // 本次地图地点
+        bool rolled = 4; // 骰子已用
+        bool step_done = 5; // 本次走图结算完毕
+        uint64 step_win = 6; // 本次走图目的地总赢钱奖励，注意不是win rate
+        uint32 step_plus = 10; // 本次走图目的地次数奖励
+
+        uint64 jackpot_win = 7; // jackpot赢钱
+
+        uint64 total_win = 8; // 总赢钱
+        bool is_over = 9; // 地图玩法结束
+
+        uint64 panel_win = 11; // 初始panel赢钱
+        uint64 letter_win = 12; // 初始字母赢钱
+
+        repeated Panel triggering_panels = 13; // 触发此状态时的panels
+    }
+    Adventure adventure = 1; //地图数据
+    message Collection {
+        repeated uint32 last = 1; // 上一轮
+        repeated uint32 add = 2; // 增量
+        repeated uint32 now = 3; // 本轮
+    }
+    Collection collection = 2;  // 字母收集
+    uint32 luck_count = 3; // freeSpin 马蹄铁数量
+    uint32 luck_count_old = 4; // freeSpin 马蹄铁上次数量
+}
+
+
+/*================= LockItLinkDiamondMine ================*/
+message LockItLinkDiamondGameResultExtraInfo {
+    map<uint32, int32> drag_reel_position_map = 1; // key: col 0-4, value: 上下偏移; drag wild
+    message LinkRegion {
+        repeated uint32 connected_position_ids = 1;
+    }
+    message  LinkJackpot {
+        uint32 jackpot_id = 1;
+        uint64 jackpot_pay = 2;
+    }
+    message LinkItem {
+        uint32 position_id = 1; // 位置
+        uint32 symbol_id = 2; // 现实图标
+        uint64 win_rate = 3; // 赢钱倍率
+    }
+    message LinkData {
+        repeated LinkItem items = 1;  // 0 - 14
+        repeated LinkRegion regions = 2; // 联通域
+        repeated LinkJackpot jackpots = 3; // 初始jackpots
+    }
+    LinkData link_data = 2; // link data
+}
+
+/*================= PharaohTreasure ================*/
+message PharaohTreasureGameResultExtraInfo {
+    message JackpotWord {
+        uint32 jackpot_id = 1; // jackpotId
+        repeated bool state = 2; // 最新字母收集情况, 例: 如果GRAND收集了G,A,D, state为[true, false, true, false, true]
+        uint32 count = 3; // 这一次spin中奖本单词的次数，多数情况是0或1，少数情况大于1（这一次spin让mini收集了2次!）。
+    }
+    repeated JackpotWord jackpot_words = 1; // jackpot word情况: GRAND, MAJOR, MINOR, MINI
+    repeated bool free_game_type = 2; // 当前freeSpin游戏的类型， 按照绿红紫顺序。 如果当前是绿紫feature，free_game_type为[true, false, true]
+    message FeatureState {
+        bool activated = 1; // 激活
+        bool exaggerated = 2; // 变大
+    }
+    repeated FeatureState feature_states = 3; // 当前三个魔法罐子的激活状态， 按照绿红紫顺序。
+    map<uint32, int32> green_reel_position_map = 4; // 当前绿色feature拉wild信息 key: col 0-4, value: 上下偏移; drag wild
+}
+
+/*======================== MoneyLink ===========================*/
+message MoneyLinkGameResultExtraInfo {
+    repeated uint32 door_position_ids = 1; // sticky doors
+    repeated uint32 last_door_position_ids = 3; // last sticky doors
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpot_id = 4; // jackpotId
+            uint64 jackpot_pay = 5; // jackpot倍率
+        }
+        repeated Item items = 1;
+        uint32 full_win_rate = 2; // grandJackpot winRate, 没中是0
+    }
+
+    LinkData link_data = 2; // link数据
+}
+
+//*======================== LionGold ============================*/
+message LionGoldGameResultExtraInfo {
+    message LockData {
+        message Item {
+            uint32 x = 1; // 位置x
+            uint32 y = 2; // 位置y
+            uint32 colour = 3; // 颜色， 0无，1红色，2绿色
+        }
+        message ItemDiff {
+            repeated Item items = 1;
+        }
+        repeated Item items = 1; // 框的位置
+        ItemDiff start_diff = 2; // 开始触发的框
+        ItemDiff panel_diff = 3; // panel龙头触发的框
+        repeated ItemDiff feature_diffs = 4; // feature促发的龙头
+        bool is_over = 5; // 此次返回之后，item数据作废，在下一把重新开始
+        bool is_trigger = 6; // 此次是龙头结算
+        repeated Item triggering_items = 7; // 龙头结算事先变成的wild的items
+    }
+    map<uint64, LockData> lock_state_map = 1; // stick wild的位置表， key是bet
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpot_id = 4; // jackpotId
+            uint64 jackpot_pay = 5; // jackpot倍率
+        }
+        repeated Item items = 1; // link数据
+        uint64 grand_jackpot = 2; // grandJackpot的win rate，没中是0
+        repeated Item dragon_triggering_items = 3; // 来自龙头结算中变绿的items
+    }
+    LinkData link_data = 2;
+}
+
+//*======================== RisingFortune ============================*/
+message RisingFortuneGameResultExtraInfo {
+    // uint64 bet = 1; // 进入feature的bet，可能前段用不到
+    uint32 pick_jackpot_id = 2; // pick玩法的结果
+    bool picked = 3; // pick玩法开始， picked = false说明当前有pick玩法
+    // uint64 pick_pre_win = 4; // 进入pick这次的panelWin, 可能前端用不到
+
+    bool chosen = 5; // 2选1， bonus请求如果json，param字段都没填就是 选link，否则选freeSpin
+    //uint64 choose_pre_win = 6; // 进入2选1的panelWin， 可能前端用不到
+    uint64 free_game_win_rate = 7; // 触发2选1，的金币总钱
+
+    // repeated Panel triggering_panels = 8; // 触发pick或2选1的triggering panel， 可能前端用不到
+
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+            uint64 win_rate = 3; // 赢钱倍率
+        }
+        repeated Item items = 1;
+        uint64 full_win_rate = 2;
+    }
+
+    LinkData link_data = 9; // link数据源
+
+    uint32 green_multiplier = 10; // link中绿色的翻倍
+    uint64 free_game_coin_total_win_rate = 11; // freeGame的金币积累
+    bool exaggerated = 12; // 碗变不变大
+}
+
+//*======================== FireLinkByTheBay ============================*/
+message FireLinkByTheBayGameResultExtraInfo {
+    uint32 pepper_count = 1; // 辣椒数量； 看情况需不需要添加old_pepper_count
+    uint32 link_height = 2; //link玩法解锁那高度 普通一开始是4，最高8。每一级提升需要的辣椒数分别是 8, 12, 16, 20; 看情况需不需要添加old_link_height；
+
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpotId = 4; // jackpot id
+            uint64 jackpot_pay = 5; // jackpot pay
+        }
+        repeated Item items = 1;
+        map<uint32, uint32> reel_mapping = 2; // linkReels轴映射
+    }
+    LinkData link_data = 3; // link数据，positionId从0到39
+}
+
+//*=========================== CrazyTrain ===============================*/
+message CrazyTrainGameResultExtraInfo {
+    repeated uint32 free_spin_counts = 1; // 每列火车的freeSpinCount
+    repeated uint32 golden_position_ids = 2; // 金色火车(stickyWild)的位置，stickyWild
+
+    uint64 bet = 3; // 进入bonus的bet
+    uint64 panel_win = 4; // 进入bonus的panel_win;
+    bool chosen = 5; // bonus选择完了吗
+    uint64 map_base = 6; // bonus基础赢钱
+    bool chosen_again = 7; // bonus再次确认
+    uint32 map_multiplier = 9; // bonus倍率
+    uint32 map_step = 10; // 进度槽step
+    uint32 map_step_total = 11; // 进度槽总step
+}
+
+//*=========================== LittleImp ===============================*/
+message LittleImpGameResultExtraInfo {
+    message BonusGame {
+        repeated Panel triggering_panels = 1; // 触发panels
+        repeated Panel mini_panels = 2; // 小slot
+        uint32 mini_progress = 3; // bonus进度  mini_progress >= mini_panels.length时 bonus完毕
+        repeated uint32 mini_game_ids = 4; //小slot编号， x2,x3,x5三种mini slot的id分别是1 2 3
+        uint64 bet = 5; // 进入bonus的bet
+        uint64 pre_win = 6; // 进入bonus的panel win
+        uint64 total_win = 7; // bonus总赢钱
+    }
+
+    BonusGame bonus_game = 1; // bonus数据
+
+    message FreeGame {
+        uint32 starting_panel_count = 1; // 开启freeGame时的起始panel数
+        uint32 current_panel_count = 2; // 当前panel数
+        uint32 last_bomb_count = 3; // 上一次spin炸弹数量
+        uint32 bomb_count = 4; // 当前炸弹数量
+        uint32 bomb_left_next_level = 5; // 到下一级还缺少的炸弹数量
+        uint32 level = 6; // freeGame等级。 5, 10是superFree, avgBet 20是megaFree, avgBet，到20级settle后会变成0级
+    }
+    FreeGame free_game = 2; // freeSpin数据
+}
+//*=========================== LittleImp2 ===============================*/
+message LittleImp2GameResultExtraInfo {
+    message BonusGame {
+        repeated Panel triggering_panels = 1; // 触发panels
+        repeated Panel mini_panels = 2; // 小slot
+        uint32 mini_progress = 3; // bonus进度  mini_progress >= mini_panels.length时 bonus完毕
+        repeated uint32 mini_game_ids = 4; //小slot编号， x2,x3,x5三种mini slot的id分别是1 2 3
+        uint64 bet = 5; // 进入bonus的bet
+        uint64 pre_win = 6; // 进入bonus的panel win
+        uint64 total_win = 7; // bonus总赢钱
+    }
+
+    BonusGame bonus_game = 1; // bonus数据
+
+    message FreeGame {
+        uint32 starting_panel_count = 1; // 开启freeGame时的起始panel数
+        uint32 current_panel_count = 2; // 当前panel数
+        uint32 last_bomb_count = 3; // 上一次spin炸弹数量
+        uint32 bomb_count = 4; // 当前炸弹数量
+        uint32 bomb_to_next_level = 5; // 到下一级所需要的炸弹数量
+        uint32 level = 6; // freeGame等级。 5, 10是superFree, avgBet 20是megaFree, avgBet，到20级settle后会变成0级
+        uint32 next_panel_count = 7;    // 下一个等级的面板数量
+    }
+    FreeGame free_game = 2; // freeSpin数据
+}
+//*=========================== GorillaEatBanana ===============================*/
+message GorillaEatBananaGameResultExtraInfo {
+
+    message Banana {
+        uint32 position_id = 1;
+        uint64 win_rate = 2;
+        uint32 jackpot_id = 3;
+        uint64 jackpot_pay = 4;
+        bool is_coin = 5;
+        bool eaten = 6;
+    }
+
+    repeated Banana bananas = 1;
+    repeated uint32 last_eaten_position_ids = 2;
+    uint32 level = 3;
+}
+
+//*=========================== Aztec ===============================*/
+// 注意这个机器左右都能算赢钱线；
+// 从base进入转盘的时候；scatter的winLine freeSpinCount是0但是bonusGameId>0
+// free里面reTrigger的scatter的winLine freeSpinCount>0
+message AztecGameResultExtraInfo {
+    message Wheel {
+        bool to_bonus_wheel = 1; // 去bonus转盘
+        uint32 rapid_count = 2; // rapid数量
+        uint32 free_spin_count = 3; // freeSpin数
+        bool is_over = 4; // 直接结束
+        uint64 win_rate = 5; // win rate奖励； 当rapid = 3 4
+        uint32 jackpot_id = 6; // jackpotId; 当rapid = 5 6 7 8 9
+        uint64 jackpot_pay = 7; // jackpot_pay; 当rapid = 5 6 7 8 9, 选中才有值，没中是0
+    }
+
+    uint64 bet = 1; // 进入bonus时的bet
+    bool is_chosen = 2; // 进入bonus后，是否选完白天黑夜
+    bool is_night = 3; // 是不是黑夜
+    uint32 normal_wheel_index = 4; // 普通转盘停留index
+    repeated Wheel normal_wheel = 5; // 普通转盘信息
+    uint32 bonus_wheel_index = 6; // bonus转盘停留index
+    repeated uint32 bonus_wheel = 7; // bonus转盘信息，倍率
+    bool is_bonus_wheel = 8; // 当前是否是bonus转盘
+    bool is_playing = 9; // 是否进入bonus
+    bool is_over = 10; // bonus是否可以结算；调用settle api
+    uint64 total_win = 11; // bonus总赢钱，包括进来时候的panel线奖
+    repeated Panel triggering_panels = 12; // 触发bonus时的panels
+}
+
+//*=========================== Rhino ===============================*/
+message RhinoGameResultExtraInfo {
+    message DiskItem {
+        uint64 win_rate = 1; // 非jackpot,非freeSpin的item
+        uint32 jackpot_id = 2; // jackpotId
+        uint64 jackpot_pay = 3; // jackpotPay 中了的时候才是最新值;否则是旧值或0
+        bool is_free_spin = 4; // 是否是freeSpin的item
+    }
+    message DiskData {
+        repeated DiskItem items = 1; // items.length = 6
+        repeated DiskItem free_items = 2; // items.length = 6
+    }
+    map<uint64, DiskData> disk_data_map = 1; // 每个bet一个数据
+}
+
+//*=========================== Zeus ==================================*/
+message ZeusGameResultExtraInfo {
+    message Position {
+        uint32 x = 1;
+        uint32 y = 2;
+    }
+    repeated Position sticky_zeus_positions = 1;
+    repeated Position sticky_wild_positions = 2;
+    repeated Column wild_reels = 3;
+    repeated Panel final_panels = 4;
+}
+
+//*=========================== DragonRising ==================================*/
+message DragonRisingGameResultExtraInfo {
+    // free 相关
+    uint32 level = 1; // free等级；4, 8级 是mage；16级 是super
+    bool is_mega = 2; // 4, 8级 是mage
+    bool is_super = 3; // 16级 是super
+
+    message Position {
+        uint32 x = 1;
+        uint32 y = 2;
+    }
+
+    repeated Position random_wilds = 4; // mega的随机wild
+    repeated Position sticky_wilds = 5; // super的sticky wild
+
+    // link 相关
+    // 和其他link游戏的区别是：这个游戏的linkData分 左中右三部分返回；gameResult.panels也是左中右给了3个
+    // 注意：随着右边的buff加高度，中间的linkData不会改变positionId的规则；中间未解锁高度不会转出link图标，21个位置的positionId是不会变的；
+    // 例如：右边buff数值rows_more是0时， 中间positionId为 0到2 7到9 14到16 的地方不会转出link图标
+    // 右边buff数值rows_more是1时， 中间positionId为 0到1 7到8 14到15 的地方不会转出link图标
+    // 右边buff数值rows_more是3时， 中间所有地方可能转出link图标
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpotId = 4; // jackpot id
+            uint64 jackpot_pay = 5; // jackpot pay
+        }
+        repeated Item items = 1;
+        map<uint32, uint32> reel_mapping = 2; // linkReels轴映射
+    }
+
+    LinkData link_data_left = 6; // link数据，左列， positionId 从上到下 0到2
+    LinkData link_data_right = 7; // link数据，右列, positionId 从上到下 0到2
+    LinkData link_data_center = 8; // link数据，中间, positionId 3列 7行， 从上到下 0到6， 从左到右 0到6 7到13 14到20
+
+    uint32 rows_more_old = 9; // 上一轮的 右边加楼层buff
+    uint32 all_win_multiplier_old = 10; // 上一轮的 左边加倍数buff
+    uint32 rows_more = 11; // 右边加楼层buff
+    uint32 all_win_multiplier = 12; // 左边加倍数buff
+}
+
+//*============================== LuckyRabbits ================================*/
+//
+// 本游戏base玩法有两条特殊赢钱线：
+// 1 特殊wild的winLine，用winLine.bonusId=101 帮助区分；
+// 2 scatter触发转盘的winLine, 用winLine.bonusId=2001 帮助区分；
+//
+// 两种特殊bonus玩法pick和wheel，最后都需要settle结算；两种玩法已经保证不会同时触发；
+// pick玩法注意需要通过bonus api的json字段传一个数字字符串指定pick的位置；
+message LuckyRabbitsGameResultExtraInfo {
+
+    message WheelItem {
+        uint32 jackpot_id = 1; // jackpot id
+        uint64 win_rate = 2; // win rate; 前端展示的时候要乘以bet除以100
+        uint32  multiplier = 3; // 倍数边缘
+    }
+
+    // pick 玩法
+    message PickItem {
+        bool revealed = 1; // 是否显示，被翻开
+        bool removed = 2; // 是否被幸运的remove卡排除，被排除的item同时revealed=true
+        uint32 jackpot_id = 3; // jackpot id
+        bool is_lucky = 4; // 是否是幸运remove卡
+        uint32 removed_jackpot_id = 5; // remove卡移走的jackpotId
+    }
+    bool is_picking = 1; // 当前是否在pick玩法中
+    bool is_picking_over = 2; // 当前pick玩法是否结束，可以settle； settle之后is_picking=false
+    repeated PickItem pick_items = 3; // pick的所有item，item位置来自所在数组中的下标，玩家输入决定选哪一个
+    uint32 pick_jackpot_id = 4; // pick结果的jackpotId
+
+    // wheel 玩法
+    bool is_rolling = 5; // 当前是否在wheel玩法中
+    bool is_rolling_over = 6; // 当前wheel玩法是否结束，可以settle； settle之后is_rolling=false
+    repeated WheelItem wheel_items = 7; // wheel的转盘item
+    uint32 wheel_end_index = 8; // wheel玩法最后停留的位置，此时is_rolling_over=true
+    uint32 wheel_nudge_index = 9; // wheel玩法nudge的位置，客户端展示从wheel_nudge_index nudge到 wheel_end_index；如果不nudge两者相等
+
+    // 两种bonus玩法通用字段
+    uint64 bet = 10; // 进入bonus时的bet
+    repeated Panel triggering_panels = 11; // 触发bonus的panels
+    uint64 total_win = 12; // bonus的最后赢钱
+
+    uint32 prize_level = 13; // 奖池等级： 0～4
+    uint64 wheel_win = 14; // wheel win
+    uint64 pick_win = 15; // pick win
+}
+
+//*============================== LuckyRabbits2 ================================*/
+//
+// 本游戏base玩法有两条特殊赢钱线：
+// 1 特殊wild的winLine，用winLine.bonusId=101 帮助区分；
+// 2 scatter触发转盘的winLine, 用winLine.bonusId=2001 帮助区分；
+//
+// 两种特殊bonus玩法pick和wheel，最后都需要settle结算；两种玩法已经保证不会同时触发；
+// pick玩法注意需要通过bonus api的json字段传一个数字字符串指定pick的位置；
+message LuckyRabbits2GameResultExtraInfo {
+
+    message WheelItem {
+        uint32 jackpot_id = 1; // jackpot id
+        uint64 win_rate = 2; // win rate; 前端展示的时候要乘以bet除以100
+        uint32  multiplier = 3; // 倍数边缘
+    }
+
+    // pick 玩法
+    message PickItem {
+        bool revealed = 1; // 是否显示，被翻开
+        bool removed = 2; // 是否被幸运的remove卡排除，被排除的item同时revealed=true
+        uint32 jackpot_id = 3; // jackpot id
+        bool is_lucky = 4; // 是否是幸运remove卡
+        uint32 removed_jackpot_id = 5; // remove卡移走的jackpotId
+    }
+    bool is_picking = 1; // 当前是否在pick玩法中
+    bool is_picking_over = 2; // 当前pick玩法是否结束，可以settle； settle之后is_picking=false
+    repeated PickItem pick_items = 3; // pick的所有item，item位置来自所在数组中的下标，玩家输入决定选哪一个
+    uint32 pick_jackpot_id = 4; // pick结果的jackpotId
+
+    // wheel 玩法
+    bool is_rolling = 5; // 当前是否在wheel玩法中
+    bool is_rolling_over = 6; // 当前wheel玩法是否结束，可以settle； settle之后is_rolling=false
+    repeated WheelItem wheel_items = 7; // wheel的转盘item
+    uint32 wheel_end_index = 8; // wheel玩法最后停留的位置，此时is_rolling_over=true
+    uint32 wheel_nudge_index = 9; // wheel玩法nudge的位置，客户端展示从wheel_nudge_index nudge到 wheel_end_index；如果不nudge两者相等
+
+    // 两种bonus玩法通用字段
+    uint64 bet = 10; // 进入bonus时的bet
+    repeated Panel triggering_panels = 11; // 触发bonus的panels
+    uint64 total_win = 12; // bonus的最后赢钱
+
+    uint32 prize_level = 13; // 奖池等级： 0～4
+    uint64 wheel_win = 14; // wheel win
+    uint64 pick_win = 15; // pick win
+}
+
+//*============================== Amalgamation（link合并玩法） ================================*/
+// free的时候根据extra.free_spin_count多少（10 15 25）决定用哪个卷轴free3reels free4Reels free5Reels
+// link分两部分，前部分和之前link一样；后一部分让所有shape.isOver=true,每次spin让一个可以spin的shape确定最终值，panel和shape.symbolId都反应了这次spin的结果，
+// 由于shape的卷轴：ShapeLinkReels，包含了所有的shape，每次shape的spin的panel只有一个column.symbols里有值, 具体怎么返回再商量
+
+message AmalgamationGameResultExtraInfo {
+
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+        }
+        repeated Item items = 1;
+        map<uint32, uint32> reel_mapping = 2; // linkReels轴映射
+    }
+
+    message ShapeItem {
+        uint32 position_id = 1; // 位置
+        uint32 symbol_id = 2; // 现实图标
+        uint64 win_rate = 3; // 赢钱倍率
+        uint32 jackpotId = 4; // jackpot id
+        uint64 jackpot_pay = 5; // jackpot pay
+        uint32 width = 6; // 宽
+        uint32 height = 7; // 长
+        bool is_over = 8; // 这个shape转完
+    }
+
+    bool to_choose = 1; // 是否正在bonus 2选一
+    uint32 free_spin_count = 2; // 2选一的时候 free显示几次
+    uint32 re_spin_count = 3; // 2选一的时候 link显示几次
+    repeated Panel triggering_panels = 4; // 进入2选一时候的 触发 panels
+
+    map<uint32, int32> drag_reel_position_map = 5; // key: col 0-4, value: 上下偏移; drag wild // 用于free玩法的drag featrue
+
+    bool link_from_choose = 6; // 这个link是从2选一进的，还是从base，free中进的；两种情况数值用了不同的卷轴（SelectLinkReels和NormalLinkReels）
+    LinkData link_data = 7; // link数据，和以前一样的link数据，里面的symbolId要么是13要么是0
+    repeated ShapeItem shapes = 8; // shape数据，在link数据基础上合并成的大矩形，转之前是14到24，如果这个
+    bool link_need_initialized = 9; // choose link的第一下是类似普通的spin，必转出6个猪; 卷轴名SelectInitialLinkReels
+    bool is_shape_settling = 10; // shape是否正在结算
+    bool no_re_spin_needed = 11; // 满贯进link标志
+}
+
+//*============================== EyeOfMedusa ================================*/
+// 这关有两个复杂点：
+// 1： feature很多，主要看后面的字段描述 belle feature, bag feature, wheel, map free
+// 2： free的总类很多，主要依靠freeSpinInfo.freeSpinId进行区分
+//    freeSpinId == 0, 表示普通free，靠wheel转出来
+//    freeSpinId == 1, 表示belle free，靠wheel转出来
+//    freeSpinId == 2, 表示map中的，classic free, avgBet
+//    freeSpinId == 3, 表示map中的，random wild类型free, avgBet
+//    freeSpinId == 4, 表示map中的，moving wild类型free, avgBet
+//    freeSpinId == 5, 表示map中的，sticky wild类型free, avgBet
+//    freeSpinId == 6, 表示map中的，2-10 multiplier wild类型free, avgBet
+//    freeSpinId == 7, 表示map中的，5-50 multiplier wild类型free, avgBet
+//    freeSpinId == 8, 表示map中的，10-100 multiplier wild类型free, avgBet
+// 特殊赢钱线：
+// 1 scatter触发wheel bonusGameId = 1001
+// 2 s1触发map，bonusGameId = 2002
+// 3 belle feature中 gems的特殊赢钱线 bonsGameId = 3001
+// 4 bag特殊赢钱线，bonusGameId = 4001
+// 多状态转化同时触发情况：
+// base可以同时触发map和wheel，此时先完成map，再进行wheel。
+// 会在map的settle api返回: gameResult.bonusGame > 0 和 extra.wheel.started = true;
+message EyeOfMedusaGameResultExtraInfo {
+    // map related
+    uint32 level = 1; // map 等级 从0开始，每次base触发加1，最后一关settle后变成0
+    uint32 point = 2; // map 的累计槽进度,
+    uint32 max_point = 3; // map 的累计槽最大值， 注意point累积触发map free时，point可能超过max_point
+
+    message Position {
+        uint32 x = 1;
+        uint32 y = 2;
+    }
+    message RepeatedPositions {
+        repeated Position items = 1;
+    }
+    repeated RepeatedPositions map_random_wilds = 4; // map 玩法的随机wild位置, index是0，1，2对应第几个panel
+    repeated uint32 map_multipliers = 5; // map 玩法倍数
+
+    message PositionId {
+        uint32 x = 1;
+        uint32 y = 2;
+        uint32 id = 3; // symbol id
+    }
+    message RepeatedPositionIds {
+        repeated PositionId items = 1;
+    }
+    repeated RepeatedPositionIds map_sticky_wilds = 6; // map 玩法的sticky wild位置, index是 0，1，2对应第几个panel
+    message MovingPositionId {
+        bool moving = 1; // 当前位置是否不是新转出来的(可能用词略有歧义，主要区分这一把转出来的和之前转出来的，之前转出来spin之前会moving)；新转出来的sticky moving=false
+        uint32 old_x = 2; // 老位置， 注意有可能 老位置==新位置 and moving == true
+        uint32 old_y = 3; // 老位置  当 moving == false时， 老位置 必定等于 新位置
+        uint32 x = 4; // 新位置
+        uint32 y = 5; // 新位置
+        uint32 id = 6;
+    }
+    message RepeatedMovingPositionIds {
+        repeated MovingPositionId items = 1;
+    }
+    repeated RepeatedMovingPositionIds map_moving_wilds = 7; // map 玩法的moving wild位置, index是0，1，2对应第几个panel
+
+    // belle feature related
+    bool is_feature = 8; // 这把有没有触发belle feature， 注意下面这个3个参数base和belle free中复用
+    map<uint32, int32> drag_reel_position_map = 9; // 触发feature的时候第一列可能发生drag；这里用一个map是为了和其他任何列都能drag的游戏统一
+    repeated PositionId random_positioned_gems = 10; // 粗发feature的时候 生成的随机gems
+
+    // bag feature related
+    uint32 bag_level = 11; // bag等级：0，1，2，最大是2； 用于中间展示
+    repeated uint32 bag_level_history = 12;
+    // bag_level_history类似一些游戏的old_level,old_points, 但这里数个数组，因为可能一次转出多个bag;
+    // 正常没有bag转出时它是空
+    // 例1： 如果转出1个bag，而且他中了， 转出前bag_level是1
+    // 那么返回: bag_level = 0; bag_level_history = [1]
+    // 例2： 如果转出1个bag，但他没中， 转出前bag_level是2
+    // 那么返回: bag_level = 2; bag_level_history = [2]
+    // 例3： 如果转出2个bag，转出前bag_level是1，第一个bag没中让bag_level加1，第二个bag中了
+    // 那么返回: bag_level = 0; bqg_level_history = [1, 2]
+    // 例4：如果转出4个bag，转出前bag_level是1，第一个bag没中， 第二个bag没中， 第三个bag中了， 第四个bag没中
+    // 那么返回: bag_level = 1; bag_level_history = [1, 2，2，0]
+
+    // normal free related
+    repeated Position normal_free_random_wilds = 13; // 普通free（非belle）的random wild位置
+
+    // wheel related
+    message Wheel {
+        uint64 bet = 1; // 进入wheel的bet
+        uint64 total_win = 2; // wheel的总赢钱；类似freeSpinInfo.freeSpinTotalWin; 包括触发的线赢甚至同时触发map时，之前map的总赢
+        repeated Panel triggering_panels = 3; // 触发的panel
+        bool started = 4; // 是否开始
+        bool to_settle = 5; // 是否结算完毕，用于判断是否该调用settle api
+        uint32 index = 6; // wheel转出的结果的序号
+        message Item {
+            uint32 jackpot_id = 1; // 非0表示这是jackpot
+            bool is_feature_free = 2; // true表示这是触发belle free
+            bool is_normal_free = 3; // true表示这是触发普通free
+            bool is_bag_bonus = 4; // true表示这是触发Bag
+            uint64 win_rate = 5; // 如果是bag，这里是bag的winRate
+            uint64 jackpot_pay = 6; // 如果是jackpot，这里是jackpot的winRate
+        }
+        repeated Item items = 7; // wheel里每一个item的信息
+    }
+    Wheel wheel = 14; // wheel数据
+    uint64 map_free_pre_win = 15; // map free pre win
+    uint64 bag_win = 16; // bagWin
+}
+
+// *====================================== GoldRushTrain ========================================= *//
+//
+// train feature主要火车数据在trains中，每次bonus_process让一个火车跑出结果； 如果有金火车，它会在trains中的最后一个
+// 当train feature所有train.over=true后要结算，发settle_api
+// 注意如果一个火车都没有（只有数字奖和星星），也会进入train feature bonus, 并直接发settle_api结算
+//
+// 如果同时触发train feature和2选1， train feature的settle api返回之后会进入2选1；
+// 2选1的参数和11011一样，靠json字段有无，有json进入train feature
+// 2选一的train feature进入之后会用bonus_process api来得到触发panel,再进行正常train feature；（之前王剑商量确定这么处理）
+//
+// 注意isTrain=true && is_panel_ready=false时断线重连，返回的gameResult.panels是chooseTriggeringPanels(可以商量怎么处理)
+// isTrain=true && is_panel_ready=true时断线重连，返回的gameResult.panels是trainTriggeringPanels
+//
+// free中会触发进入reSpin状态（之前王剑商量确定这么处理），会reSpin一次或两次；
+//
+// 几种特殊赢钱线：（具体id是否超过1000可以商量）
+// scatter触发2选一的winLine.bonusGameId = 101
+// 触发train的winLine.bonusGameId = 201;（base中会有，2选一train feature第一下会有）
+//
+message GoldRushTrainGameResultExtraInfo {
+    // choose related
+    bool chosen = 1; // 是否正在bonus 2选一; chosen == false时需要2选一
+    uint32 free_spin_count = 2; // 2选一的时候 free显示几次
+    // free related
+    message StickyColumn {
+        uint32 x = 1; // x轴
+        repeated uint32 symbols = 2; // symbol ids
+    }
+    repeated StickyColumn sticky_columns = 3; // free中触发reSpin的sticky columns
+    // train feature related
+    bool is_train = 4; // 是否在train feature中
+    bool is_chosen_train = 5; // train feature是否是2选一触发的
+    bool is_panel_ready = 6; // 如果是is_chosen_train==true, 它表示第一下触发panel是否已经转出来了
+    uint64 win_line_pay = 7; // 火车赢钱线的奖励累积，是winRate； 如果有金火车加倍它会是加倍之前的值；它包换数字奖和非金火车奖
+    message Train {
+        bool over = 1; // train结果是否跑完
+        uint32 id = 2; // train的SymbolId, 靠它分辨是颜色的火车
+        uint32 x = 3; // panel上的位置x
+        uint32 y = 4; // panel上的位置y
+
+        message Result {
+            uint64 win_rate = 1;
+            uint32 jackpot_id = 2;
+            uint64 jackpot_pay = 3;
+        }
+        repeated Result results = 5; // 火车箱结果
+        uint64 total_win_rate = 6; // 火车总winRate
+    }
+    repeated Train trains = 8; // 火车数据
+
+    repeated Panel choose_triggering_panels = 9; // 2选1的触发panels
+    repeated Panel train_triggering_panels = 10; // train feature bonus的触发panels
+}
+
+// *====================================== ChilliFrenzy ========================================= *//
+/*
+    注意事项:
+    1 这个游戏的link不是通过单轴生成的，前端之前可能认为所有link玩法都是单轴转出来的,这一次是3*5转出来的
+    2 link数据会变化；比如从带jackpot的辣椒id变成单红的辣椒id
+    3 map玩法要积累26次才生效, bonus api根据当前游戏状态发选择位置参数
+    4 可能出现同时触发map和link，先玩map，再玩link
+    5 特殊赢钱线,如果base一次产生的辣椒大于6个但没有触发link，会有一条bonusGameId=101的额外赢钱线
+
+    其他的看下面各字段解释就懂了
+ */
+message ChilliFrenzyGameResultExtraInfo {
+
+    message MapBonus  {
+        uint32 map_count = 1; // 收集
+        uint32 level = 2; // map等级 26级进入map玩法
+
+        message Multiplier {
+            uint32 multiplier = 1; // 分值
+            bool removed = 2; // 状态，是否移除
+        }
+        repeated Multiplier multipliers = 3; // 分值数据
+
+        message Letter {
+            uint32 index = 1; // 字母 0-25
+            bool chosen = 2; // 状态，是否被选中
+            bool removed = 3; // 状态， 是否被移除
+        }
+        repeated Letter letters = 4; // 字母数据
+
+        uint32 holden_letter = 5; // 一上来就被选中的那个字母
+        uint32 current_letter = 6; // 当前被开奖的字母
+        uint32 current_multiplier = 7; // 当前被开奖的字母的分值
+        uint32 fake_multiplier = 8; // 当前被开奖的字母的假分值； 如果没有这把不忽悠则等于0
+        uint32 round = 9; // 第几轮； 0-6；第0轮只选holden_letter;1-5轮正常加offer；最后一轮6进入final2选一
+        uint32 num_of_letter_to_select = 10; // 1-5轮一开始要选几个字母
+        bool is_select = 11; // 当前轮是否刚进入select状态
+        bool is_offer = 12; // 当前轮是否进入offer状态
+        repeated uint32 offers = 13; // 历史所有offer，最后一个就是当前轮的offer
+        bool is_final = 14; // 是否是final轮，也可用round==6判断
+
+        uint32 final_multiplier = 15; // 最终结果的分值，来自offer的时候从了 或者 final二选一
+        uint64 start_prize = 16; // 开始奖金， start_prize*final_multiplier等于totalWin
+
+        // bonus玩法通用数据
+        uint64 bet = 17;
+        uint64 pre_win = 18;
+        uint64 total_win = 19;
+        repeated Panel triggering_panels = 20;
+        bool is_started = 21;
+        bool to_settle = 22;
+
+        uint32 map_max_count = 23; // 收集max
+        bool level_up = 24; // 此把map升级
+    }
+    MapBonus map_bonus = 1; // map数据
+
+    bool link_triggered_by6_pepper_and_green = 2; // link 进入两种方式中的一种
+    bool link_triggered_by3_yellow_pepper = 3; //  link 进入两种方式中的一种， 如果 link_triggered_by6_pepper_and_green也是true， 说明是先进了小link又进大link
+    uint32 link_active_panel_count = 4; // link中，当前解锁的panel数， link_triggered_by6_pepper_and_green时为1；
+
+    uint32 link_pepper_count = 5; // 辣椒数
+    uint64 link_pepper_win_rate = 6; // 辣酱奖励winRate
+    uint32 link_pepper_jackpot_id = 7; // 辣酱奖励如果是最高档这里就不等于0
+    uint64 link_pepper_jackpot_pay = 8; // 辣酱奖励是最高档时的winRate
+
+    message LinkData {
+        message LinkItem {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 显示图标
+            uint32 jackpot_id = 3; // jackpot id
+        }
+        repeated LinkItem items = 1;  // 0 - 14
+    }
+    repeated LinkData link_data_list = 9; // 这回的linkData共有4个放在数组里，两种玩法共用第一个
+
+    message JackpotTitle {
+        uint32 jackpot_id = 1; // 这个title表示的类型；id对应Jackpots表
+        uint32 old_num = 2; // 上一轮辣椒数量
+        uint32 num = 3; // 当前辣椒数; 注意我这里大于等于3的时候没有回0，如果num=n说明本轮已经中了（n/3）个这种jackpot。
+        // 当num=3*n,n为整数时， 前端动画逻辑要先显示3个然后消成0个
+        repeated uint64 pay_list = 4; // jackpot奖励， 长度等于（num/3）
+    }
+    repeated JackpotTitle jackpot_title_list = 10; // 上面辣椒jackpot的状态
+}
+
+// *====================================== Chameleon ========================================= *//
+/*
+    特殊赢钱线：
+    1 base下ReSpin满列会返回赢钱线，bonusID=101
+    2 base收集的特殊赢钱线，bonusId=201, extra中有positioned_credits，看这个特殊赢钱线还有没必要
+
+    商店系统：
+    商店购买要调用新的special api，参数类似bonus_process api, 告诉要购买的位置
+    注意商店一个Tab9个物品买完后，触发最后一次最终奖励也要调用special api
+
+    不同freeSpinId意义：
+    0 普通free
+    1 shopNormalFree
+    2 shopSuperFree
+    3 shopFinalSuper1
+    4 shopFinalSuper2
+    5 shopFinalSuper3
+    6 shopFinalSuper4
+ */
+message ChameleonGameResultExtraInfo {
+    message StickyItem {
+        uint32 x = 1; // 位置x
+        uint32 y = 2; // 位置y
+        uint32 id = 3; // symbol id
+        uint64 win_rate = 4; // winRate奖励
+        uint32 jackpot_id = 5;  // jackpot id 不是jackpot取0
+        uint64 jackpot_pay = 6; // jackpot 奖励的winRate
+        uint32 multiplier = 7; // 转盘倍数，正常是1
+    }
+    message Position {
+        uint32 x = 1;
+        uint32 y = 2;
+    }
+    message NormalData {
+        repeated StickyItem sticky_items = 1; // 每个sticky item信息
+        repeated Position sticky_anticipation = 2; // 差一个sticky item的时候会出anti
+        repeated uint32 sticky_column_re_spin_counts = 3; // 每一列的reSpin的数字
+        repeated Panel panels = 4; // panel
+        repeated uint32 full_indexes = 5; // 因为满变成0的列
+        repeated uint32 failed_indexes = 6; // 自然减到0的列
+    }
+    map<uint64, NormalData> normal_data_map = 1; // base状态下reSpin-link Sticky信息; 是个map,key是bet，每个不同的bet存一份数据
+    message PositionedCredit {
+        uint32 x = 1;
+        uint32 y = 2;
+        uint64 credit = 3; // 这个位置的金币数
+    }
+    repeated PositionedCredit positioned_credits = 2; // base状态本次spin的金币获取信息
+    message FreeData {
+        repeated StickyItem sticky_items = 1; // 每个sticky item信息
+        repeated Position sticky_anticipation = 2; // 差一个sticky item的时候会出anti
+        repeated uint32 multipliers = 3; // 列满之后，这一列的wheel转盘结果
+        bool is_super = 4; // 这个free是否是super free，super free的转盘multiplier会乘以2
+        repeated uint32 new_full_indexes = 5; // 刚满的列
+    }
+    FreeData free_data = 3; // free的状态下reSpin-link Sticky信息
+    message Shop {
+        uint64 credits = 1; // 累积分数
+        message ShopTable{
+            bool available = 1; // 这一tab是否解锁
+            message ShopItem {
+                bool open = 1; // 是否已经购买
+                uint64 price = 2; // 消耗多少credit购买
+                uint64 win_rate = 3; // 奖励的winRate
+                bool is_free = 4; // 奖励的是否是free
+                bool is_super = 5; // 奖励的free是不是super free
+                uint64 total_win = 6; // 实际领了多少钱
+            }
+            repeated ShopItem items = 2; // 这一tab的所有购买项
+            bool super_triggered = 3; // 这一tab的最终奖励是否领取
+            bool super_ready = 4; // 这一tab的最终奖励是否准备好1
+        }
+        repeated ShopTable tables = 2; // shop每一个tab的信息
+    }
+    Shop shop = 4; // 商店信息
+    message AvgBet {
+        uint64 spin_count = 1;
+        uint64 total_bet = 2;
+    }
+    AvgBet avg_bet = 5; // average bet统计，策划需求终身制，不会重置， total_bet/spin_count，用于计算各种shop玩法的bet
+}
+
+// *====================================== Pig ========================================= *//
+/*
+    这一关的reSpin有多个panel，有可能一个panel结束了另一个还能完，所以两个panel的逻辑要分开，reSpinInfo中存的是两个panel merge考虑后的数据
+
+    特殊赢钱线：
+    1 base中触发reSpin会有bonusId=1001的赢钱线
+    2 map开锁时base中会有收集的赢钱线bonusId=1002
+
+    卷轴对应说明：
+    reels是base
+    reels1 reels2 reels3 reels12 reels13 reels23 reels123 对应各种触发的reSpin
+    MapFree1Reels MapFree2Reels MapFree3Reels MapFree4Reels MapFree5Reels 对应各大节点map玩法
+*/
+message PigGameResultExtraInfo {
+    message MapBonus {
+        uint32 level = 1; // 等级
+        uint32 count = 2; // 当前等级进度累积
+        uint32 max_count = 3; // 当前等级进度最大值
+        repeated uint64 total_win_history = 4; // 每级获奖历史 注意freeGame节点这里是也记录了, 0级total_win_history[0]的纪录永远是0
+        repeated uint32 multipliers = 5; // mapFree中3个panel的multiplier数值
+
+        // bonus玩法通用数据
+        uint64 bet = 6;
+        uint64 pre_win = 7;
+        uint64 total_win = 8;
+        repeated Panel triggering_panels = 9;
+        bool is_started = 10;
+        bool to_settle = 11;
+    }
+    MapBonus map_bonus = 1; // map bonus数据
+
+    repeated bool re_spin_type = 3; // reSpin的类型 0，1，2位置对应从左到右三种颜色
+    uint32 re_spin_panel_count = 4; // reSpin中 panel数量， 1或2
+    repeated uint32 re_spin_counts = 5; // reSpin中 每个panel的剩余reSpin次数
+    message PositionedWinRates {
+        message PositionedWinRate {
+            uint32 x = 1;
+            uint32 y = 2;
+            uint64 win_rate = 3;
+        }
+        repeated PositionedWinRate list = 1;
+    }
+    repeated PositionedWinRates re_spin_random_boost_win_rate_list = 6; // reSpin中某个feature会使每一次spin在每个panel的宝石随机位置加winRate
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 显示图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpot_id = 4; // jackpotId
+            uint64 jackpot_pay = 5; // jackpot倍率
+        }
+        repeated Item items = 1; // link items
+        uint64 full_win_rate = 2; // grandJackpot winRate, 没中是0
+        map<uint32, uint32> reel_mapping = 3; // linkReels轴映射
+    }
+    repeated LinkData link_data_list = 7; // 多个panel的link_data
+    repeated uint32 re_spin_type_show_level = 8; // 0,1,2,3
+    bool link_calculated = 9; // link
+}
+
+/*================= 11301: CatInBoots ====================================*/
+message CatInBoots2GameResultExtraInfo {
+    repeated uint32 door_position_ids = 1; // sticky doors
+    repeated uint32 last_door_position_ids = 2; // last sticky doors
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpot_id = 4; // jackpotId
+            uint64 jackpot_pay = 5; // jackpot倍率
+        }
+        repeated Item items = 1;
+        uint32 full_win_rate = 2; // grandJackpot winRate, 没中是0
+    }
+
+    LinkData link_data = 3; // link数据
+    bool is_map_feature = 4;   // 是否是map
+
+    enum RewardType {
+        UNKNOWN_REWARD = 0;
+        COIN = 1;   // 金币奖励
+        FREE_GAME = 2;  // 免费游戏
+        RESPIN = 3; // re spin
+    }
+
+    message RoleGridData {
+        RewardType reward_type = 1; // 奖励类型
+        uint32 reward_value = 2;    // 奖励相关的数值
+        uint64 avg_bet = 3; // 翻开的时候的avg bet
+        bool opened = 4;    // 格子是否开启
+        uint32 price = 5;   // 格子价格
+    }
+    message RoleData {
+        uint32 role_id = 1; // 角色id
+        repeated RoleGridData grids = 2;    // 格子信息，按下标存，0～8
+        bool unlocked = 3;  // 是否已解锁
+        uint32 super_free_spin_count = 4;   // superFree的次数
+        repeated uint32 super_free_pattern = 5;
+    }
+
+    uint32 collect_items = 5;   // 当前剩余代币
+    repeated RoleData roles = 6;    // 角色列表，按下标存，0～3
+
+    message AvgBetData {
+        uint32 spin_count = 1;  // spin次数
+        uint64 avg_bet = 2; // 当前的平均下注
+        uint64 total_bet = 3;
+    }
+    AvgBetData avg_bet = 7; // 平均下注信息
+    map<uint32, uint32> attach_items = 8;   // 附带的角标，key为格子id，1～15，value为item数量
+
+    message SuperFreeInfo {
+        uint32 freeSpinId = 1;
+        uint32 freeSpinCount = 2;
+    }
+    SuperFreeInfo cache_super_free_info = 9;    // 缓存的superFree信息
+
+    bool all_opened = 10;  // 是否所有的格子都开过了
+}
+message CatInBoots2BonusGameRequest {
+    uint32 roleId = 1;  // 要升级的角色id
+    uint32 choose = 2;  // 玩家选择的索引，从0开始
+}
+
+/*=========================== Phoenix ====================================*/
+message PhoenixGameResultExtraInfo {
+    uint32 old_level = 1; // feature中的上次等级
+    uint32 level = 2; // feature中的这次等级
+    uint32 jackpot_id = 3; // feature中的jackpotId， 没中是0
+    uint64 jackpot_pay = 4; // feature中的jackpotPay
+    uint32 old_wild_count = 5; // feature中的wild数量累积（上一次）
+    uint32 wild_count = 6; // feature中的wild数量累积
+    WheelBonus wheel_bonus = 7; // bonus状态相关数据
+    message WheelBonus {
+        uint32 index = 1; // 转盘结果，
+        uint32 free_spin_count = 2; // 结果对应的freeSpin次数
+        uint64 bet = 3;  // bonus通用参数
+        uint64 pre_win = 4; // bonus通用参数
+        uint64 total_win = 5; // bonus通用参数
+        repeated Panel triggering_panels = 6; // bonus通用参数
+        bool is_started = 7; // // bonus通用参数： 是否要进入wheel
+        bool to_settle = 8; // // bonus通用参数： 进入wheel后是否可以settle
+    }
+    uint32 show_type = 8; // 表现参数 0 无 1 蓝凤凰 2 红凤凰
+    repeated uint32 show_columns = 9; // 表现参数 出炸裂特效的列
+    bool show_super = 10; // 表现参数 是否是纵非，否则只横飞
+}
+
+
+/*=========================== SolarDisc ====================================*/
+// 有可能normal和free这里的gongData要分开，才好恢复从free退出到normal触发变形后的样子。最后就复用，要恢复就恢复到变形前的样子。
+message SolarDiscGameResultExtraInfo {
+    message GongData {
+        Position position = 1; // 锣出现的位置, 这个位置会变wild
+        uint32 symbol_id = 2;  // 锣影响的symbolId， 特殊：如果没有能影响的空位这里会是0，下面长就为空
+        repeated Position positions = 3; // 受锣影响变wild的位置； 上面的[position] ++ 这里的 positions = 所有要变wild的位子
+    }
+    repeated GongData gong_data_list = 1; // 这一次spin的锣数据
+}
+
+/*=========================== Firecracker ====================================*/
+message FirecrackerGameResultExtraInfo {
+    repeated uint32 trigger_wild_indexes = 1; // 触发变全wild列，实现解锁的列
+    repeated uint32 other_wild_indexes = 2; // 解锁后连锁触发全wild的列
+    bool is_normal_free = 3; // 这是普通free
+    bool is_mega_free = 4; // 这是mega free, 如果is_normal_free和is_mega_free同时为true, 那么当前free是从普通free进入的mega free
+}
+
+/*================= CaptainPenguin2 ====================================*/
+message CaptainPenguin2GameResultExtraInfo {
+    message FreeGameInfo {
+        map<uint32, uint32> pre_locked_symbols = 1; // 前一把锁定的图标
+        map<uint32, uint32> new_locked_symbols = 2; // 新锁定的图标
+    }
+
+    FreeGameInfo free_game_info = 1;    // 免费游戏数据
+
+    message ReSpinInfo {
+        uint32 panel_height = 1;    // 当前面板高度
+        repeated uint32 valid_frames = 2; // 当前剩下的框
+        repeated uint32 used_frames = 3;    //  已经用掉的框
+        repeated uint32 new_frames = 4; // 新出现的框
+
+        message CoinInFrame {
+            uint32 id = 1;
+            uint32 symbol_id = 2;
+        }
+        repeated CoinInFrame coin_in_frame = 5;  // 出现在框里面的coin，等待spin
+
+        message LinkItem {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpot_id = 4; // jackpotId
+            uint64 jackpot_pay = 5; // jackpot倍率
+            uint32 jackpot_count = 6;
+        }
+        map<uint32, LinkItem> link_items = 6;  // 当前面板上的coin，包括coin_in_frame
+
+        uint64 added_to_reels = 7;  // 金黄色的coin的值
+
+        message JackpotInfo {
+            uint32 jackpot_id = 1;
+            uint32 jackpot_pay = 2;
+            uint64 total_win = 3;
+        }
+        JackpotInfo jackpot_info = 8;   // jackpotInfo，有此信息时需要弹jackpot的collect界面
+
+        uint32 start_coin_num = 9;
+        map<uint32, uint32> start_coins = 10;
+        uint32 random_pick_index = 11;  // 配合小转轮使用的一个随机参数
+        uint64 yellow_coin_total_win_rate = 12;  // 当前面板上所有黄币的和
+    }
+
+    ReSpinInfo re_spin_info = 2;
+
+    map<uint32, uint32> random_wild = 3;    // 随机的wild
+    map<uint32, uint32> random_scatter = 4;
+    repeated uint32 random_s01 = 5; // 随机的s01
+}
+
+/*================= Pelican ====================================*/
+// choose的时候 bonus api 发 0 1 2参数，决定free是 10次 6次 3次
+// 本关状态非常多 特别是reSpin 要结合 is_map_re_spin is_map_free is_super_map_free is_super_re_spin 以及freeSpinInfo.isOver判断 reSpin发生的地点
+// 状态优先级 map > choose > base
+// 状态图
+// base -> map -> 大节点 free（1） -> reSpin(1)
+//             -> 大节点 reSpin(2)
+//             -> 小节点
+// base -> choose -> free（2） -> reSpin(3)
+// base -> reSpin(4)
+//
+// 下面判断方法参考
+// reSpin(1) : is_map_free == true && is_map_re_spin == false(！！!) &&  freeSpinInfo.isOver == false && reSpinInfo.isOver == false
+// reSpin(2) : is_map_re_spin == true &&  freeSpinInfo.isOver == true && reSpinInfo.isOver == false
+// reSpin(3) : is_map_free == false && is_map_re_spin == false &&  freeSpinInfo.isOver == false && reSpinInfo.isOver == false
+// reSpin(4) : is_map_re_spin == false &&  freeSpinInfo.isOver == true && reSpinInfo.isOver == false
+// 再结合 is_super_re_spin 判断这个reSpin是不是super
+//
+// free（1）： is_map_free == true && freeSpinInfo.isOver == false 再结合 is_super_map_free 判断是不是super free
+// free (2): is_map_free == false && freeSpinInfo.isOver == false
+//
+// min_trigger_link_count 体现 choose 的结果
+// free_drag_reel_position_map 是 free里的drag feature
+message PelicanGameResultExtraInfo {
+    message Bonus {
+        uint64 bet = 1;   // bonus基本数据
+        bool is_started = 2; // bonus基本数据
+        uint64 total_win = 3; // bonus基本数据
+        bool to_settle = 4; // bonus基本数据
+        uint64 pre_win = 5; // bonus基本数据
+        repeated Panel triggering_panels = 6; // bonus基本数据
+    }
+    Bonus choose = 1; // free选择相关
+    message Map {
+        uint64 bet = 1; // bonus基本数据
+        bool is_started = 2; // bonus基本数据
+        uint64 total_win = 3; // bonus基本数据
+        bool to_settle = 4; // bonus基本数据
+        uint64 pre_win = 5; // bonus基本数据
+        repeated Panel triggering_panels = 6; // bonus基本数据
+
+        message AvgBet {
+            uint64 total_bet = 1;
+            uint64 spin_count = 2;
+        }
+        AvgBet avg_bet = 7; // avg bet 相关
+        uint64 progress = 8; // 当前等级进度
+        uint32 level = 9; // 等级
+        bool is_wheel = 10; // 当前是小节点还是转盘节点
+        bool is_final = 11; // 是否是最后一轮
+        uint32 index = 12; // 转盘结果
+    }
+    Map map = 2; // map 相关
+    bool is_map_re_spin = 3; // 这个reSpin是否是map wheel中转出来的, 注意下面的mapFree中触发的reSpin这里是false
+    bool is_map_free = 4; // 这个free是否是map wheel中转出来的
+    bool is_super_map_free = 5; // 这个map free是不是super mapFree
+    bool is_super_re_spin = 6; // 这个reSpin是不是super reSpin： 金色link symbol， 一上来全解锁
+    uint32 min_trigger_link_count = 7; // 6 5 4， choose过后这里会是选择结果
+    uint32 total_link_count = 8; // 当前link symbol的总数， 用于计算差几个解锁panel
+    uint32 active_link_panel_count = 9; // 当前reSpin解锁panel数量
+    message LinkData {
+        message Item {
+            uint32 position_id = 1; // 位置
+            uint32 symbol_id = 2; // 现实图标
+            uint64 win_rate = 3; // 赢钱倍率
+            uint32 jackpotId = 4; // jackpot id
+            uint64 jackpot_pay = 5; // jackpot pay
+        }
+        repeated Item items = 1;
+        map<uint32, uint32> reel_mapping = 2; // linkReels轴映射
+        uint64 full_win_rate = 3; // 满屏额外grand奖励 jackpotId=4
+    }
+    repeated LinkData link_data_list = 10; // linkDateList
+    map<uint32, int32> free_drag_reel_position_map = 11; // free里面的 drag feature
+}

@@ -1,0 +1,30 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+
+message AdStrategy {
+    enum Type {
+        NONE = 0;
+        MULTIPLE_BIG_WIN = 1;
+        EXTRA_FREE_SPIN = 2;
+        EXTRA_WIN_BONUS = 3;
+    }
+    Type type = 1;                     // 类型
+    string place_id = 2;               // 广告位
+
+    // MULTIPLE_BIG_WIN
+    repeated uint32 multiples = 3;     // multiples 选择
+    uint32 multiple_index = 4;         // multiple 最后结果
+    uint64 big_win_base = 5;           // multiple big win base
+
+    // EXTRA_FREE_SPIN
+    uint32 extra_free_spin_count = 6;  // extra free
+
+    // EXTRA_WIN_BONUS
+    uint64 extra_win_bonus_base = 7;    // extra win bonus
+    uint64 extra_win_bonus_percent = 8; // extra win bonus
+    uint64 extra_win_bonus_win = 9;     // extra win bonus
+}

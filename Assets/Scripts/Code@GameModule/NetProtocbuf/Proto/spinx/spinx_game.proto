@@ -1,0 +1,311 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+import "spinx_common.proto";
+
+// 赔付线掩码，1表示激活，0表示未激活
+message Mask {
+    repeated uint32 mask = 1; //
+}
+
+// 赔付线
+message PayLine {
+    uint32 pay_line_id = 1; //
+    repeated Mask masks = 2; //
+}
+
+// 图标类型
+enum SymbolType {
+    SYMBOL_TYPE_NONE = 0; //
+    SYMBOL_TYPE_NORMAL = 1; //
+    SYMBOL_TYPE_WILD = 2; //
+    SYMBOL_TYPE_JACKPOT = 3; //
+    SYMBOL_TYPE_BONUS = 4; //
+    SYMBOL_TYPE_SCATTER = 5; //
+}
+
+// 赢钱线方向
+enum LineDirection {
+    LINE_DIRECTION_LEFT = 0; // 从左开始算
+    LINE_DIRECTION_RIGHT = 1; // 从右开始算
+    LINE_DIRECTION_BOTH = 2; // 双向
+}
+
+// 赔付规则
+message PayRule {
+    uint32 pay_rule_id = 1; //
+    repeated uint32 symbols_ids = 2; //
+    uint32 symbol_count = 3; //
+    bool by_line = 4; //
+    uint32 pay = 5; //
+    bool allow_wild = 6; //
+}
+
+// 坐标： 左上为(0, 0)
+message Position {
+    uint32 x = 1; //
+    uint32 y = 2; //
+}
+
+// 赢钱线
+message WinLine {
+    uint32 pay_line_id = 1; // 线id，不按线的这里是0
+    uint32 pay_rule_id = 2; // 规则id, 不按rule的这里是0
+    uint32 pay = 3; // 赢钱倍数
+    repeated Position positions = 4; // 不按线赢钱的，使用这个数组
+    uint32 jackpot_id = 5; // 触发的jackpotId
+    uint32 free_spin_count = 6; // 触发了free spin的次数
+    uint32 bonus_game = 7; // 触发了bonus game
+    uint32 symbol_count = 8; // 中奖图标个数
+    uint32 bonus_game_id = 9; // 小游戏id
+    uint32 re_spin_count = 10; // 触发了reSpin的次数
+    uint32 free_spin_choices = 11; // 触发了可以选择的freeSpin游戏
+    bool show_symbol_animation = 12;    // 是否要播放动画
+    uint64 mask = 13; // mask [1,1,1,0,0]表示7
+    bool is_multiway = 14; // 是否是multiway winLine
+}
+
+// 单个转轴
+message Reel {
+    repeated uint32 symbols = 1; //
+}
+
+// 一组转轴
+message Reels {
+    repeated Reel reels = 3; //
+}
+
+// 一列图标
+message Column {
+    repeated uint32 symbols = 1; // 图标
+    uint32 stop_position = 2; // 停止位置
+    bool drum_mode = 3; // 播放drum mode
+    repeated uint32 appearing_rows = 4; // 播放appear动画的行
+}
+
+// 图标结果
+message Panel {
+    repeated Column columns = 1; //
+    string reels_id = 2; //
+    uint64 win_rate = 3; //  赢钱倍数
+    repeated WinLine win_lines = 5; // 赢钱线
+
+    message ReelSubstitute {
+        uint32 col = 1;
+        repeated uint32 pos = 2;
+        uint32 to = 3;
+    }
+    repeated ReelSubstitute substitutes = 6; // panel轴上symbol替换
+}
+
+// 游戏模式 
+enum GameMode {
+    GAME_MODE_NONE = 0; //
+    GAME_MODE_EASY = 1; //
+    GAME_MODE_NORMAL = 2; //
+    GAME_MODE_HARD = 3; //
+}
+
+// 游戏方向
+enum GameOrientation {
+    GAME_ORIENTATION_PORTRAIT = 0; // 竖屏
+    GAME_ORIENTATION_LANDSCAPE = 1; // 横屏
+}
+
+// 图标配置
+message SymbolConfig {
+    uint32 id = 1; //
+    SymbolType type = 2; //
+    string icon = 3; //
+    string name = 4; //
+    uint32 multiple = 5; //
+    uint32 width = 6; //
+    uint32 height = 7; //
+    uint32 position = 8; //
+    string extras = 9; // extras
+    uint32 rarity = 10; // 稀有度
+}
+
+// jackpot类型 
+enum JackpotType {
+    JACKPOT_TYPE_NONE = 0; //
+    JACKPOT_TYPE_PROGRESSIVE = 1; // 随时间自然增长
+    JACKPOT_TYPE_ACCUMULATIVE = 2;  // 随下注累计增长
+}
+
+// jackpot配置
+message JackpotConfig {
+    uint32 jackpot_id = 1; //
+    JackpotType jackpot_type = 2; //
+    uint32 min_pay = 3; //
+    uint32 max_pay = 4; //
+    uint32 interval = 5; //
+    uint64 unlock_bet = 6; //
+    uint32 weight = 7; //
+    string name = 8; //
+}
+
+// jackpot状态
+message JackpotState {
+    uint32 jackpot_id = 1;  //
+    uint32 jackpot_value = 2; //
+    float jackpot_progress = 3; // jackpot当前进度
+}
+
+// 卷轴解锁配置
+message ReelUnlock {
+    uint32 level_min = 1;
+    uint32 level_max = 2;
+    repeated uint64 unlock_bet = 3;  // 解锁所需bet
+}
+
+message MachineUnlockValue {
+    uint64 value = 1;
+}
+
+// 游戏配置
+message GameConfig {
+    string game_id = 1; //
+    string game_name = 2; //
+    GameMode game_mode = 3; //
+    repeated string resource_urls = 4; //
+    uint32 unlock_level = 5; //
+    repeated JackpotConfig jackpot_configs = 6; //
+    repeated SymbolConfig symbol_configs = 7; //
+    repeated GameBetConfig bets = 8; //
+    map<string, Reels> reels_map = 9; //
+    repeated PayLine pay_lines = 10; //
+    repeated PayRule pay_rules = 11; //
+    bool is_full_line = 12; // 是否为满线模式
+    LineDirection line_direction = 13; // 赢钱线方向
+    repeated GameUnlockConfig unlocks = 14; // feature解锁
+
+    bool flag_big = 16; //
+    bool flag_hot = 17; //
+    bool flag_new = 18; //
+    bool flag_top = 19; //
+
+    GameOrientation game_orientation = 20; // 游戏朝向
+    repeated ReelUnlock reel_unlock = 21;   // 卷轴解锁配置
+    string extra_info = 22; // json扩展数据
+    AnyStruct extra_info_pb = 23; // pb格式扩展字段
+    repeated string cheat_ids = 24;
+    repeated JackpotState jackpot_state = 25; // 大厅展示需要jackpotState, 给个数组，目前只要最大的
+
+    bool flag_coming_soon = 26; //
+    string game_img = 27;
+    map<uint32, MachineUnlockValue> unlock_condition = 28;  // 机台解锁条件
+    map<uint32, MachineUnlockValue> show_unlock_condition = 29;  // 机台解锁展示条件
+}
+
+message GameBetConfig {
+    uint32 level_min = 1;
+    uint32 level_max = 2;
+    repeated uint64 bets = 3;
+    repeated uint32 unlock_jackpot = 4;
+}
+
+
+message GameUnlockConfig {
+    uint32 level_min = 1;
+    uint32 level_max = 2;
+    repeated uint64 unlock_bets = 3;
+}
+
+message FreeSpinInfo {
+    uint32 free_spin_count = 1; // 免费游戏剩余次数
+    uint64 free_spin_bet = 2; // 免费游戏投注金额
+    uint32 free_spin_total_count = 3; // 免费游戏最大次数
+    uint64 free_spin_total_win = 4; //免费游戏总赢钱数量
+    uint32 free_spin_id = 5; // 可选free spin的id
+    uint32 free_spin_choices = 6; // 剩余的可以选择的freeSpin游戏
+    repeated Panel triggering_panels = 7; // 触发此状态时的panels
+    bool is_over = 8; // 是否freeSpin结束，结算完毕
+    bool is_avg_bet = 9; //是否是avgBet
+}
+
+message ReSpinInfo {
+    uint32 re_spin_count = 1;  // 剩余ReSpin次数
+    uint32 re_spin_limit = 2; // ReSpin上限
+    uint64 re_spin_bet = 3; // ReSpin的投注
+    uint64 re_spin_total_win = 4; // ReSpinTotalWin
+    repeated Panel triggering_panels = 5; // 触发此状态时的panels
+    repeated uint32 reels_mapping = 6; // link玩法位置与卷轴映射表
+    bool is_over = 7; // 是否reSpin结束,结算完毕
+    bool is_avg_bet = 9; //是否是avgBet
+}
+
+// 通用reSpin扩展数据
+message NormalReSpinExtraInfo {
+    message LinkItem {
+        uint32 position_id = 1; // 位置
+        uint32 symbol_id = 2; // 图标
+        uint64 win_rate = 3; // 赢钱倍率
+        uint32 jackpot_id = 4; // jackpotId
+        uint64 jackpot_pay = 5; // jackpot倍率
+    }
+    map<uint32, LinkItem> link_items = 1;
+    map<uint32, uint32> reels_index = 2;    // 记录每个格子所用的卷轴index
+    repeated uint32 hit_jackpot_ids = 3;    // 在reSpin期间中的jackpot，因为reSpin期间jackpot是要锁定的，reSpin结束后要将这些jackpot重置
+    uint32 new_item_count = 4;  // 新的图标数量
+
+    message JackpotInfo {
+        uint32 jackpot_id = 1;
+        uint64 jackpot_pay = 2;
+        uint64 total_win = 3;
+    }
+    JackpotInfo jackpot_info = 5;   // jackpot信息，link满的时候中grand用这个
+    map<uint32, uint32> new_item_map = 6;   // 新出现的元素都记下来
+}
+
+message SuperBonusInfo {
+    uint32 progress = 1;  // superBonus进度
+    uint64 avg_bet = 2;  // super bonus 平均下注
+    bool triggered = 3; // superBonus触发状态
+    uint64 start_time = 4; // superBonus开启时间
+    uint64 total_bet = 5;
+}
+
+message GameResult {
+    uint64 bet = 1;  // 投注金额
+    repeated Panel panels = 2; // 图标结果
+    uint64 total_win = 3; // 总赢钱，解决(bet*win_rate/100)算式带来的最多(bet/100)误差。
+    uint32 win_level = 4; // 赢钱等级
+    uint32 jackpot_id = 6; // 本局触发的jackpotId
+    uint64 jackpot_pay = 7; // 本局jackpot赢钱
+    repeated JackpotState jackpot_states = 8; // jackpot当前状态
+    uint32 free_spin_count = 9; // 本局新增免费游戏次数
+    uint32 re_spin_count = 10; // reSpinCount
+    uint32 bonus_game = 11; // 本局触发了小游戏
+    string fsm = 12; // fsm状态
+    string pay_control = 13; // 赢钱控制
+    uint32 free_spin_choices = 14; // 触发了可以选择的freeSpin游戏的次数
+    string extra_info = 15; // 扩展信息, 不同游戏对应的具体内容参考spinx_extra_info.proto
+    AnyStruct extra_info_pb = 16; // pb格式的扩展字段
+
+    bool is_jackpot_static = 17; // jackpot是否固定
+
+    uint64 display_total_win = 18;   // 累计赢钱数，freeGame，reSpin之类的会用到，普通游戏的话等于display_cur_win，客户端显示用
+    uint64 display_current_win = 19; // 当前这局的赢钱数
+    uint64 timestamp = 20;  // 服务器时间戳
+    bool has_ad = 21;   // 是否有激励广告
+    uint32 free_spin_id = 22;   // free game Id
+    uint32 sfx_id = 23; // 播放特效id通用字段； 目前用于按概率播放的必中动画，以后可扩展
+
+    bool is_free_spin = 32; // 本局是free spin
+    bool is_bonus_game = 33; // 本局是bonus_game
+    bool is_re_spin = 34; // 本局是reSpin
+    bool is_avg_bet = 35; // 当前Spin使用AvgBet
+    uint32 ad_button_show_param = 36;   // bigWin广告按钮上的显示参数
+
+    FreeSpinInfo free_spin_info = 64;
+    ReSpinInfo re_spin_info = 65;
+    SuperBonusInfo super_bonus_info = 66;
+}
+
+// 玩家所在房间信息
+message UserRoomInfo {
+    string room_id = 1; // 房间id
+    uint32 camp = 2;    // 阵营id
+    uint32 index = 3;   // 座位索引
+}

@@ -1,0 +1,2206 @@
+{
+    "gmeditconfig": [
+        {
+            "sheetName": "AdReward",
+            "columnName": "showInterval",
+            "columnType": "number"
+        },
+        {
+            "sheetName": "AdReward",
+            "columnName": "limitPerDay",
+            "columnType": "number"
+        },
+        {
+            "sheetName": "AdInterstitial",
+            "columnName": "showInterval",
+            "columnType": "number"
+        },
+        {
+            "sheetName": "AdInterstitial",
+            "columnName": "limitPerDay",
+            "columnType": "number"
+        }
+    ],
+    "rules": [
+        {
+            "groupName": "NEWUSER",
+            "groupId": 99,
+            "dataKey": "installedAt",
+            "operator": "lt",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数小于3天"
+        },
+        {
+            "groupName": "UNKNOWN",
+            "groupId": 100,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "0",
+            "desc": "Firebase预测分组为0 （未知默认）"
+        },
+        {
+            "groupName": "UNKNOWN",
+            "groupId": 100,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "IAP1-10000",
+            "groupId": 101,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "1",
+            "desc": "Firebase预测分组为1 （已付费）"
+        },
+        {
+            "groupName": "IAP1-10000",
+            "groupId": 101,
+            "dataKey": "iapTotal",
+            "operator": "gte",
+            "dataType": "number",
+            "dataValue": "1",
+            "desc": "付费总额大于等于1美分"
+        },
+        {
+            "groupName": "IAP1-10000",
+            "groupId": 101,
+            "dataKey": "iapTotal",
+            "operator": "lt",
+            "dataType": "number",
+            "dataValue": "10000",
+            "desc": "付费总额小于10000美分"
+        },
+        {
+            "groupName": "IAP1-10000",
+            "groupId": 101,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "IAP10000-50000",
+            "groupId": 102,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "1",
+            "desc": "Firebase预测分组为1 （已付费）"
+        },
+        {
+            "groupName": "IAP10000-50000",
+            "groupId": 102,
+            "dataKey": "iapTotal",
+            "operator": "gte",
+            "dataType": "number",
+            "dataValue": "10000",
+            "desc": "付费总额大于等于10000美分"
+        },
+        {
+            "groupName": "IAP10000-50000",
+            "groupId": 102,
+            "dataKey": "iapTotal",
+            "operator": "lt",
+            "dataType": "number",
+            "dataValue": "50000",
+            "desc": "付费总额小于50000美分"
+        },
+        {
+            "groupName": "IAP10000-50000",
+            "groupId": 102,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "IAP50000-100000",
+            "groupId": 103,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "1",
+            "desc": "Firebase预测分组为1 （已付费）"
+        },
+        {
+            "groupName": "IAP50000-100000",
+            "groupId": 103,
+            "dataKey": "iapTotal",
+            "operator": "gte",
+            "dataType": "number",
+            "dataValue": "50000",
+            "desc": "付费总额大于等于50000美分"
+        },
+        {
+            "groupName": "IAP50000-100000",
+            "groupId": 103,
+            "dataKey": "iapTotal",
+            "operator": "lt",
+            "dataType": "number",
+            "dataValue": "100000",
+            "desc": "付费总额小于100000美分"
+        },
+        {
+            "groupName": "IAP50000-100000",
+            "groupId": 103,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "IAP>100000",
+            "groupId": 104,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "1",
+            "desc": "Firebase预测分组为1 （已付费）"
+        },
+        {
+            "groupName": "IAP>100000",
+            "groupId": 104,
+            "dataKey": "iapTotal",
+            "operator": "gte",
+            "dataType": "number",
+            "dataValue": "100000",
+            "desc": "付费总额大于等于100000美分"
+        },
+        {
+            "groupName": "IAP>100000",
+            "groupId": 104,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "HIGH-PROB-T1",
+            "groupId": 110,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "2",
+            "desc": "Firebase预测分组为2 （高概率付费）"
+        },
+        {
+            "groupName": "HIGH-PROB-T1",
+            "groupId": 110,
+            "dataKey": "country",
+            "operator": "in",
+            "dataType": "arraystring",
+            "dataValue": "KR, JP, US, CH, AU, TW, NZ, HK",
+            "desc": "国家在KR, JP, US, CH, AU, TW, NZ, HK内"
+        },
+        {
+            "groupName": "HIGH-PROB-T1",
+            "groupId": 110,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "HIGH-PROB-T1",
+            "groupId": 110,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "HIGH-PROB-T2",
+            "groupId": 111,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "2",
+            "desc": "Firebase预测分组为2 （高概率付费）"
+        },
+        {
+            "groupName": "HIGH-PROB-T2",
+            "groupId": 111,
+            "dataKey": "country",
+            "operator": "in",
+            "dataType": "arraystring",
+            "dataValue": "GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT",
+            "desc": "国家在GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT内"
+        },
+        {
+            "groupName": "HIGH-PROB-T2",
+            "groupId": 111,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "HIGH-PROB-T2",
+            "groupId": 111,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "HIGH-PROB-T3",
+            "groupId": 112,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "2",
+            "desc": "Firebase预测分组为2 （高概率付费）"
+        },
+        {
+            "groupName": "HIGH-PROB-T3",
+            "groupId": 112,
+            "dataKey": "country",
+            "operator": "nin",
+            "dataType": "arraystring",
+            "dataValue": "KR, JP, US, CH, AU, TW, NZ, HK, GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT",
+            "desc": "国家不在KR, JP, US, CH, AU, TW, NZ, HK, GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT内"
+        },
+        {
+            "groupName": "HIGH-PROB-T3",
+            "groupId": 112,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "HIGH-PROB-T3",
+            "groupId": 112,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "LOW-PROB-T1",
+            "groupId": 120,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "3",
+            "desc": "Firebase预测分组为3 （低概率付费）"
+        },
+        {
+            "groupName": "LOW-PROB-T1",
+            "groupId": 120,
+            "dataKey": "country",
+            "operator": "in",
+            "dataType": "arraystring",
+            "dataValue": "KR, JP, US, CH, AU, TW, NZ, HK",
+            "desc": "国家在KR, JP, US, CH, AU, TW, NZ, HK内"
+        },
+        {
+            "groupName": "LOW-PROB-T1",
+            "groupId": 120,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "LOW-PROB-T1",
+            "groupId": 120,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "LOW-PROB-T2",
+            "groupId": 121,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "3",
+            "desc": "Firebase预测分组为3 （低概率付费）"
+        },
+        {
+            "groupName": "LOW-PROB-T2",
+            "groupId": 121,
+            "dataKey": "country",
+            "operator": "in",
+            "dataType": "arraystring",
+            "dataValue": "GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT",
+            "desc": "国家在GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT内"
+        },
+        {
+            "groupName": "LOW-PROB-T2",
+            "groupId": 121,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "LOW-PROB-T2",
+            "groupId": 121,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "LOW-PROB-T3",
+            "groupId": 122,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "3",
+            "desc": "Firebase预测分组为3（低概率付费）"
+        },
+        {
+            "groupName": "LOW-PROB-T3",
+            "groupId": 122,
+            "dataKey": "country",
+            "operator": "nin",
+            "dataType": "arraystring",
+            "dataValue": "KR, JP, US, CH, AU, TW, NZ, HK, GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT",
+            "desc": "国家不在KR, JP, US, CH, AU, TW, NZ, HK, GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT内"
+        },
+        {
+            "groupName": "LOW-PROB-T3",
+            "groupId": 122,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "LOW-PROB-T3",
+            "groupId": 122,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "FREE-PROB-T1",
+            "groupId": 130,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "4",
+            "desc": "Firebase预测分组为4（不会付费）"
+        },
+        {
+            "groupName": "FREE-PROB-T1",
+            "groupId": 130,
+            "dataKey": "country",
+            "operator": "in",
+            "dataType": "arraystring",
+            "dataValue": "KR, JP, US, CH, AU, TW, NZ, HK",
+            "desc": "国家在KR, JP, US, CH, AU, TW, NZ, HK内"
+        },
+        {
+            "groupName": "FREE-PROB-T1",
+            "groupId": 130,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "FREE-PROB-T1",
+            "groupId": 130,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "FREE-PROB-T2",
+            "groupId": 131,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "4",
+            "desc": "Firebase预测分组为4（不会付费）"
+        },
+        {
+            "groupName": "FREE-PROB-T2",
+            "groupId": 131,
+            "dataKey": "country",
+            "operator": "in",
+            "dataType": "arraystring",
+            "dataValue": "GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT",
+            "desc": "国家在GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT内"
+        },
+        {
+            "groupName": "FREE-PROB-T2",
+            "groupId": 131,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "FREE-PROB-T2",
+            "groupId": 131,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "FREE-PROB-T3",
+            "groupId": 132,
+            "dataKey": "userGroup",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "4",
+            "desc": "Firebase预测分组为4（不会付费）"
+        },
+        {
+            "groupName": "FREE-PROB-T3",
+            "groupId": 132,
+            "dataKey": "country",
+            "operator": "nin",
+            "dataType": "arraystring",
+            "dataValue": "KR, JP, US, CH, AU, TW, NZ, HK, GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT",
+            "desc": "国家不在KR, JP, US, CH, AU, TW, NZ, HK, GB, NO, KW, AT, CA, DK, SG, DE, SE, QA, AE, BE, NL, ES, PL, FR, IT内"
+        },
+        {
+            "groupName": "FREE-PROB-T3",
+            "groupId": 132,
+            "dataKey": "sourceCampaign",
+            "operator": "in",
+            "dataType": "arraytypecode",
+            "dataValue": "-1,0",
+            "desc": "市场没有指定分层或指定为默认分层"
+        },
+        {
+            "groupName": "FREE-PROB-T3",
+            "groupId": 132,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "3",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "Campaign-MustPay",
+            "groupId": 210,
+            "dataKey": "sourceCampaign",
+            "operator": "eq",
+            "dataType": "typecode",
+            "dataValue": "1",
+            "desc": "市场指定为内购用户"
+        },
+        {
+            "groupName": "Campaign-MustPay",
+            "groupId": 210,
+            "dataKey": "iapTotal",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "0",
+            "desc": "付费额是0"
+        },
+        {
+            "groupName": "Campaign-MustPay",
+            "groupId": 210,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "7",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "Campaign-HighPayProb",
+            "groupId": 220,
+            "dataKey": "sourceCampaign",
+            "operator": "eq",
+            "dataType": "typecode",
+            "dataValue": "2",
+            "desc": "市场指定为内购为主广告为辅的用户"
+        },
+        {
+            "groupName": "Campaign-HighPayProb",
+            "groupId": 220,
+            "dataKey": "iapTotal",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "0",
+            "desc": "付费额是0"
+        },
+        {
+            "groupName": "Campaign-HighPayProb",
+            "groupId": 220,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "5",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "Campaign-LowPayProb",
+            "groupId": 230,
+            "dataKey": "sourceCampaign",
+            "operator": "eq",
+            "dataType": "typecode",
+            "dataValue": "3",
+            "desc": "市场指定为广告为主内购为辅的用户"
+        },
+        {
+            "groupName": "Campaign-LowPayProb",
+            "groupId": 230,
+            "dataKey": "iapTotal",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "0",
+            "desc": "付费额是0"
+        },
+        {
+            "groupName": "Campaign-LowPayProb",
+            "groupId": 230,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "2",
+            "desc": "总登录天数大于等于3天"
+        },
+        {
+            "groupName": "Campaign-Free",
+            "groupId": 240,
+            "dataKey": "sourceCampaign",
+            "operator": "eq",
+            "dataType": "typecode",
+            "dataValue": "4",
+            "desc": "市场指定为广告用户"
+        },
+        {
+            "groupName": "Campaign-Free",
+            "groupId": 240,
+            "dataKey": "iapTotal",
+            "operator": "eq",
+            "dataType": "number",
+            "dataValue": "0",
+            "desc": "付费额是0"
+        },
+        {
+            "groupName": "Campaign-Free",
+            "groupId": 240,
+            "dataKey": "installedAt",
+            "operator": "gte",
+            "dataType": "days",
+            "dataValue": "1",
+            "desc": "总登录天数大于等于3天"
+        }
+    ],
+    "adreward": [
+        {
+            "id": 9901,
+            "placeId": 1,
+            "userGroup": 99,
+            "showInterval": 60,
+            "limitPerDay": 0,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 9902,
+            "placeId": 2,
+            "userGroup": 99,
+            "showInterval": 300,
+            "limitPerDay": 0,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 9903,
+            "placeId": 3,
+            "userGroup": 99,
+            "showInterval": 300,
+            "limitPerDay": 0,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 9904,
+            "placeId": 4,
+            "userGroup": 99,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 9905,
+            "placeId": 5,
+            "userGroup": 99,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 9906,
+            "placeId": 6,
+            "userGroup": 99,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 9907,
+            "placeId": 7,
+            "userGroup": 99,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 9908,
+            "placeId": 8,
+            "userGroup": 99,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10001,
+            "placeId": 1,
+            "userGroup": 100,
+            "showInterval": 60,
+            "limitPerDay": 30,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 10002,
+            "placeId": 2,
+            "userGroup": 100,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10003,
+            "placeId": 3,
+            "userGroup": 100,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10004,
+            "placeId": 4,
+            "userGroup": 100,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10005,
+            "placeId": 5,
+            "userGroup": 100,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10006,
+            "placeId": 6,
+            "userGroup": 100,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 10007,
+            "placeId": 7,
+            "userGroup": 100,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 10008,
+            "placeId": 8,
+            "userGroup": 100,
+            "showInterval": 0,
+            "limitPerDay": 50,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10101,
+            "placeId": 1,
+            "userGroup": 101,
+            "showInterval": 60,
+            "limitPerDay": 5,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10102,
+            "placeId": 2,
+            "userGroup": 101,
+            "showInterval": 300,
+            "limitPerDay": 5,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10103,
+            "placeId": 3,
+            "userGroup": 101,
+            "showInterval": 300,
+            "limitPerDay": 5,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10104,
+            "placeId": 4,
+            "userGroup": 101,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10105,
+            "placeId": 5,
+            "userGroup": 101,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10106,
+            "placeId": 6,
+            "userGroup": 101,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 10107,
+            "placeId": 7,
+            "userGroup": 101,
+            "showInterval": 0,
+            "limitPerDay": 5,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10108,
+            "placeId": 8,
+            "userGroup": 101,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10201,
+            "placeId": 1,
+            "userGroup": 102,
+            "showInterval": 60,
+            "limitPerDay": 4,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10202,
+            "placeId": 2,
+            "userGroup": 102,
+            "showInterval": 300,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10203,
+            "placeId": 3,
+            "userGroup": 102,
+            "showInterval": 300,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10204,
+            "placeId": 4,
+            "userGroup": 102,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10205,
+            "placeId": 5,
+            "userGroup": 102,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10206,
+            "placeId": 6,
+            "userGroup": 102,
+            "showInterval": 0,
+            "limitPerDay": 1,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 10207,
+            "placeId": 7,
+            "userGroup": 102,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10208,
+            "placeId": 8,
+            "userGroup": 102,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10301,
+            "placeId": 1,
+            "userGroup": 103,
+            "showInterval": 60,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10302,
+            "placeId": 2,
+            "userGroup": 103,
+            "showInterval": 300,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10303,
+            "placeId": 3,
+            "userGroup": 103,
+            "showInterval": 300,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10304,
+            "placeId": 4,
+            "userGroup": 103,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10305,
+            "placeId": 5,
+            "userGroup": 103,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10306,
+            "placeId": 6,
+            "userGroup": 103,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 10307,
+            "placeId": 7,
+            "userGroup": 103,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10308,
+            "placeId": 8,
+            "userGroup": 103,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10401,
+            "placeId": 1,
+            "userGroup": 104,
+            "showInterval": 60,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10402,
+            "placeId": 2,
+            "userGroup": 104,
+            "showInterval": 300,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10403,
+            "placeId": 3,
+            "userGroup": 104,
+            "showInterval": 300,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 10404,
+            "placeId": 4,
+            "userGroup": 104,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10405,
+            "placeId": 5,
+            "userGroup": 104,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 10406,
+            "placeId": 6,
+            "userGroup": 104,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 10407,
+            "placeId": 7,
+            "userGroup": 104,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 10408,
+            "placeId": 8,
+            "userGroup": 104,
+            "showInterval": 0,
+            "limitPerDay": 0,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11001,
+            "placeId": 1,
+            "userGroup": 110,
+            "showInterval": 60,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 11002,
+            "placeId": 2,
+            "userGroup": 110,
+            "showInterval": 300,
+            "limitPerDay": 7,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 11003,
+            "placeId": 3,
+            "userGroup": 110,
+            "showInterval": 300,
+            "limitPerDay": 7,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 11004,
+            "placeId": 4,
+            "userGroup": 110,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11005,
+            "placeId": 5,
+            "userGroup": 110,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11006,
+            "placeId": 6,
+            "userGroup": 110,
+            "showInterval": 0,
+            "limitPerDay": 2,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 11007,
+            "placeId": 7,
+            "userGroup": 110,
+            "showInterval": 0,
+            "limitPerDay": 5,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 11008,
+            "placeId": 8,
+            "userGroup": 110,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11101,
+            "placeId": 1,
+            "userGroup": 111,
+            "showInterval": 60,
+            "limitPerDay": 10,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 11102,
+            "placeId": 2,
+            "userGroup": 111,
+            "showInterval": 300,
+            "limitPerDay": 14,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 11103,
+            "placeId": 3,
+            "userGroup": 111,
+            "showInterval": 300,
+            "limitPerDay": 14,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 11104,
+            "placeId": 4,
+            "userGroup": 111,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11105,
+            "placeId": 5,
+            "userGroup": 111,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11106,
+            "placeId": 6,
+            "userGroup": 111,
+            "showInterval": 0,
+            "limitPerDay": 2,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 11107,
+            "placeId": 7,
+            "userGroup": 111,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 11108,
+            "placeId": 8,
+            "userGroup": 111,
+            "showInterval": 0,
+            "limitPerDay": 20,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11201,
+            "placeId": 1,
+            "userGroup": 112,
+            "showInterval": 60,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 11202,
+            "placeId": 2,
+            "userGroup": 112,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 11203,
+            "placeId": 3,
+            "userGroup": 112,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 11204,
+            "placeId": 4,
+            "userGroup": 112,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11205,
+            "placeId": 5,
+            "userGroup": 112,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 11206,
+            "placeId": 6,
+            "userGroup": 112,
+            "showInterval": 0,
+            "limitPerDay": 2,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 11207,
+            "placeId": 7,
+            "userGroup": 112,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 11208,
+            "placeId": 8,
+            "userGroup": 112,
+            "showInterval": 0,
+            "limitPerDay": 20,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12001,
+            "placeId": 1,
+            "userGroup": 120,
+            "showInterval": 60,
+            "limitPerDay": 10,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 12002,
+            "placeId": 2,
+            "userGroup": 120,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 12003,
+            "placeId": 3,
+            "userGroup": 120,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 12004,
+            "placeId": 4,
+            "userGroup": 120,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12005,
+            "placeId": 5,
+            "userGroup": 120,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12006,
+            "placeId": 6,
+            "userGroup": 120,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 12007,
+            "placeId": 7,
+            "userGroup": 120,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 12008,
+            "placeId": 8,
+            "userGroup": 120,
+            "showInterval": 0,
+            "limitPerDay": 20,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12101,
+            "placeId": 1,
+            "userGroup": 121,
+            "showInterval": 60,
+            "limitPerDay": 15,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 12102,
+            "placeId": 2,
+            "userGroup": 121,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 12103,
+            "placeId": 3,
+            "userGroup": 121,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 12104,
+            "placeId": 4,
+            "userGroup": 121,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12105,
+            "placeId": 5,
+            "userGroup": 121,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12106,
+            "placeId": 6,
+            "userGroup": 121,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 12107,
+            "placeId": 7,
+            "userGroup": 121,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 12108,
+            "placeId": 8,
+            "userGroup": 121,
+            "showInterval": 0,
+            "limitPerDay": 20,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12201,
+            "placeId": 1,
+            "userGroup": 122,
+            "showInterval": 60,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 12202,
+            "placeId": 2,
+            "userGroup": 122,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 12203,
+            "placeId": 3,
+            "userGroup": 122,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 12204,
+            "placeId": 4,
+            "userGroup": 122,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12205,
+            "placeId": 5,
+            "userGroup": 122,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 12206,
+            "placeId": 6,
+            "userGroup": 122,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 12207,
+            "placeId": 7,
+            "userGroup": 122,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 12208,
+            "placeId": 8,
+            "userGroup": 122,
+            "showInterval": 0,
+            "limitPerDay": 20,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13001,
+            "placeId": 1,
+            "userGroup": 130,
+            "showInterval": 60,
+            "limitPerDay": 300,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 13002,
+            "placeId": 2,
+            "userGroup": 130,
+            "showInterval": 300,
+            "limitPerDay": 50,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 13003,
+            "placeId": 3,
+            "userGroup": 130,
+            "showInterval": 300,
+            "limitPerDay": 50,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 13004,
+            "placeId": 4,
+            "userGroup": 130,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13005,
+            "placeId": 5,
+            "userGroup": 130,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13006,
+            "placeId": 6,
+            "userGroup": 130,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 13007,
+            "placeId": 7,
+            "userGroup": 130,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 13008,
+            "placeId": 8,
+            "userGroup": 130,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13101,
+            "placeId": 1,
+            "userGroup": 131,
+            "showInterval": 60,
+            "limitPerDay": 300,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 13102,
+            "placeId": 2,
+            "userGroup": 131,
+            "showInterval": 300,
+            "limitPerDay": 50,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 13103,
+            "placeId": 3,
+            "userGroup": 131,
+            "showInterval": 300,
+            "limitPerDay": 50,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 13104,
+            "placeId": 4,
+            "userGroup": 131,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13105,
+            "placeId": 5,
+            "userGroup": 131,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13106,
+            "placeId": 6,
+            "userGroup": 131,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 13107,
+            "placeId": 7,
+            "userGroup": 131,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 13108,
+            "placeId": 8,
+            "userGroup": 131,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13201,
+            "placeId": 1,
+            "userGroup": 132,
+            "showInterval": 60,
+            "limitPerDay": 300,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 13202,
+            "placeId": 2,
+            "userGroup": 132,
+            "showInterval": 300,
+            "limitPerDay": 50,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 13203,
+            "placeId": 3,
+            "userGroup": 132,
+            "showInterval": 300,
+            "limitPerDay": 50,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 13204,
+            "placeId": 4,
+            "userGroup": 132,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13205,
+            "placeId": 5,
+            "userGroup": 132,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 13206,
+            "placeId": 6,
+            "userGroup": 132,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 13207,
+            "placeId": 7,
+            "userGroup": 132,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 13208,
+            "placeId": 8,
+            "userGroup": 132,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 21001,
+            "placeId": 1,
+            "userGroup": 210,
+            "showInterval": 60,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 21002,
+            "placeId": 2,
+            "userGroup": 210,
+            "showInterval": 300,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 21003,
+            "placeId": 3,
+            "userGroup": 210,
+            "showInterval": 300,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 21004,
+            "placeId": 4,
+            "userGroup": 210,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 21005,
+            "placeId": 5,
+            "userGroup": 210,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 21006,
+            "placeId": 6,
+            "userGroup": 210,
+            "showInterval": 0,
+            "limitPerDay": 1,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 21007,
+            "placeId": 7,
+            "userGroup": 210,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 21008,
+            "placeId": 8,
+            "userGroup": 210,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 22001,
+            "placeId": 1,
+            "userGroup": 220,
+            "showInterval": 60,
+            "limitPerDay": 7,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 22002,
+            "placeId": 2,
+            "userGroup": 220,
+            "showInterval": 300,
+            "limitPerDay": 10,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 22003,
+            "placeId": 3,
+            "userGroup": 220,
+            "showInterval": 300,
+            "limitPerDay": 10,
+            "bonus": [
+                101
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 22004,
+            "placeId": 4,
+            "userGroup": 220,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 22005,
+            "placeId": 5,
+            "userGroup": 220,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 22006,
+            "placeId": 6,
+            "userGroup": 220,
+            "showInterval": 0,
+            "limitPerDay": 1,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 22007,
+            "placeId": 7,
+            "userGroup": 220,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                101
+            ]
+        },
+        {
+            "id": 22008,
+            "placeId": 8,
+            "userGroup": 220,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 23001,
+            "placeId": 1,
+            "userGroup": 230,
+            "showInterval": 60,
+            "limitPerDay": 10,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 23002,
+            "placeId": 2,
+            "userGroup": 230,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 23003,
+            "placeId": 3,
+            "userGroup": 230,
+            "showInterval": 300,
+            "limitPerDay": 20,
+            "bonus": [
+                102
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 23004,
+            "placeId": 4,
+            "userGroup": 230,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 23005,
+            "placeId": 5,
+            "userGroup": 230,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 23006,
+            "placeId": 6,
+            "userGroup": 230,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 23007,
+            "placeId": 7,
+            "userGroup": 230,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                102
+            ]
+        },
+        {
+            "id": 23008,
+            "placeId": 8,
+            "userGroup": 230,
+            "showInterval": 0,
+            "limitPerDay": 10,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 24001,
+            "placeId": 1,
+            "userGroup": 240,
+            "showInterval": 60,
+            "limitPerDay": 999,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 24002,
+            "placeId": 2,
+            "userGroup": 240,
+            "showInterval": 300,
+            "limitPerDay": 300,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 24003,
+            "placeId": 3,
+            "userGroup": 240,
+            "showInterval": 300,
+            "limitPerDay": 300,
+            "bonus": [
+                103
+            ],
+            "arg1": 120
+        },
+        {
+            "id": 24004,
+            "placeId": 4,
+            "userGroup": 240,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 24005,
+            "placeId": 5,
+            "userGroup": 240,
+            "showInterval": 0,
+            "limitPerDay": 7,
+            "bonus": [
+                1
+            ]
+        },
+        {
+            "id": 24006,
+            "placeId": 6,
+            "userGroup": 240,
+            "showInterval": 0,
+            "limitPerDay": 3,
+            "bonus": [
+                2
+            ]
+        },
+        {
+            "id": 24007,
+            "placeId": 7,
+            "userGroup": 240,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                103
+            ]
+        },
+        {
+            "id": 24008,
+            "placeId": 8,
+            "userGroup": 240,
+            "showInterval": 0,
+            "limitPerDay": 300,
+            "bonus": [
+                1
+            ]
+        }
+    ],
+    "adbonus": [
+        {
+            "id": 1,
+            "itemId1": 301,
+            "itemCnt1": 1
+        },
+        {
+            "id": 2,
+            "itemId1": 101,
+            "itemCnt1": 1
+        },
+        {
+            "id": 101,
+            "itemId1": 300,
+            "itemCnt1": 5000
+        },
+        {
+            "id": 102,
+            "itemId1": 300,
+            "itemCnt1": 4000
+        },
+        {
+            "id": 103,
+            "itemId1": 300,
+            "itemCnt1": 3000
+        }
+    ],
+    "adinterstitial": []
+}

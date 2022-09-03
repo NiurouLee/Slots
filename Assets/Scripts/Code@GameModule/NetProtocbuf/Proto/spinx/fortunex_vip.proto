@@ -1,0 +1,23 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "spinx_common.proto";
+
+message VipLevelConfig {
+  uint32 level = 1;               // vip等级
+  uint32 exp = 2;                 // 到下一级经验
+  uint32 level_reward = 3;        // 升级奖励
+  string vip_name = 4;            // vip名称
+  uint64 system_daily_bonus = 5;  // dailybonus加成奖励(基数100)
+  uint32 system_timer_bonus = 6;  // timerbonus加成奖励(基数100)
+  uint32 system_store = 7;        // 商城加成(基数100)
+  uint32 system_vip_points = 8;   // vippoints加成(基数100)
+}
+
+// 客户端拉取VIP信息
+message CGetVipInfo {}
+// 服务器返回VIP信息
+message SGetVipInfo {
+  repeated VipLevelConfig vip_config = 1;  // vip的配置信息
+}

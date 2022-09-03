@@ -1,0 +1,71 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message CGetEggInfo {}
+
+message EggInfo {
+
+    message Egg {
+        bool win = 1;                  // 是否是终点蛋
+        repeated  Item items = 2;      // 蛋奖励: 空蛋是空list
+        bool open = 3;                 // 是否打碎; 注意没有打碎的蛋items是空list，win是false
+    }
+
+    bool is_locked = 1;                         // 本系统功能是否锁住
+    uint64 unlock_level = 2;                    // 开锁等级
+
+    uint64 timestamp_left = 3;                  // 本周活动开启倒计时， <=0 说明活动开始了， 客户端自动走到它<=0时，记得get一遍数据
+    uint64 end_timestamp_left = 4;              // 本周活动结束倒计时， 客户端自动走到它<=0时，如果不get或者没有加锤子的api动作 它还会是老数据，还可以玩没玩完的砸蛋
+    repeated uint32 show_ad_days = 5;           // 是否显示活动广告
+
+    repeated Egg silver_eggs = 6;              // 银蛋列表 0-6
+    uint32 silver_hammer = 7;                  // 银锤子数量
+    Reward silver_final_reward = 8;            // 银的普通最终奖励
+    Reward silver_hammer_reward = 9;           // 银的未使用锤子额外奖励
+    bool silver_over = 10;                     // 游戏是否结束，砸到终点蛋
+    Reward silver_total_final_reward = 11;     // 总奖励, 包括: open=true的所有silver_eggs，silver_finale_reward 和 silver_hammer_reward
+
+    repeated Egg gold_eggs = 12;                // 下面金色蛋 和 银色蛋意义相同
+    uint32 gold_hammer = 13;                    // 没有和银蛋放在同一个结构的数组中，是预防今后金银蛋还会有不同需求
+    Reward gold_final_reward = 14;
+    Reward gold_hammer_reward = 15;
+    bool gold_over = 16;
+    Reward gold_total_final_reward = 17;
+
+    uint64 start_timestamp = 18;
+    uint64 end_timestamp = 19;
+}
+
+message SGetEggInfo {
+    EggInfo egg = 1; // 蛋信息
+}
+
+message CSmashEgg {
+    bool is_gold = 1;  // 砸哪边
+    uint32 index = 2;  // 砸哪个
+}
+
+message SSmashEgg {
+    EggInfo egg = 1;
+    UserProfile user_profile = 2;  // 用户数据, 注意：如果没解锁强行调用smash没有user_profile返回
+    repeated Reward rewards = 3; // 奖励
+}
+
+// 读商品信息
+message CGetEggPaymentItems {}
+
+message EggShopItemConfig {
+    bool is_gold = 1;         // 金银
+    uint32 hammer_used = 2;   // 用过几个锤子
+    uint32 hammer_count = 3;  // 要买几个锤子
+    ShopItemConfig item = 4;  // 通用商品信息字段
+
+}
+message SGetEggPaymentItems {
+    repeated EggShopItemConfig items = 1; // 一次api发放所有商品；客户端根据当前锤子状态选择合适商品展示
+}

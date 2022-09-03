@@ -1,0 +1,86 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message MissionPass {
+  bool is_locked = 1;       // 本系统功能是否锁住
+  uint32 unlock_level = 2;  // 开锁等级
+
+  uint32 season = 3;  // 赛季号
+
+  uint64 timestamp_left = 4;  // 赛季剩余时间
+
+  uint32 level = 5;  // 等级
+  uint32 exp = 6;    // 经验
+
+  bool paid = 7;  // 是否购买付费通行证
+
+  repeated MissionPassReward free_rewards = 8;        // 免费等级奖励
+  repeated MissionPassReward free_timed_rewards = 9;  // 免费限时等级奖励
+  repeated MissionPassReward paid_rewards = 10;       // 付费等级奖励
+  repeated MissionPassReward paid_timed_rewards = 11;  // 付费限时等级奖励
+
+  uint32 exp_total = 12;     // 经验分母
+  Reward final_reward = 13;  // 终极奖励
+}
+
+message MissionPassReward {
+  uint32 level = 1;           // 可领取的等级
+  Reward reward = 2;          // 奖励
+  bool collected = 3;         // 已经领取
+  bool time_over = 4;         // 是否已经过期, 过期后无法领取
+  uint64 timestamp_left = 5;  // 倒计时显示，仅限时类型奖励需要
+  bool is_timed = 6;          // 是否是限时奖励
+  bool is_elapsing = 7;       // 正在倒计时
+  string desc = 8;            // desc
+  uint32 particle_anima = 9;  // 重要道具 0 1
+}
+
+message CGetMissionPassPaymentItems {}
+
+message SGetMissionPassPaymentItems {
+  repeated ShopItemConfig items = 1;
+}
+
+message CGetMissionPass {}
+
+message SGetMissionPass {
+  MissionPass mission_pass = 1;
+}
+
+message CRefreshMissionPass {}
+
+message SRefreshMissionPass {
+  MissionPass mission_pass = 1;
+}
+
+message CCollectMissionPass {
+  uint32 level = 1;   // 领取奖励的等级
+  bool is_paid = 2;   // 是否是付费奖励
+  bool is_timed = 3;  // 是否是限时奖励
+}
+
+message SCollectMissionPass {
+  MissionPass mission_pass = 1;
+  UserProfile user_profile = 2;  // 用户数据
+  repeated Reward rewards = 3;   // 领取到的所有奖励
+}
+
+message CCollectAllMissionPass {}
+
+message SCollectAllMissionPass {
+  MissionPass mission_pass = 1;
+  UserProfile user_profile = 2;  // 用户数据
+  repeated Reward rewards = 3;   // 领取到的所有奖励
+}
+
+message CDiamondBuyLevelMissionPass {}
+
+message SDiamondBuyLevelMissionPass {
+  MissionPass mission_pass = 1;
+  UserProfile user_profile = 2;  // 用户数据
+}

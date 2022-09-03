@@ -1,0 +1,16 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+
+message SJackpotNotification {
+    string name = 1;
+    uint32 avatar_id = 2;  // 默认头像
+    string game_id = 3;
+    uint64 pay = 4;
+    string avatar_url = 5;  // facebook头像url，没有就是空
+    /** facebookId 注意用了string 没有facebookId就用"" */
+    string facebook_id = 6;
+}

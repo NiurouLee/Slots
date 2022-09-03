@@ -1,0 +1,66 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+import "fortune_x_activity.proto";
+
+// README:
+// 免费游戏需要手动开箱
+// 付费游戏买了直接开
+
+message LevelRushPopupInfo {// levelrush 弹框所需信息; spin时触发活动的那一次，spin时等级变化的那一次，及主动获取，会下发该结构;
+    uint32 start_at = 1;//本轮次开始的时间,单位秒
+    uint32 end_at = 2;// 本轮次结束的时间,单位秒
+    uint32 server_time_seconds = 3;// 服务器时间,单位秒
+    uint32 level_target = 4;//本轮次的目标等级
+    uint32 level_current = 5;//当前等级
+    message LevelRewardInfo {
+        uint32 level = 1;// 等级
+        Reward reward = 2;// 奖励, 初始等级的节点，reward=null
+        bool received = 3;//是否已经领取
+    }
+    repeated LevelRewardInfo level_reward_list = 6;// 等级及奖励信息 
+    repeated LevelRushGameInfo free_games_can_play = 7;//玩家能玩的免费游戏列表
+
+    message IncrementTimeInfo {
+        bool has_increment = 1;// 是否已经续过命了
+        uint32 seconds_can_increment = 2;// 续命可以增加的秒数
+        uint32 diamonds_cost = 3;// 续命需要消耗的钻石
+    }
+    IncrementTimeInfo increment_time_info = 8;// 续命相关信息
+    Reward reward_got = 9;// 领取的奖励，仅当等级变化且有等级到达奖励时该字段不为空
+    uint64 free_games_coin_up_to = 10;// 免费游戏最大的金币产出，用于渲染弹框上的win_up_to
+}
+
+message CGetLevelRushPopUpInfo {// 获取levelrush的弹框信息
+
+}
+
+message SGetLevelRushPopUpInfo {
+    bool has_level_rush_task = 1;// 目前是否有levelrush任务
+    LevelRushPopupInfo level_rush_pop_up_info = 2;//has_level_rush_task=true时读取该字段
+    repeated LevelRushGameInfo free_games_can_play = 3;//玩家能玩的免费游戏列表
+}
+
+message CLevelRushIncrementTime {// levelrush 增加本轮的结束时间，此接口暂时废弃
+
+}
+
+message SLevelRushIncrementTime {
+    UserProfile user_profile = 1;
+    LevelRushPopupInfo level_rush_pop_up_info = 2;
+}
+
+message CLevelRushGamePlay {// levelrush游戏 play
+    string key = 1;
+}
+
+message SLevelRushGamePlay {
+    LevelRushGameResult game_result = 1;// 游戏结果
+    UserProfile user_profile = 2;
+    ShopItemConfig shop_game_pay_item = 3;// 付费游戏支付项，仅当前游戏为免费游戏时读取该字段
+    LevelRushGameInfo paid_game_info_for_show = 4;// 付费游戏展示数据
+}

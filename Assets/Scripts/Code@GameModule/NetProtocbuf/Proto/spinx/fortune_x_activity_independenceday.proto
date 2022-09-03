@@ -1,0 +1,74 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+// 独立日活动，除部分命名外，数据结构同情人节活动相同
+message IndependenceDayActivityConfigPB {
+    string id = 1;
+    int64 level_limited = 2;
+    uint32 payment_id = 3;  // 获取高级奖励所需购买的商品标识
+    int64 start_timestamp = 4;
+    int64 end_timestamp = 5; 
+}
+
+message IndependenceDayActivityDataPB {
+    uint32 payment_id = 3;// 获取高级奖励所需购买的商品标识
+    bool payment_already_paid = 4;// 对应商品是否已经买过
+    bool step_already_biggest = 5;// 步数是否已经达到最大值
+}
+
+message CGetIndependenceDayMainPageInfo { // 情人节活动主页面调用
+    string activity_id = 1;
+}
+
+message SGetIndependenceDayMainPageInfo {
+    uint32 step = 1;// 拥有的步数 默认为0
+    uint32 normal_rewards_received_step = 2;//普通奖励领取到的步数 默认为0 用于判断红心上是否需要打钩
+
+    uint32 payment_id = 3;// 获取高级奖励所需购买的商品标识
+    bool payment_already_paid = 4;// 对应商品是否已经买过
+
+    int64 activity_start_timestamp = 5; // 活动开始时间
+    int64 activity_end_timestamp = 6; // 活动结束时间
+    int64 server_time_seconds = 7; // 服务器当前时间UTC
+
+    message IndependenceDayStepReward {
+        enum IndependenceDayRewardStatus {
+            LOCKED = 0;// 锁定状态
+            UNLOCKED = 1; // 解锁 但未领取
+            RECEIVED = 2;// 已领取
+        }
+        uint32 step = 1;// 需要的步数
+        Reward normal_reward = 2;// 普通奖励
+        IndependenceDayRewardStatus normal_reward_status = 3;// 普通奖励领取状态 
+        Reward special_reward  = 4;// 特殊奖励 
+        IndependenceDayRewardStatus special_reward_status = 5;// 特殊奖励领取状态
+    }
+    repeated IndependenceDayStepReward independence_rewards = 8;// 奖励列表
+    uint32 step_max = 9;// 地图上最大的步数
+    uint32 special_rewards_received_step = 10;//特殊奖励领取到的步数 默认为0
+    ShopItemConfig pay_item = 11;// 情人节活动的支付项信息
+}
+
+message CCollectIndependenceDayRewards {// 获取情人节活动的奖励
+    string activity_id = 1;
+}
+
+message SCollectIndependenceDayRewards {
+    bool success = 1;// 领取结果
+    repeated Reward rewards = 2;// 领取的奖励
+    UserProfile user_profile = 3;  // 用户数据
+    repeated Reward special_rewards_after_pay = 4; //在支付以后还能获取的奖励
+}
+
+message CGetIndependenceDayPayItemInfo {// 获取情人节活动的支付项信息
+    string activity_id = 1;
+}
+
+message SGetIndependenceDayPayItemInfo {
+    ShopItemConfig pay_item = 2;
+}

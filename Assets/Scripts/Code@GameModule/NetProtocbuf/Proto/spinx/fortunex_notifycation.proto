@@ -1,0 +1,24 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+
+// // 推送
+message FortunexNotification {
+  FortunexNotificationType notification_type = 1;  // 推送类型
+  string json = 2;                                 // json格式通知
+  AnyStruct pb = 3;                                // pb格式通知
+}
+
+// 推送类型
+enum FortunexNotificationType {
+  FORTUNEX_NOTIFICATION_TYPE_NONE = 0;           // 空，占位无用
+  FORTUNEX_NOTIFICATION_TYPE_EMAIL_UPDATED = 1;  // 邮箱更新了
+  FORTUNEX_NOTIFICATION_TYPE_TIMER_HOURLY_BONUS_SPEED_UPDAT = 2; //timerbonus hourlyBonus 金币增长速度更新
+}
+
+message FortunexNotifyficationContentMail {
+  uint64 mailCount = 1;
+}

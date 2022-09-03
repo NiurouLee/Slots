@@ -1,0 +1,67 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message DailyMission {
+  bool is_locked = 1;       // 本系统功能是否锁住
+  uint32 unlock_level = 2;  // 开锁等级
+
+  uint64 normal_timestamp_left = 3;  // 普通任务计时
+  uint64 honor_timestamp_left = 4;   // 荣誉任务计时
+  uint64 stage_timestamp_left = 5;   // 累计奖励倒计时
+
+  repeated Mission normal_missions = 6;  // 普通任务列表，正常数量为3
+  repeated Mission honor_missions =
+      7;  // 荣誉任务， 正常数量为1或2  最后一个是最新的， 领取时会用到旧的
+
+  uint32 stage_point = 8;        // 累计奖励积分
+  uint32 stage_point_total = 9;  // 累计奖励积分最大值
+
+  message Stage {
+    uint32 point = 1;         // 领取积分
+    repeated Item items = 2;  // 奖励
+    string desc = 3;          // 描述
+  }
+
+  repeated Stage stages = 10;  // 累计奖励
+}
+
+message CGetDailyMission {}
+
+message SGetDailyMission {
+  DailyMission daily_mission = 1;
+}
+
+message CRefreshDailyMission {}
+
+message SRefreshDailyMission {
+  DailyMission daily_mission = 1;
+}
+
+message CCollectDailyMission {
+  bool is_honor = 1;
+  uint32 index = 2;
+}
+
+message SCollectDailyMission {
+  DailyMission daily_mission = 1;     // 每日任务数据
+  UserProfile user_profile = 2;       // 用户数据
+  Reward mission_reward = 3;          // 完成任务奖励
+  repeated Reward stage_rewards = 4;  // 完成任务奖励
+}
+
+message CCompleteNowDailyMission {
+  bool is_honor = 1;
+  uint32 index = 2;
+}
+
+message SCompleteNowDailyMission {
+  DailyMission daily_mission = 1;     // 每日任务数据
+  UserProfile user_profile = 2;       // 用户数据
+  Reward mission_reward = 3;          // 完成任务奖励
+  repeated Reward stage_rewards = 4;  // 完成任务奖励
+}

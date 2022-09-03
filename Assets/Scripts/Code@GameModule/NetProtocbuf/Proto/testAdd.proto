@@ -1,0 +1,11 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace="DragonU3DSDK.Network.API.Protocol";
+option go_package="protocols";
+
+
+
+message TinyGameAdd {
+    string type = 1;
+    bytes message = 2;
+}

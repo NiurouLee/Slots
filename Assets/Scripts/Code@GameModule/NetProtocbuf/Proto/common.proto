@@ -1,0 +1,24 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace="DragonU3DSDK.Network.API.Protocol";
+option go_package="protocols";
+
+enum Platform {
+    PLATFORM_IOS = 0; // 
+    PLATFORM_FACEBOOK = 1; // 
+    PLATFORM_AMAZON = 2; // 
+    PLATFORM_GOOGLE = 3; // 
+    PLATFORM_WP8 = 4; // 
+    PLATFORM_UNITY_EDITOR = 5; // 
+}
+
+enum PlayerType {
+    PLAYER_TYPE_GUEST = 0; // 
+    PLAYER_TYPE_FACEBOOK = 1; // 
+    PLAYER_TYPE_EMAIL = 2; // 
+}
+
+message ClientConfig {
+    string json = 1; // 
+}
+

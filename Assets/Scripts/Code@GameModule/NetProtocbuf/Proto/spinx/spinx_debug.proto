@@ -1,0 +1,53 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+// 设置金币数
+message CSetCoins {
+    uint64 coins = 1;
+}
+
+message SSetCoins {
+    UserProfile user_profile = 1;
+}
+
+// 更新任务进度
+message CUpdateQuestProgress {
+    string quest_id = 1;
+    uint32 increment = 2;
+}
+
+message SUpdateQuestProgress {}
+
+// 购买奖杯任务
+message CBuyCupsQuest {}
+
+message SBuyCupsQuest {}
+
+// 购买任务付费转盘
+message CBuyDailyQuestWheel {
+    uint32 wheel_id = 1;
+}
+
+message SBuyDailyQuestWheel {}
+
+// ---------- 商城测试协议
+message CDebugPreparePayment {
+    string product_id = 1;
+}
+message SDebugPreparePayment {}
+
+message CDebugVerifyPayment {
+    string payment_id = 1;
+    string transaction_id = 2;
+    string product_id = 3;
+}
+
+message SDebugVerifyPayment {}
+
+message CDebugFulfillPayment {
+    string payment_id = 1;
+}
+message SDebugFulfillPayment {}

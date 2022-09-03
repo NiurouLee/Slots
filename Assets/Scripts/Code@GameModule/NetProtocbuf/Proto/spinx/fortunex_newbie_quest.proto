@@ -1,0 +1,46 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message NewbieQuest {
+    bool is_locked = 1;         // 本系统功能是否锁住
+    uint32 unlock_level = 2;    // 开锁等级
+    uint64 timestamp_left = 3;  // 倒计时 秒
+    repeated Quest quests = 4;  // 推图
+}
+
+message Quest {
+    bool is_slot = 1;     // 是机台进度还是奖励进度
+    string game_id = 2;   // 机台的gameId
+    string asset_id = 3;  // 机台的assetId， 普通机台gameID=assetId,
+    // Quest机台用assetId寻找普通机台里的资源
+    repeated Mission missions = 4;  // 机台进度的任务
+    Reward reward = 5;              // 奖励
+    bool collectable = 6;           // 是否可完成
+    bool collected = 7;             // 是否已完成
+}
+
+message CGetNewbieQuest {}
+
+message SGetNewbieQuest {
+    NewbieQuest newbie_quest = 1;  // guides
+}
+
+message CCollectNewbieQuest {
+    uint32 index = 1;  // Quest的index,从0开始
+}
+
+message SCollectNewbieQuest {
+    NewbieQuest newbie_quest = 1;  // 新手quest
+    UserProfile user_profile = 2;  // 用户数据
+}
+
+message CGetNewbieQuestPaymentItems {}
+
+message SGetNewbieQuestPaymentItems {
+    repeated ShopItemConfig items = 1;
+}

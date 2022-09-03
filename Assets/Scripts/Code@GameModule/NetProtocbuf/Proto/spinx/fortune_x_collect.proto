@@ -1,0 +1,268 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+enum CardsRewardStat {// 奖励状态
+    CANNOT_RECEIVE = 0;// 尚不能领取
+    CAN_RECEIVE = 1;// 可以领取
+    RECEIVED = 2;// 已领取
+}
+
+message Card {
+    uint32 card_id = 1;// 卡牌ID
+    string name = 2;// 卡牌名称
+    enum CardType {
+        NORMAL = 0;// 普卡
+        GOLDEN = 1;// 金卡
+        LUCKY = 2;// lucky卡
+        WILD = 3;// wild卡
+    }
+    CardType type = 3;// 卡牌类型
+    uint32 star = 4;// 星级
+    uint32 count = 5;// 拥有的个数
+    bool is_new = 6; // 是否是一张新卡（拥有卡，但是从没看过）
+    uint32 recycle_value = 7;// 在回收系统中能折算成多少能量
+}
+
+message CardSet {// 卡册
+    uint32 set_id = 1;// 卡册ID
+    repeated Card cards = 2;// 卡片列表
+    Reward reward_for_collect_all = 3;//集齐本卡册所有卡片后的奖励
+    CardsRewardStat reward_for_collect_all_stat = 4;// 奖励的状态
+    uint32 cards_count_total = 5;// 卡册内包含的卡片数
+    uint32 cards_count_owned = 6;// 目前拥有的卡片数
+}
+
+message CollectCardRewardsWhenSpin {
+    Reward reward = 1;
+}
+
+message CGetCardAlbumInfo { // 获取所有卡册信息接口
+
+}
+
+message SGetCardAlbumInfo {
+    bool is_first_in = 1;//是否是第一次调用该接口
+    uint32 cards_count_total = 3;// 所有卡册的总卡片数
+    uint32 cards_count_owned = 4;// 目前拥有的卡片数
+    Reward reward_for_collect_all = 5;// 所有卡片集齐后奖励
+    CardsRewardStat reward_for_collect_all_stat = 6;// 奖励的状态
+    repeated CardSet card_sets = 7;// 卡册列表
+    uint32 season_id = 8;// 赛季id,客户端暂时无用
+    uint64 season_start_at = 9;// 赛季开始时间戳
+    uint64 season_end_at = 10;// 赛季结束时间戳
+    uint32 card_lucky_spin_count = 11;// luckySpin总次数
+    uint32 used_card_lucky_spin_count = 12;// 已经使用的luckySpin次数
+    uint32 season_count_down = 13;// 结束倒计时，单位秒
+    uint32 unlock_level = 14;// 卡片系统解锁等级
+    message LuckyChallengeConfig {
+        uint32 independent_lucky_card_count = 1;// 已获取lucky卡的个数
+        uint32 lucky_spin_count = 2;// 获取不同的lucky卡达到该数量时，奖励luckyspin的次数
+    }
+    repeated LuckyChallengeConfig lucky_challenge_config = 15;// luckyChanllenge的配置
+    uint32 lucky_challenge_progress = 16;//lucky challenge 进度
+    uint32 recycle_game_count_down = 17;// 回收游戏倒计时，单位秒
+    uint32 beginners_guide_step = 18;// 新手引导进度，默认为0
+    message CardProbobilityDisplayItem {
+        uint32 level_min = 1;
+        uint32 level_max = 2;
+        uint32 start_bet = 3;
+        uint32 bet_count = 4;
+    }
+    repeated CardProbobilityDisplayItem card_probability_display_list = 19;//在spin中显示的概率配置
+    uint32 hat_game_count_down = 20;// 帽子游戏倒计时，单位秒
+}
+
+message CAcceptCardReward {// 领取集齐卡册的奖励
+    repeated uint32 set_ids = 1;// 卡册ID列表，传空表示获取所有已集齐的卡册奖励
+}
+
+message SAcceptCardReward {
+    message ReceivedCardSetReward {
+        uint32 set_id = 1;
+        Reward reward = 2;
+    }
+    repeated ReceivedCardSetReward received_card_set_reward = 1;//获取的集齐卡册奖励列表
+    repeated Reward received_collect_all_reward = 2;//获取的集齐所有卡册的所有卡牌奖励
+    UserProfile user_profile = 3;
+}
+
+message CGetCardLuckySpinInfo {// 获取luckyspin的信息
+
+}
+
+message SGetCardLuckySpinInfo {// 获取luckyspin的信息
+    uint32 card_lucky_spin_count = 1;// luckySpin总次数
+    uint32 used_card_lucky_spin_count = 2;// 已经使用的luckySpin次数
+    message SpinRewardConfItem {
+        uint32 reward_id = 1;// 奖励ID
+        Reward reward = 2;// 奖励
+        bool is_super_bonus = 3;// 是否是超级奖励
+    }
+    repeated SpinRewardConfItem spin_reward_confs = 3;// 奖品列表
+    repeated Reward rewards_for_collect = 4;// 待领取的奖励列表
+}
+
+message CCardLuckySpin {// luckyspin 一次
+
+}
+
+message SCardLuckySpin {// luckyspin 一次
+    uint32 reward_id = 1;// 奖励ID
+    Reward reward = 2;// 奖励
+    uint32 used_card_lucky_spin_count = 4;// 已经使用的luckySpin次数
+}
+
+message CCardLuckySpinAll {// luckyspin一次全开完
+
+}
+
+message SCardLuckySpinAll {
+    message LuckySpinSingleResult {
+        uint32 reward_id = 1;// 奖励ID
+        Reward reward = 2;// 奖励
+    }
+    repeated LuckySpinSingleResult results = 1;
+    uint32 used_card_lucky_spin_count = 2;// 已经使用的luckySpin次数
+}
+
+message CCollectLuckySpinRewards {// 领取luckyspin暂存的奖励
+
+}
+
+message SCollectLuckySpinRewards {
+    repeated Reward rewards = 1;// 领取的奖励
+    UserProfile user_profile = 2;  // 用户数据
+}
+
+
+message CMarkViewCardSet {// 标记看过某卡册
+    uint32 set_id = 1;
+}
+
+message SMarkViewCardSet {
+    bool success = 1;
+    CardSet card_set = 2;
+}
+
+message CGetCardRecycleGameInfo {// 获取卡片回收游戏的信息
+
+}
+
+message SGetCardRecycleGameInfo {
+    message GameRewardItem {
+        uint32 id = 1;// ID，给奖励的时候用
+        uint32 index = 2;// 排序序号 从1开始
+        uint32 card_color = 3;// 底框颜色
+        uint32 show_coin_count = 4;// 展示的金币数量 如 200
+        repeated Item item_other = 5;// 其他的道具列表，长度最大为1
+    }
+    message RecycleLevelConfig {
+        uint32 cover_level = 1;
+        uint32 cover_energy_need = 2;//从0级开始到该等级，共需多少经验
+    }
+    repeated GameRewardItem game_reward_items = 1;// 回收转轮配置
+    repeated Card cards_can_recycle = 2;// 能参与回收的卡片列表，卡片的数量已经减了1
+    repeated RecycleLevelConfig recycle_level_configs = 3;// 回收等级配置，用于计算选中的卡牌能开启几个锯齿
+}
+
+message CCardRecycleGameSpin {// 回收游戏，spin
+    repeated uint32 card_ids = 1;
+    repeated uint32 card_counts = 2;
+}
+
+message SCardRecycleGameSpin {
+    repeated uint32 game_reward_item_ids = 1;// 摇中的GameRewardItem id列表
+    Reward reward = 2;// 得到的奖励（经汇总）
+    UserProfile user_profile = 3;
+    uint32 game_count_down = 4;//能玩该游戏的倒计时，单位秒
+}
+
+message CGetCardGotRecords { // 获取卡片获取历史记录
+
+}
+
+message SGetCardGotRecords {
+    message CardGotRecord {
+        Card card = 1;
+        string source = 2;
+        uint32 got_time = 3;// 
+    }
+    repeated CardGotRecord card_got_records = 1;
+}
+
+message CIncBeginnersGuideStep {// 增加玩家新手引导的进度
+
+}
+
+message SIncBeginnersGuideStep {
+    bool success = 1;
+    Reward reward = 2;// 奖励，need_collect_beginners_package=false时为空
+    uint32 beginners_guide_step = 3;//进度，默认为0,掉接口以后+1
+}
+
+message HatGameInfo {// 帽子游戏信息
+    enum HatColor {
+        SILVER = 0;//银色
+        GOLD = 1;//金色
+    }
+    enum HatGameStat {
+        LIVE = 0;// 游戏进行中
+        DEAD = 1;// 遇见了兔子，下一步要么复活成LIVE要么结束
+        CLEARED = 2;// 通关了（已经选了第15关的帽子但还未领取奖励）
+        END = 3;// 领取奖励或者放弃复活，游戏结束
+    }    
+    uint32 current_step = 1;// 当前关卡，默认为1
+    HatColor hat_color = 2;// 帽子颜色
+    bool has_rabit_tip = 3;// 是否有兔子提示
+    bool has_lucky_card_tip = 4;// 是否有luckycard提示
+    repeated uint32 selected_hat_indexs_record = 5;// 本关选择帽子的历史记录 如[] [0]; 序号取值0-3；不为空数组则表示本关卡遇见过兔子
+    repeated Reward rewards_can_collected = 6;// 截止目前，总共可领取的奖励
+    HatGameStat hat_game_stat = 7;// 游戏状态 
+    uint32 revice_cost = 8;// 复活需要的钻石数量
+    uint32 hat_game_count_down = 9;// 帽子游戏倒计时，单位秒
+    uint32 unlock_level = 10;// 解锁等级
+}
+
+message CHatGameInfo {// 帽子游戏页面信息
+
+}
+
+message SHatGameInfo {
+    HatGameInfo hat_game_info = 1;
+}
+
+message CHatGameSelect {// 帽子游戏 选择帽子
+    uint32 index = 1;//帽子序号 0-3
+}
+
+message SHatGameSelect {
+    bool rabbit_appear = 1;// 兔子出现了
+    Reward reward = 2;// 选中的奖励，仅当兔子没出现时，读该值
+    HatGameInfo hat_game_info = 3;
+    repeated Reward rewards_others = 4;//其他未被选中的奖励，长度为2或者3
+}
+
+message CHatGameHandleRabbit { // 复活
+    bool revive = 1;//是否复活
+    bool has_watched_adv = 2;// 是否观看了广告
+}
+
+message SHatGameHandleRabbit {
+    HatGameInfo hat_game_info = 1;
+    UserProfile user_profile = 2;
+}
+
+message CHatGameCollectRewards {// 领奖
+
+}
+
+message SHatGameCollectRewards {
+    repeated Reward rewards = 1;
+    UserProfile user_profile = 2;
+    HatGameInfo hat_game_info = 3;
+}

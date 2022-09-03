@@ -1,0 +1,232 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace="DragonU3DSDK.Network.API.Protocol";
+option go_package="protocols";
+
+message BiEventFortuneX {
+    enum GameEventType {
+        GAME_EVENT_PLACEHOLDER = 0; // 占位，无含义
+        GAME_EVENT_LAUNCH_APP = 1; // 漏斗：启动游戏，成功后发送日志
+        GAME_EVENT_INIT_ADDRESSABLE_SUCCESS = 2; // 漏斗：初始化资源下载插件成功，发送日志
+        GAME_EVENT_DOWNLOAD_CODE = 3; // 漏斗：下载热更代码成功，发送日志
+        GAME_EVENT_START_LOAD_LOADING = 4; // 漏斗：下载loading资源成功，发送日志
+        GAME_EVENT_ENTER_LOADING_SCENE = 5; // 漏斗：进入loading开始下载核心资源，发送日志
+        GAME_EVENT_DOWNLOAD_RESOURCE = 6; // 漏斗：下载资源成功，发送日志
+        GAME_EVENT_ENTER_LOGIN_SCREEN = 7; // 漏斗：进入登录页面，发送日志
+        GAME_EVENT_USER_LOGIN = 8; // 漏斗：用户登录，发送日志；extras记录login_type（Guest、Facebook、AppleId）
+        GAME_EVENT_GUIDE_POP_WELCOME = 9; // 漏斗：弹出新手引导界面-给玩家初始资金,发送日志
+        GAME_EVENT_GUIDE_COLLECT_WELCOME = 10; // 漏斗：点击新手引导界面收到初始资金,发送日志
+        GAME_EVENT_GUIDE_POP_FIRST_MACHINE = 11; // 漏斗：弹出新手引导界面-点击第一个机器,发送日志
+        GAME_EVENT_GUIDE_TAP_FIRST_MACHINE = 12; // 漏斗：点击新手引导界面-第一个机器,发送日志
+        GAME_EVENT_GUIDE_POP_SPIN_1 = 13; // 漏斗：弹出新手引导1-点击Spin按钮,发送日志
+        GAME_EVENT_GUIDE_TAP_SPIN_1 = 14; // 漏斗：点击新手引导1-第一次点击Spin按钮,发送日志
+        GAME_EVENT_GUIDE_COMPLETE_1 = 15; // 漏斗：完成新手引导1-点击3次SPIN ,发送日志; 
+        GAME_EVENT_GUIDE_POP_REACH_LEVEL_2 = 16; // 漏斗：弹出新手引导2-到达指定等级3,发送日志
+        GAME_EVENT_GUIDE_COMPLETE_REACH_LEVEL_2 = 17; // 漏斗：完成新手引导2-到达指定等级3,发送日志; 
+        GAME_EVENT_GUIDE_POP_UNLOCK_QUEST_3 = 18; // 漏斗：弹出新手引导3-解锁新的模块Quest,发送日志
+        GAME_EVENT_GUIDE_COMPLETE_UNLOCK_QUEST_3 = 19; // 漏斗：完成新手引导3-解锁新的模块Quest，点击Let's Go,发送日志; 
+        GAME_EVENT_GUIDE_TRANSFER_QUEST = 20; // 漏斗：从新手引导界面点击Let's Go跳转到Quest界面成功,发送日志
+        GAME_EVENT_QUEST_ENTER = 21; // 漏斗：进入新手Quest，发送日志；extras记录来源source（Guide、Advertisement、Machine、Lobby）
+        GAME_EVENT_QUEST_TAP_1 = 22; // 漏斗：点击新手Quest1-第一台机器,发送日志
+        GAME_EVENT_QUEST_COMPLETE_1 = 23; // 漏斗：完成新手Quest1-第一台机器,发送日志; extras记录倒计时CountDown
+        GAME_EVENT_QUEST_COLLECT_1 = 24; // 漏斗：领取新手Quest1-第一个奖励节点,发送日志
+        GAME_EVENT_QUEST_TAP_2 = 25; // 漏斗：点击新手Quest2-第二台机器,发送日志
+        GAME_EVENT_QUEST_COMPLETE_2 = 26; // 漏斗：完成新手Quest2-第二台机器,发送日志; extras记录倒计时countDown
+        GAME_EVENT_QUEST_COLLECT_2 = 27; // 漏斗：领取新手Quest2-第二个奖励节点,发送日志
+        GAME_EVENT_QUEST_TAP_3 = 28; // 漏斗：点击新手Quest3-第三台机器,发送日志
+        GAME_EVENT_QUEST_COMPLETE_3 = 29; // 漏斗：完成新手Quest3-第三台机器,发送日志; extras记录倒计时countDown
+        GAME_EVENT_QUEST_COLLECT_3 = 30; // 漏斗：领取新手Quest3-第三个奖励节点,发送日志
+        GAME_EVENT_QUEST_TAP_4 = 31; // 漏斗：点击新手Quest4-第四台机器,发送日志
+        GAME_EVENT_QUEST_COMPLETE_4 = 32; // 漏斗：完成新手Quest4-第四台机器,发送日志; extras记录倒计时countDown
+        GAME_EVENT_QUEST_COLLECT_4 = 33; // 漏斗：领取新手Quest4-第四个奖励节点,发送日志
+        GAME_EVENT_QUEST_TAP_5 = 34; // 漏斗：点击新手Quest5-第五台机器,发送日志
+        GAME_EVENT_QUEST_COMPLETE_5 = 35; // 漏斗：完成新手Quest5-第五台机器,发送日志; extras记录倒计时countDown
+        GAME_EVENT_QUEST_COLLECT_5 = 36; // 漏斗：领取新手Quest5-第五个奖励节点,发送日志
+        GAME_EVENT_QUEST_TAP_6 = 37; // 漏斗：点击新手Quest6-第六台机器,发送日志
+        GAME_EVENT_QUEST_COMPLETE_6 = 38; // 漏斗：完成新手Quest6-第六台机器,发送日志; extras记录倒计时countDown
+        GAME_EVENT_QUEST_COLLECT_6 = 39; // 漏斗：领取新手Quest6-第六个奖励节点,发送日志
+        GAME_EVENT_MACHINE_CLICK = 40; // 点击机器图标，发送日志；extras记录来源source（Advertisement、Lobby、MachineUnlock）、机器gameId
+        GAME_EVENT_MACHINE_DOWNLOAD_START = 41; // 机器开始下载，发送日志（只在下载的时候加，Loading的时候不加）
+        GAME_EVENT_MACHINE_DOWNLOAD_SUCCESS = 42; // 机器下载成功，发送日志
+        GAME_EVENT_MACHINE_DOWNLOAD_FAIL = 43; // 机器下载失败，发送日志；extras记录机器gameId
+        GAME_EVENT_LEVEL_UP = 44; // 升级，发送日志；extras记录升级后Level
+        GAME_EVENT_VIP_LEVEL_UP = 45; // VIP升级，发送日志；extras记录升级原因reason（LevelUp、Purchase、MissionPassReward）
+        GAME_EVENT_RATE_US_POP = 46; // 弹出Rate Us弹窗时发送日志；extras记录source（Setting）
+        GAME_EVENT_RATE_US_5 = 47; // 点击Rate 5星时发送日志
+        GAME_EVENT_RATE_US_4 = 48; // 点击Rate 1-4星时发送日志
+        GAME_EVENT_RATE_US_CLOSE = 49; // Rate Us 弹窗点击关闭按钮时，发送日志
+        GAME_EVENT_BIND_FACEBOOK_BIND = 50; // 点击绑定 FB按钮时，发送日志；extras记录source
+        GAME_EVENT_BIND_FACEBOOK_SUCCESS = 51; // 绑定 FB 成功时发送
+        GAME_EVENT_BIND_FACEBOOK_FAIL = 52; // 绑定 FB 返回失败时发送；
+        GAME_EVENT_LIKE_US_POP = 53; // 弹出Like Us弹窗时发送日志
+        GAME_EVENT_LIKE_US_LIKE = 54; // 在Like Us弹窗点击 Like 按钮时发送日志
+        GAME_EVENT_LIKE_US_LATER = 55; // 在Like Us弹窗点击 Later 发送日志
+        GAME_EVENT_LIKE_US_CLOSE = 56; // 在Like Us弹窗点击 关闭或者No Thanks发送日志
+        GAME_EVENT_CONTACT_US = 57; // 打开 Contact Us 页面时发送日志；extras记录来源source（Setting、RateUs（点击评论 1-4 星时打开））
+        GAME_EVENT_SETTING_OPEN = 58; // 打开 Setting页面时发送日志
+        GAME_EVENT_DAILY_BONUS_POP = 59; // 弹出每日奖励弹窗发送日志
+        GAME_EVENT_DAILY_BONUS_DAILY = 60; // 每日奖励弹窗领取每日签到按钮发送日志
+        GAME_EVENT_DAILY_BONUS_STAGE = 61; // 每日奖励弹窗领取累计签到按钮发送日志；extras记录stage（1、2、3）、累计签到天数totalLoginDay
+        GAME_EVENT_TIMER_BONUS_HOURLY_COLLECT = 62; // 领取TimerBonus里面每小时奖励时发送日志
+        GAME_EVENT_TIMER_BONUS_WHEEL_COLLECT = 63; // 领取TimerBonus里面转轮奖励时发送日志；extras记录扇叶wedgeId、superWheelBoost
+        GAME_EVENT_TIMER_BONUS_EXTRA_WHEEL_COLLECT = 64; // 领取TimerBonus里面3层转轮奖励时发送日志；extras记录拿到的win、multiple、emerald
+        GAME_EVENT_TIMER_BONUS_GOLDEN_WHEEL_POP = 65; // 领取TimerBonus转轮奖励后首次弹出付费转轮时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_TIMER_BONUS_GOLDEN_WHEEL_POP_2 = 66; // 领取TimerBonus转轮奖励后玩家点击关闭第二次弹出付费转轮挽留界面时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_TIMER_BONUS_GOLDEN_WHEEL_EXIT = 67; // 退出付费转轮界面时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_TIMER_BONUS_GOLDEN_WHEEL_PURCHASE = 68; // 点击付费转轮付费按钮时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_TIMER_BONUS_GOLDEN_WHEEL_PURCHASE_SUCCESS = 69; // 购买付费转轮成功时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_DAILY_MISSION_POP = 70; // 点击并弹出每日任务界面发送日志；extras记录Normal任务完成进度normalSchedule（0、1、2、3）来源source（Lobby、Machine）
+        GAME_EVENT_DAILY_MISSION_NORMAL_COLLECT_1 = 71; // 领取每日任务-1时发送日志；
+        GAME_EVENT_DAILY_MISSION_NORMAL_COLLECT_2 = 72; // 领取每日任务-2时发送日志；
+        GAME_EVENT_DAILY_MISSION_NORMAL_COLLECT_3 = 73; // 领取每日任务-3时发送日志；
+        GAME_EVENT_DAILY_MISSION_HONOR_COLLECT = 74; // 领取每日任务-Honor任务时发送日志；
+        GAME_EVENT_DAILY_MISSION_STAGE_COLLECT = 75; // 领取每日任务-Stage奖励时发送日志；extras记录领取时stage剩余时间countDown、Stage阶段（1、2）
+        GAME_EVENT_MISSION_PASS_POP = 76; // 点击并弹出MissionPass界面发送日志；extras记录来源source（Lobby、Machine、Advertisement）
+        GAME_EVENT_MISSION_PASS_COLLECT = 77; // 领取MissionPass奖励发送日志；extras记录领取类型missionType（Free、Mission、FreeLimited、MissionLimited）、MissionPass等级missionPassLevel
+        GAME_EVENT_MISSION_PASS_COLLECT_ALL = 78; // 点击MissionPass界面CollectAll按钮发送日志；extras记录领取类型missionType（Free、Mission、Limited）及对应类型数量count、MissionPass等级missionPassLevel
+        GAME_EVENT_MISSION_PASS_BUY_LEVEL_POP = 79; // 点击并弹出MissionPass购买等级界面时发送日志；extras记录MissionPass等级missionPassLevel
+        GAME_EVENT_MISSION_PASS_BUY_LEVEL_PURCHASE = 80; // 点击MissionPass购买等级界面付费按钮时发送日志；extras记录商品paymentId、price、MissionPass等级missionPassLevel
+        GAME_EVENT_MISSION_PASS_BUY_LEVEL_PURCHASE_SUCCESS = 81; // 购买MissionPass等级成功时发送日志；extras记录商品paymentId、price、MissionPass等级missionPassLevel
+        GAME_EVENT_MISSION_PASS_UNLOCK_POP = 82; // 点击并弹出MissionPass解锁MissionPass权限界面时发送日志；extras记录MissionPass等级missionPassLevel
+        GAME_EVENT_MISSION_PASS_UNLOCK_PURCHASE = 83; // 点击MissionPass解锁界面付费按钮时发送日志；extras记录商品paymentId、price、当前余额、MissionPass等级missionPassLevel
+        GAME_EVENT_MISSION_PASS_UNLOCK_PURCHASE_SUCCESS = 84; // 购买MissionPass解锁成功时发送日志；extras记录商品paymentId、price、MissionPass等级missionPassLevel
+        GAME_EVENT_STORE_OPEN = 85; // 打开商店界面时发送日志；extras记录来源source（货币栏、Banner、BUY、余额不足）、scene（Lobby、gameId）
+        GAME_EVENT_STORE_BONUS_CLICK = 86; // 点击并领取StoreBonus时发送日志
+        GAME_EVENT_STORE_GIFT_BOX_CLICK = 87; // 点击GiftBox说明时发送日志
+        GAME_EVENT_STORE_GIFT_BOX_COLLECT = 88; // 领取GiftBox奖励时发送日志
+        GAME_EVENT_STORE_PURCHASE = 89; // 点击Store付费按钮时发送日志；extras记录商品paymentId、price、productType
+        GAME_EVENT_STORE_PURCHASE_SUCCESS = 90; // 购买Store成功时发送日志；extras记录商品paymentId、price、productType
+        GAME_EVENT_PURCHASE_FAIL = 91; // 购买失败时发送日志；extras记录失败原因failedReason、product_id
+        GAME_EVENT_PIGGY_BANK_OPEN = 92; // 打开PiggyBank界面时发送日志；extras记录来源scene（Lobby、机器gameId、）source(Advertisement, TopPanel)、是否填满Piggy（isFull）
+        GAME_EVENT_PIGGY_BANK_PURCHASE = 93; // 点击PiggyBank付费按钮时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_PIGGY_BANK_PURCHASE_SUCCESS = 94; // 购买PiggyBank成功时发送日志；extras记录商品paymentId、price、是否首次砸猪isFirst
+        GAME_EVENT_SPECIAL_OFFER_POP = 95; // 弹出SpecialOffer界面时发送日志；extras记录来源source（Advertisement、Deal、Lobby）
+        GAME_EVENT_SPECIAL_OFFER_PURCHASE = 96; // 点击SpecialOffer付费按钮时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_SPECIAL_OFFER_PURCHASE_SUCCESS = 97; // 购买SpecialOffer成功时发送日志；extras记录商品paymentId、price
+        GAME_EVENT_INBOX_OPEN = 98; // 点开Inbox时发送日志；extras记录Inbox包含的信息条数messageCount
+        GAME_EVENT_INBOX_COLLECT = 99; // 领取Inbox内容时发送日志；extras记录该条内容的信息type
+        GAME_EVENT_ADS_POP = 100; // 弹出广告时发送日志；extras记录广告性质adsType（interstitialVideo、rewardVideo）、placeId、userGroup（分层）
+        GAME_EVENT_ADS_COLLECT = 101; // 领取广告奖励时发送日志
+        GAME_EVENT_TERM_SERVICE_CLICK = 102; // 点击TermofService时发送日志
+        GAME_EVENT_PRIVACY_CLICK = 103; // 点击PrivacyPolicy时发送日志
+        GAME_EVENT_COUPON_ACTIVITY_COINS_ADENTER = 104; // 点击金币优惠券活动的开屏广告的REDEEM
+        GAME_EVENT_COUPON_ACTIVITY_COINS_ADCLOSE = 105; // 点击金币优惠券活动的开屏广告的关闭按钮
+        GAME_EVENT_COUPON_ACTIVITY_COINS_REDEEM = 106; // 点击邮箱中的金币优惠券的REDEEM
+        GAME_EVENT_COUPON_ACTIVITY_COINS_CAROUSELENTER = 107; // 点击金币优惠券活动的轮播图广告的REDEEM
+    }
+    enum SpinActionType {
+        SPIN_ACTION_TYPE_NONE = 0; // 占位
+        SPIN_ACTION_TYPE_SPIN = 1; // SPIN；extras记录游戏状态（如BaseGame、Feature）
+        SPIN_ACTION_TYPE_STOP = 2; // 提前停止Spin
+        SPIN_ACTION_TYPE_NO_CHIPS = 3; // 没有钱了
+        SPIN_ACTION_TYPE_FEATURE_TRIGGER = 4; // 机器Feature；extras记录feature_type（如FreeGame、Link、Map）、其余信息和前端同学协商
+        SPIN_ACTION_TYPE_FEATURE_PLAY = 5; // 
+        SPIN_ACTION_TYPE_FEATURE_END = 6; // 机器Feature结束；extras记录的游戏状态和前端同学协商
+        SPIN_ACTION_TYPE_JACKPOT = 7; // 中Jackpot；extras记录jackpot_type（如MachineJackpot、App内的全局Jackpot（预留））、jackpot_level（Jackpot等级）、其余信息和前端同学协商
+        SPIN_ACTION_TYPE_CHANGE_BET = 8; // 切换Bet
+        SPIN_ACTION_TYPE_OPEN_PAYTABLE = 9; // 查看PayTable
+    }
+    enum Item {
+        ITEM_NONE = 0; // 占位
+        ITEM_COIN = 1; // 金币
+        ITEM_EXP = 2; // 经验
+        ITEM_VIP_POINTS = 3; // VIP点数
+        ITEM_EMERALD = 4; // 绿宝石
+        ITEM_GIFT_BOX = 5; // GiftBox
+        ITEM_LEVEL_UP_BURST = 6; // 升级奖励Boost
+        ITEM_SUPER_WHEEL = 7; // 付费转轮奖励Boost
+        ITEM_DOUBLE_XP = 8; // 双倍经验Boost
+        ITEM_MISSION_POINTS = 9; // DailyMission点数
+        ITEM_MISSION_STARS = 10; // MissionPass点数
+    }
+    enum ItemChangeReason {
+        ITEM_CHANGE_REASON_NONE = 0; // 占位
+        ITEM_CHANGE_REASON_CREATE_PROFILE = 1; // 获得：创建账号获得发送日志
+        ITEM_CHANGE_REASON_GUIDE = 2; // 获得：完成新手引导拿到金币、绿宝石；extras记录新手引导任务
+        ITEM_CHANGE_REASON_QUEST = 3; // 获得：完成新手Quest拿到金币、绿宝石、Boost；extras记录新手Quest关卡进度
+        ITEM_CHANGE_REASON_BIND_FACEBOOK = 4; // 获得：绑定Facebook拿到金币
+        ITEM_CHANGE_REASON_LIKE_US = 5; // 获得：like粉丝页奖励拿到金币
+        ITEM_CHANGE_REASON_IAP = 6; // 获得：支付获得金币、绿宝石、VIP点数、GiftBox、Boost；extras 记录product_id、玩家余额、机器id
+        ITEM_CHANGE_REASON_STORE_BONUS = 7; // 获得：领取商店免费金币拿到金币
+        ITEM_CHANGE_REASON_STORE_GIFT_BOX = 8; // 获得：领取商店GiftBox拿到金币
+        ITEM_CHANGE_REASON_SPIN = 9; // 获得：Spin拿到金币、经验；extras记录机器id，如果在feature中则记录Freespin、Respin、SmallGame
+        ITEM_CHANGE_REASON_LEVEL_UP = 10; // 获得：升级拿到金币、VIP点数
+        ITEM_CHANGE_REASON_VIP_LEVEL_UP = 11; // 获得：VIP升级拿到金币及消耗经验；extras记录升级后的VIP等级
+        ITEM_CHANGE_REASON_DAILY_BONUS_DAILY = 12; // 获得：领取DailyBonus拿到金币、绿宝石、Boost；extras记录第几天奖励、累计签到天数
+        ITEM_CHANGE_REASON_DAILY_BONUS_STAGE = 13; // 获得：累计签到一定天数领取拿到金币、绿宝石、Boost；extras记录Stage阶段（1、2、3）、累计签到天数
+        ITEM_CHANGE_REASON_TIMER_BONUS_HOURLY = 14; // 获得：领取TimerBonus每小时奖励拿到金币
+        ITEM_CHANGE_REASON_TIMER_BONUS_WHEEL = 15; // 获得：领取TimerBonus转盘奖励拿到金币；extras记录拿到的扇叶id、SuperWheelBoost(记0、1)
+        ITEM_CHANGE_REASON_TIMER_BONUS_EXTRA_WHEEL = 16; // 获得：领取TimerBonus3层转盘奖励拿到金币、绿宝石
+        ITEM_CHANGE_REASON_DAILY_MISSION_NORMAL = 17; // 获得：完成每日任务拿到金币、MissionPoints、MissionStars；消耗：花费绿宝石完成每日任务；extras记录完成任务关数1、2、3
+        ITEM_CHANGE_REASON_DAILY_MISSION_HONOR = 18; // 获得：完成Honor任务拿到金币、MissionPoints、MissionStars；extras记录Honor任务完成轮数与当前轮的次数
+        ITEM_CHANGE_REASON_DAILY_MISSION_STAGE = 19; // 获得：达到一定MissionPoints拿到金币、绿宝石、Boost；extras记录领取时MissionPoints和Stage阶段1、2
+        ITEM_CHANGE_REASON_MISSION_PASS_FREE = 20; // 获得：领取MissionPass免费拿到金币、绿宝石、Boost、Vip点数；extras记录MissionPass奖励等级和当前MissionPass等级
+        ITEM_CHANGE_REASON_MISSION_PASS_MISSION = 21; // 获得：领取MissionPass付费拿到金币、绿宝石、Boost、Vip点数；extras记录MissionPass奖励等级和当前MissionPass等级
+        ITEM_CHANGE_REASON_MISSION_PASS_LIMITED = 22; // 获得：领取MissionPass限时拿到金币、绿宝石、Boost、Vip点数；extras记录MissionPass奖励等级、当前MissionPass等级和任务倒计时
+        ITEM_CHANGE_REASON_MISSION_PASS_LEVEL = 23; // 消耗：花费绿宝石购买MissionPass等级；extras记录当前MissionPass等级
+        ITEM_CHANGE_REASON_INBOX = 24; // 获得：领取Inbox拿到的金币、绿宝石、Boost、Vip点数；extras记录发放原因如MissionPassChest等级赛季结算
+        ITEM_CHANGE_REASON_ADS = 25; // 获得：观看广告拿到金币；extras记录广告入口
+        ITEM_CHANGE_REASON_ADMIN = 26; // 获得：后台权限增加拿到的金币、绿宝石、Boost、Vip点数等；extras记录备注
+        ITEM_CHANGE_REASON_EXPIRE = 27; // 消耗：GiftBox填满或者过期、MissionPoints清零、MissionStar清零；
+        ITEM_CHANGE_REASON_BIND_APPLEID = 28; // 获得：绑定AppleId拿到金币
+    }
+    
+    message Common {
+        uint64 coin = 1; // 当前金币数量
+        uint64 level = 2; // 当前等级
+        uint64 vip_level = 3; // 当前vip等级
+        uint64 emerald = 4; // 当前绿宝石数量
+        uint64 vip_points = 5; // 当前vip点数数量
+        uint64 exp = 6; // 当前经验
+    }
+    message GameEvent {
+        GameEventType game_event_type = 1; // 
+        map<string, string> extras = 2; // 
+    }
+    message PanelColumn {
+        repeated uint64 symbols = 1; // 
+    }
+    message Panel {
+        repeated PanelColumn columns = 1; // 
+    }
+    message SpinAction {
+        string game_id = 1; // 
+        SpinActionType spin_action_type = 2; // 
+        bool is_auto = 3; // 
+        bool is_fast = 4; // 
+        string spin_mode = 5; // 
+        uint64 bet = 6; // 
+        string request_id = 7; // 
+        map<string, string> extras = 8; // 
+    }
+    message SpinResult {
+        string game_id = 1; // 
+        SpinActionType spin_action_type = 2; // 
+        string request_id = 3; // 
+        uint64 bet = 4; // 
+        uint64 win = 5; // 
+        repeated Panel panels = 6; // 
+        repeated uint64 positions = 7; // 
+        map<string, string> extras = 8; // 
+        bool is_spin_end = 9; // 
+        uint64 cost = 10; // 
+        uint64 display_win = 11; // 
+        uint64 display_total_win = 12; // 
+    }
+    message ItemChange {
+        Item item = 1; // 
+        int64 amount = 2; // 
+        uint64 current = 3; // 
+        ItemChangeReason reason = 4; // 
+        map<string, string> extras = 5; // 
+    }
+    
+    Common common = 1;
+    oneof payload {
+        GameEvent game_event = 11;
+        SpinAction spin_action = 12;
+        SpinResult spin_result = 13;
+        ItemChange item_change = 14;
+        
+    }
+}

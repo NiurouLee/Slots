@@ -1,0 +1,55 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace="DragonU3DSDK.Network.API.Protocol";
+option go_package="protocols";
+
+import "common.proto";
+
+message CHeartBeat {
+}
+message SHeartBeat {
+    uint64 timestamp = 1;
+}
+
+message CGetConfig {
+    string route = 1;
+}
+message SGetConfig {
+    ClientConfig config = 8;
+}
+
+//player_condition说明
+//判断是否有对应key，若有，则作为and条件之一
+//① 描述：是否绑定facebook， key名：isFacebook, 值类型：bool, 值说明：true(已绑定) false(未绑定)
+//② 描述：是否付费， key名：isPaid, 值类型：bool, 值说明：true(已付费) false(未付费)
+//③ 描述：账户创建时间范围， key名：createdTimeRange, 值类型：数组, 值说明：0元素（起始时间时间戳）,1元素（截止时间时间戳）
+//④ 描述：平台， key名：platform, 值类型：无符号整型, 值说明：对应平台类型枚举值
+//⑤ 描述：最大版本号， key名：maxNativeVersion, 值类型：字符串, 值说明：nativeVersion小于（不包含等于）该值
+
+//公告
+message Announcement {
+    string announcement_id = 1; //公告id
+    uint64 start_time = 2; //公告开始时间
+    uint64 end_time = 3; //公告结束时间
+    uint64 cd_seconds = 4; //公告弹出间隔时间（单位：秒）
+    bool is_all = 5; //是否发送全体玩家
+    string player_condition = 6; //玩家条件筛选
+    string img_url = 7; //公告图片链接
+    enum MsgType {
+        CUSTOMIZE = 0; //自定义
+        NEW_RESTAURANT = 1; //新餐厅
+        NEW_EVENT = 2; //新活动
+        NEW_FEATURE = 3; //新功能
+    }
+    MsgType msg_type = 8; //公告信息类型
+    string msg_text = 9; //公告信息内容（若自定义类型）
+    map<string, string> locale_msg_infos = 10; //公告信息内容多语言（若自定义类型)
+    bool   manual_end = 11;
+}
+
+message CListAnnouncements {
+}
+
+message SListAnnouncements {
+    repeated Announcement announcement = 1;
+}

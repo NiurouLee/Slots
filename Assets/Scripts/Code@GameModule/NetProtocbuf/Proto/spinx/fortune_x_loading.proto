@@ -1,0 +1,74 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "fortunex_advertisement.proto";
+import "fortunex_buff.proto";
+import "spinx_api.proto";
+import "fortunex_daily_bonus.proto";
+import "fortunex_egg.proto";
+import "fortunex_daily_mission.proto";
+import "fortunex_mission_pass.proto";
+import "fortunex_guide.proto";
+import "fortunex_shop.proto";
+import "fortunex_mail.proto";
+import "fortunex_newbie_quest.proto";
+import "fortunex_season_quest.proto";
+import "fortunex_timer_bonus.proto";
+import "fortunex_vip.proto";
+import "fortunex_piggy_bank.proto";
+import "fortune_x_activity.proto";
+import "fortune_x_coindash.proto";
+
+
+message PopUpConfig { // PopupConfig
+    message PopupConfigConf {
+        string id = 1;
+        string pool_id = 2;
+    }
+    repeated PopupConfigConf config = 1;
+
+    message PopupConfigPool {
+        string id = 1;
+        string popup_name = 2;
+        string filter = 3;
+        string weight = 4;
+    }
+    repeated PopupConfigPool pool = 2;
+
+    message PopupConfigFilter {
+        uint32 id = 1;
+        string filter_type = 2;
+        string arg1 = 3;
+    }
+    repeated PopupConfigFilter filter = 3;
+}
+
+
+message CGetInfoBeforeEnterLobby {  // 获取进入大厅之前的信息（汇总若干接口的返回数据)
+    string user_group = 1;
+}
+
+message SGetInfoBeforeEnterLobby {
+    PopUpConfig pop_up_config = 1;
+    SGetRVAdvertisingConfig s_get_rv_advertising_config = 2;
+    SGetBuff s_get_buff = 3;
+    SGetPaymentBaseInfo s_get_payment_base_info = 4;
+    SGetAdvertisement s_get_advertisement = 5;
+    SGetVipInfo s_get_vip_info = 6;
+    SListGame s_list_game = 7;
+    SGetUserCoupons s_get_user_coupons = 8;
+    SGetDailyBonus s_get_daily_bonus = 9;
+    SGetEggInfo s_get_egg_info = 10;
+    SGetDailyMission s_get_daily_mission = 11;
+    SGetMissionPass s_get_mission_pass = 12;
+    SGetGuide s_get_guide = 13;
+    SRefreshWeekendVipMail s_refresh_weekend_vip_mail = 14;
+    SGetNewbieQuest s_get_newbie_quest = 15;
+    SGetPiggyBank s_get_piggy_bank = 16;
+    SGetSeasonQuest s_get_season_quest = 17;
+    SGetTimerBonus s_get_timer_bonus = 18;
+    SGetCoinDashInfo s_get_coin_dash_info = 19;
+}

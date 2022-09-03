@@ -1,0 +1,60 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+import "spinx_common.proto";
+
+
+// 用户统计信息
+message UserStatInfo {
+    uint64 total_play = 1; //
+    uint64 total_win = 2; //
+    uint64 total_pay = 3;   // 总付费
+}
+
+// 用户等级结构
+message UserLevelInfo {
+    uint32 level = 1; // 当前等级
+    bool level_changed = 2; // 升级标志
+    uint64 exp_current = 3; // 当前经验
+    uint64 exp_next_level = 4; // 升级到下一级所需经验
+    float exp_multiplier = 5; // 经验倍数
+    uint64 exp_multiplier_expire = 6;   // 经验加成效果过期时间
+    uint64 level_reward = 7; // 升级金币奖励
+    uint64 vip_reward = 8;  // 升级vip点数奖励
+}
+
+// 用户vip等级结构
+message UserVipLevelInfo {
+    uint32 level = 1; // vip等级
+    uint64 exp_current = 2; // 当前经验点数
+    uint64 exp_next_level = 3; // 下一等级所需经验
+    bool level_changed = 4; // 升级标志
+}
+
+// 用户数据
+message UserProfile {
+    uint64 coins = 1; // 金币
+    uint64 diamonds = 2; // 钻石
+    UserLevelInfo user_level_info = 3; // 等级相关
+    UserVipLevelInfo user_vip_level_info = 4; // vip相关
+    UserBasicInfo user_basic_info = 5; // 基础数据
+    uint64 marks = 6;   // 存储一些标志位
+    string extraInfo = 15; // 扩展数据
+    UserStatInfo user_stat_info = 16; // 统计相关
+    string game_id = 17;    // 当前所在游戏id
+}
+
+// 用户基础数据
+message UserBasicInfo {
+    uint32 user_avatar_id = 1; // 头像id
+    uint32 user_avatar_frame_id = 2; // 头像框id
+    string user_name = 3; // 用户名字
+    string user_email = 4;  // 用户邮箱
+    repeated uint32 avatar_ids_owned = 5;// 持有的头像ID列表
+}
+
+// 对应userProfile里面的marks标记，按位存储，数量有限，先到先得
+enum MarkType {
+    MARK_BIND_FACEBOOK_REWARD = 0;  // facebook绑定奖励是否已领取
+    MARK_BIND_APPLE_REWARD = 1;     // apple绑定奖励是否已领取
+}

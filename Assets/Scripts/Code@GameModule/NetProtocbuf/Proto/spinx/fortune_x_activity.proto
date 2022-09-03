@@ -1,0 +1,575 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+// cashback
+message CashBackActivityConfig {
+    string id = 1; // 
+    repeated int32 payment_id_limited = 2; // # 需要满足的payment_id,-1为任意计费点
+    int64 back_type = 3; // # CashBack类型，0-Win返还，1-NoWin返还，2-Bet返还
+    float return = 4; // # 每次返还百分比
+    int64 return_limited = 5; // # 上限值，受到LevelStore和VIPLevelStore的加成
+    string resource = 6; // 
+    int64 time = 7; // 
+    string start_time = 8; // 
+    int64 start_timestamp = 9; // 
+    string end_time = 10; // 
+    int64 end_timestamp = 11; // 
+    string note = 12; //  
+    int64 level_limited = 13; //
+    int64 get_buff_end_timestamp = 14;
+}
+
+message BuffCashBack {
+    uint32 buff_type = 1;//buff类型  0 win  1 nowin 2 bet
+    float back_percentage = 2;//返还的百分比
+    uint32 expire = 3;//buff截止时间，单位秒
+    uint32 back_coin = 4;//截止目前为止，用户可返还的金额
+    string key = 5;//buff时间截止后，用该字段获取奖励
+    uint32 return_limited = 6;//用户可返还的金额上限
+    uint32 reward_at = 7;// 领奖时间（客户端根据这个发送领奖励邮件的请求）
+    uint32 reward_mode = 8;// 领奖规则 0 buff失效领奖 1 buff失效后第二天领奖
+}
+
+message CashBackActivityData {  
+    repeated BuffCashBack cash_back_buffs = 1;
+}
+
+// bonus coupon
+message BonusCouponActivityConfig {
+    string id = 1; // 
+    int64 level_limited = 2; //
+    int64 coupon_type = 3; // 发放的优惠券类型 1普通优惠券 2活动优惠券
+    int64 item_id_target = 4; // 道具ID列表，包含在数组内的道具，会在支付后获取时受到加成，4商店金币，8商店绿宝石
+    int64 bonus_persentage = 5; // 加成百分数 如50
+    int64 effective_time = 6; // 优惠券有效时长（单位秒），从获得时开始算
+    int64 start_timestamp = 7; // 
+    int64 end_timestamp = 8; // 
+}
+
+message BonusCouponActivityData {
+    bool coupon_binded = 1;//是否绑定过主城
+}
+
+message CGetUserCoupons {// 获取用户的优惠券列表
+
+}
+
+message SGetUserCoupons {
+    enum CouponType {
+        NORMAL = 0;// 普通优惠券
+        HOLIDAY = 1;// 节日优惠券
+    }
+    message UserCoupon {
+        string id = 1;
+        CouponType type = 2;
+        uint32 item_id_target = 3;// 加成的道具ID，对应的道具会在支付后获取时受到加成
+        uint32 bonus_persentage = 4;// 加成百分数
+        uint32 expire_at = 5;// 截止时间，单位秒 默认为0（表永久有效)
+        string linked_activity_id = 6; // 关联的activityId，默认为空字符串
+    }
+    repeated UserCoupon user_coupons = 1;
+    uint32 server_time_seconds = 2;
+}
+
+message CBindCouponToStore {// 绑定coupon到主商城
+    string coupon_id = 1;// 优惠券ID，在优惠券列表中返回
+}
+
+message SBindCouponToStore {
+    bool success = 1;
+}
+
+message CGetCashBackBuffRewardMail {//buff到期时，获取用户的cashbackbuff奖励
+    string key = 1;
+}
+
+message SGetCashBackBuffRewardMail {
+    bool success = 1;
+}
+
+message CGetUserCashBackBuffs {
+
+}
+
+message SGetUserCashBackBuffs {
+    repeated BuffCashBack cash_back_buffs = 1;
+}
+
+// superSpinGiveCardActivity
+message SuperSpinGiveCardActivityConfigPB {
+    string id = 1;
+    int64 start_timestamp = 2;
+    int64 end_timestamp = 3;
+}
+
+message SuperSpinGiveCardActivityDataPB {
+    bool collected_all_card = 1;//是否已领取了所有的卡，该值为true,服务端不再给卡
+}
+
+// valentine gift
+message ValenTineActivityConfigPB {
+    string id = 1;
+    int64 level_limited = 2;
+    uint32 payment_id = 3;  // 获取高级奖励所需购买的商品标识
+    int64 start_timestamp = 4;
+    int64 end_timestamp = 5; 
+}
+
+message ValentineActivityDataPB {
+    uint32 payment_id = 3;// 获取高级奖励所需购买的商品标识
+    bool payment_already_paid = 4;// 对应商品是否已经买过
+    bool step_already_biggest = 5;// 步数是否已经达到最大值
+}
+
+message CGetValentineMainPageInfo { // 情人节活动主页面调用
+    string activity_id = 1;
+
+}
+
+message SGetValentineMainPageInfo {
+    uint32 step = 1;// 拥有的步数 默认为0
+    uint32 normal_rewards_received_step = 2;//普通奖励领取到的步数 默认为0 用于判断红心上是否需要打钩
+
+    uint32 payment_id = 3;// 获取高级奖励所需购买的商品标识
+    bool payment_already_paid = 4;// 对应商品是否已经买过
+
+    int64 activity_start_timestamp = 5; // 活动开始时间
+    int64 activity_end_timestamp = 6; // 活动结束时间
+    int64 server_time_seconds = 7; // 服务器当前时间UTC
+
+    message ValentineStepReward {
+        enum ValentineRewardStatus {
+            LOCKED = 0;// 锁定状态
+            UNLOCKED = 1; // 解锁 但未领取
+            RECEIVED = 2;// 已领取
+        }
+        uint32 step = 1;// 需要的步数
+        Reward normal_reward = 2;// 普通奖励
+        ValentineRewardStatus normal_reward_status = 3;// 普通奖励领取状态 
+        Reward special_reward  = 4;// 特殊奖励 
+        ValentineRewardStatus special_reward_status = 5;// 特殊奖励领取状态
+    }
+    repeated ValentineStepReward valentine_rewards = 8;// 奖励列表
+    uint32 step_max = 9;// 地图上最大的步数
+    uint32 special_rewards_received_step = 10;//特殊奖励领取到的步数 默认为0
+    ShopItemConfig pay_item = 11;// 情人节活动的支付项信息
+}
+
+message CCollectValentineRewards {// 获取情人节活动的奖励
+    string activity_id = 1;
+}
+
+message SCollectValentineRewards {
+    bool success = 1;// 领取结果
+    repeated Reward rewards = 2;// 领取的奖励
+    UserProfile user_profile = 3;  // 用户数据
+    repeated Reward special_rewards_after_pay = 4; //在支付以后还能获取的奖励
+}
+
+message CGetValentinePayItemInfo {// 获取情人节活动的支付项信息
+    string activity_id = 1;
+}
+
+message SGetValentinePayItemInfo {
+    ShopItemConfig pay_item = 2;
+}
+
+message CGetActivityUserData {// 获取活动的个人数据
+    repeated string activity_ids = 1;
+}
+
+message SGetActivityUserData {
+    message ActivityData {
+        AnyStruct activity_config = 1;
+        AnyStruct activity_user_data = 2;
+    }
+    map<string,ActivityData> activity_datas = 1;//key: activityId
+    uint32 server_time_seconds = 2;
+}
+
+message RushPassActivityConfigPB {// rushpass活动配置
+    string id = 1;
+    int64 level_limited = 2;
+    uint32 ticket_payment_id = 3;// rushpass支付项特征 
+    int64 start_timestamp = 4;
+    int64 end_timestamp = 5; 
+    int64 end_count_down = 6;// 活动倒计时单位秒
+}
+
+message RushPassPopUpInfo {// rushpass 弹框相关数据
+    int64 end_count_down = 1;// 活动倒计时单位秒
+    message StepReward {
+        Reward reward = 1;
+        uint32 status = 2;// 状态0不可领取 1可领取 2已领取
+    }
+    message Step {
+        StepReward reward_free = 1;
+        StepReward reward_paid = 2;
+    }
+    repeated Step steps = 2;// 活动奖励配置
+    ShopItemConfig pay_item = 3;// 支付项信息
+    bool payment_has_paid = 4;// 支付项已经买过
+}
+
+message RushPassActivityDataPB {// rushpass活动用户数据
+    bool level_rush_is_living = 1;// levelrush是否正在进行
+    RushPassPopUpInfo rush_pass_pop_up_info = 2;// rushpass弹框信息，仅level_rush_is_living=true时弹框
+}
+
+// 大富翁跑图
+message MonopolyActivityConfigPB {// SGetActivityUserData中使用
+    string id = 1;
+    int64 level_limited = 2;
+    uint32 ticket_payment_id = 3;// 支付项id
+    int64 start_timestamp = 4;
+    int64 end_timestamp = 5; 
+    int64 end_count_down = 6;// 活动倒计时单位秒
+}
+
+message MonopolyBuffInfo {// 大富翁buff
+    uint32 start = 1;//buff开始时间，单位秒 默认为0
+    uint32 expire = 2;//buff截止时间，单位秒 默认为0
+}
+
+message MonopolyPortalInfo {// 大富翁传送门
+    uint32 amount = 1;
+}
+
+message MonopolyActivityDataPB {
+    uint32 ticket_payment_id = 1;// 支付项id
+    uint32 ticket_count = 2;// 持有的门票
+    uint32 running_round_id = 3;// 正在玩但未完成的关卡ID，默认为0
+    MonopolyEnergyInfoWhenSpin energy_info_when_spin = 4;//spin中需要显示的能量
+    uint32 beginner_guide_step  = 5;// 新手引导的进度
+    uint32 added_count_current = 6;// 目前已经加了多少票了
+    uint32 added_count_max = 7;// 最多能加多少票
+    MonopolyBuffInfo monopoly_buff_more_ticket = 8;// 大富翁buff-能量条满后获得更多票
+    MonopolyBuffInfo monopoly_buff_more_damage = 9;// 大富翁buff-火炮伤害增强
+    MonopolyPortalInfo monopoly_portal = 10;// 大富翁传送门剩余次数
+}
+
+message MonopolyRoundSimpleInfo {// 大富翁关卡简要信息 用于渲染关卡列表
+    uint32 round_num = 1;// 关卡号 1-6
+    uint32 round_id = 2;// 关卡ID
+    bool is_current_round = 3;//是否是当前关卡(每轮的最开始，所有的关卡都是false，其他仅有一个true)
+    repeated Reward complete_rewards = 4;//完成此关卡后的奖励
+    enum RoundStatus {
+        LOCKED = 0;// 未开启（现在不能玩)
+        OPENING = 1;// 开启中，玩家可玩(只会有一个关卡的状态是OPTNING)
+        RUNNING = 2;// 正在玩
+        FINISHED = 3;// 已完成（完成时直接结算奖励）
+    }
+    RoundStatus round_status = 5;//关卡状态
+}
+
+message MonopolyGiftBox {// 大富翁游戏玩家持有的宝箱
+    uint32 id = 1;// 宝箱在表中配置的ID，可能与显示有关
+    uint32 level = 2;
+    uint64 uinon_sign = 3;// 宝箱唯一标识,用于开宝箱
+    uint32 open_seconds_fill = 4;//宝箱开启需要的秒数
+    uint32 open_seconds_count_down = 5;//宝箱开启还剩余多少秒
+    uint32 open_diamond_fill = 6;//宝箱开启需要花费的钻石（得到宝箱后立刻就要开启的情况）
+    uint32 open_diamond_current = 7;//当前时间，开启宝箱，需要的钻石
+}
+
+message MonopolyRoundInfo {// 大富翁关卡详细信息 用于渲染关卡内
+    // 票数，倒计时等简要信息
+    uint32 round_num = 1;//第几轮 如 1
+    MonopolyRoundSimpleInfo simple_info = 2;
+    uint32 ticket_count = 3;//可用的票数（用于roll点）
+    int64 activity_start_timestamp = 4; // 活动开始时间
+    int64 activity_end_timestamp = 5; // 活动结束时间
+    int64 server_time_seconds = 6; // 服务器当前时间UTC
+    
+    // 跑圈相关
+    message SpecialLattice {
+        uint32 id = 1;
+        uint32 index = 2;//序号 从0开始
+        enum LatticeType {
+            CANNON = 0;
+            GIFTBOX = 1;
+        }
+        LatticeType type = 3;
+        uint32 level = 4;
+        bool is_current_lattice = 5;// 玩家是否在当前格子中
+    }
+    repeated SpecialLattice special_lattices = 7;// 特殊格子
+    uint32 current_lattice_index = 8;// 玩家当前所在格子的序号，从0开始
+    uint32 blood_full = 9;//中间海盗船/章鱼，满血是多少
+    uint32 blood_current = 10;// 中间海盗船/章鱼，当前血量
+    uint32 shoot_again_diamond_cost = 11;// 再次射击消耗的钻石数量
+    
+    // 宝箱相关
+    message GiftBoxPosition {
+        bool has_box = 1;
+        MonopolyGiftBox gift_box = 2;
+    }
+    repeated GiftBoxPosition gift_box_positions = 12;// 多个宝箱位
+    MonopolyBuffInfo monopoly_buff_more_ticket = 13;// 大富翁buff-能量条满后获得更多票
+    MonopolyBuffInfo monopoly_buff_more_damage = 14;// 大富翁buff-火炮伤害增强
+    MonopolyPortalInfo monopoly_portal = 15;// 大富翁传送门剩余次数
+
+    // 地图上的大富翁拼图碎片等 奖励性道具（领完了就没)
+    message RewardSpecialLattice {
+        uint32 index_of_map = 1;//在地图上的位置序号 从0开始
+        Reward reward = 2;// 奖励，包含大富翁碎片，以及以后可能的巴拉巴拉
+    }
+    repeated RewardSpecialLattice reward_special_lattices = 16;
+}
+
+message BuffMonopolyBooster {//大富翁多个buff的状态
+    MonopolyBuffInfo monopoly_buff_more_ticket = 1;// 大富翁buff-能量条满后获得更多票
+    MonopolyBuffInfo monopoly_buff_more_damage = 2;// 大富翁buff-火炮伤害增强
+}
+
+message MonopolyDailyTask {// 每日任务相关信息
+    uint32 task_index = 1;// 任务序号 从1开始
+    enum TaskType {
+        DEFAULT = 0;
+        STEP = 1;// 走N步
+        OPEN_BOX = 2;// 开N个宝箱
+        SPIN = 3;// 点N次spin
+        FIRE = 4;// 开N炮
+        GET_COINS = 5;// 赢N多少钱
+        PASS_LEVEL = 6;// 通多少关
+    }
+    TaskType task_type = 2;// 任务类型
+    uint64 target_value = 3;// 目标值
+    uint64 current_value = 4;// 当前值
+    uint32 status = 5;// 0进行中 1 已完成，完成时服务端直接发奖
+    uint32 expire_at = 6;// 任务结束的时间，单位秒
+    uint32 server_time_seconds = 7;// 服务器时间
+    Reward task_rewards = 8;// 完成此任务给的奖励
+    Reward task_rewards_got = 9;// 仅当完成任务给奖励时，该字段不为空
+}
+
+message CGetMonopolyRoundListInfo {// 获取关卡列表信息
+    string activity_id = 1;
+}
+
+message SGetMonopolyRoundListInfo {
+    uint32 round_num = 1;//第几轮 如 1
+    repeated Reward complete_round_list_rewards = 2;// 完成当前轮后的奖励
+    repeated MonopolyRoundSimpleInfo round_list = 3;// 关卡列表
+    uint32 ticket_count = 4;//可用的票数（用于roll点）
+    int64 activity_start_timestamp = 5; // 活动开始时间
+    int64 activity_end_timestamp = 6; // 活动结束时间
+    int64 server_time_seconds = 7; // 服务器当前时间UTC
+    int64 end_count_down = 8;// 活动倒计时单位秒
+    MonopolyDailyTask daily_task = 9;// 每日任务
+    MonopolySelfRankInfo self_rank_info = 10;// 排行榜个人排名
+}
+
+message CGetMonopolyRoundInfo {// 获取某关卡的信息
+    string activity_id = 1;
+    uint32 round_id = 2;
+    bool is_start = 3;// 开启某关卡时为true
+}
+
+message SGetMonopolyRoundInfo {
+    MonopolyRoundInfo monopoly_round_info = 1;
+    repeated Reward complete_round_list_rewards = 2;// 完成当前轮后的奖励
+    MonopolyDailyTask daily_task = 3;// 每日任务
+    MonopolySelfRankInfo self_rank_info = 4;// 排行榜个人排名
+}
+
+message CMonopolySpin {// 大富翁spin
+    string activity_id = 1;
+    uint32 round_id = 2;
+}
+
+message SMonopolySpin {
+    Reward coin_reward = 1;//金币奖励 里面多个item 每个item表一格给的金币
+    MonopolyGiftBox gift_box_reward = 2;// 获得的宝箱奖励，可能为null
+    bool gift_box_failed_to_position = 3;// 宝箱是否进入位置失败了（原宝箱阵位都满了的情况）
+    
+    repeated Reward round_complete_rewards = 4;// 当前关卡完成后获得的奖励
+    repeated Reward round_list_complete_rewards = 5;// 当前关卡轮（1-6)完成后获得的奖励
+    
+    MonopolyRoundInfo monopoly_round_info = 6;
+    UserProfile user_profile = 7;
+    uint32 forward_step = 8;// 前进的步数
+    uint32 gift_box_reward_position_index = 9;// 宝箱奖励进入了哪个阵位 index 从0开始
+    MonopolyDailyTask daily_task = 10;// 每日任务
+
+    Reward reward_lattice_reward = 11;// 跑到奖励格子上后领取的奖励（包括拼图碎片）
+}
+
+message CMonopolyTeleport {// 大富翁 瞬间传送
+    string activity_id = 1;
+    uint32 forward_step = 2;//前进多少步
+}
+
+message SMonopolyTeleport {
+    Reward coin_reward = 1;//金币奖励 里面多个item 每个item表一格给的金币
+    MonopolyGiftBox gift_box_reward = 2;// 获得的宝箱奖励，可能为null
+    bool gift_box_failed_to_position = 3;// 宝箱是否进入位置失败了（原宝箱阵位都满了的情况）
+    
+    repeated Reward round_complete_rewards = 4;// 当前关卡完成后获得的奖励
+    repeated Reward round_list_complete_rewards = 5;// 当前关卡轮（1-6)完成后获得的奖励
+    
+    MonopolyRoundInfo monopoly_round_info = 6;
+    UserProfile user_profile = 7;
+    uint32 forward_step = 8;// 前进的步数
+    uint32 gift_box_reward_position_index = 9;// 宝箱奖励进入了哪个阵位 index 从0开始
+    MonopolyDailyTask daily_task = 10;// 每日任务
+
+    Reward reward_lattice_reward = 11;// 跑到奖励格子上后领取的奖励（包括拼图碎片）
+}
+
+message CMonopolyShootAgain {//大富翁 再次射击
+    string activity_id = 1;
+    uint32 round_id = 2;
+    string free_key = 3;//免费的标识，如adId
+}
+
+message SMonopolyShootAgain {
+    repeated Reward round_complete_rewards = 1;// 当前关卡完成后获得的奖励
+    repeated Reward round_list_complete_rewards = 2;// 当前关卡轮（1-6)完成后获得的奖励
+    MonopolyRoundInfo monopoly_round_info = 3;
+    UserProfile user_profile = 4;
+    MonopolyDailyTask daily_task = 5;// 每日任务
+}
+
+message CMonopolyTicketPaymentInfo {// 获取大富翁的支付项信息（卖票）
+    string activity_id = 1;
+}
+
+message SMonopolyTicketPaymentInfo {
+    ShopItemConfig pay_item = 1;
+    repeated ShopItemConfig booster_pay_items = 2;//booster支付项列表
+}
+
+message CMonopolyOpenGiftBox {//开宝箱(倒计时不够的自动扣钻石)
+    string activity_id = 1;
+    uint64 uinon_sign = 2;
+}
+
+message SMonopolyOpenGiftBox {
+    Reward reward = 1;
+    UserProfile user_profile = 2;
+    MonopolyRoundInfo monopoly_round_info = 3;
+    MonopolyDailyTask daily_task = 4;// 每日任务
+}
+
+message CGetMonopolyDailyTaskInfo {// 获取玩家的每日任务信息，仅打开任务列表且挂机跨天时调用
+    string activity_id = 1;
+}
+
+message SGetMonopolyDailyTaskInfo {
+    MonopolyDailyTask daily_task = 1;// 每日任务
+}
+
+message CMonopolyChangeBeginnerGuideStep {// 新手引导进度更新 
+    uint32 beginner_guide_step = 1;
+    string activity_id = 2;
+}
+
+message SMonopolyChangeBeginnerGuideStep { 
+    uint32 beginner_guide_step = 1;
+}
+
+// spin返回值中的system_content增加：大富翁的能量条
+message MonopolyEnergyInfoWhenSpin {
+    uint32 energy = 1;//当前能量
+    Reward reward = 2;//奖励的门票
+    uint32 ticket_count = 3;//目前可用的票数
+    uint32 added_count_current = 4;// 目前已经加了多少票了
+    uint32 added_count_max = 5;// 最多能加多少票
+}
+
+// 大富翁第三期
+message MonopolyPuzzle {
+    uint32 num = 1;// 编号 1-6
+    bool is_locked = 2;// 是否被锁住
+    bool is_current = 3;// 是否是当前图
+    repeated bool positions_is_fill = 4;//对应位置上是否被填充  长度为9
+    Reward reward = 5;// 集满的奖励
+    uint32 status = 6;// 状态 0未集满 1已集满，待领奖 2已领奖
+}
+
+message CGetMonopolyPuzzleListInfo {// 大富翁拼图信息
+    string activity_id = 1;
+}
+
+message SGetMonopolyPuzzleListInfo {
+    repeated MonopolyPuzzle puzzle_list = 1;
+}
+
+message CCollectMonopolyPuzzleReward {// 获取大富翁拼图的奖励
+    string activity_id = 1;
+}
+
+message SCollectMonopolyPuzzleReward {
+    Reward puzzle_finished_reward = 1;
+    SGetMonopolyPuzzleListInfo get_monopoly_puzzle_list_info = 3;
+    UserProfile user_profile = 4;
+}
+
+message CGetMonopolyLeaderboard {// 大富翁排行榜
+    string activity_id = 1;
+}
+
+message SGetMonopolyLeaderboard {
+    message Rank {
+        string name = 1;
+        uint32 avatar_id = 2;  // 默认头像
+        uint64 score = 4;
+        string avatar_url = 5;  // facebook头像url，没有就是空
+        uint64 rank = 6;// 玩家排名 如 1，2，3
+        uint64 player_id = 7;// 玩家playerid 机器人的为0
+    }
+    message RankReward {
+        uint32 from = 1;
+        uint32 to = 2;
+        Reward reward = 3;
+    }
+    repeated Rank ranks = 1; // 排行榜
+    uint32 my_rank = 2; // 0是未上榜
+    uint64 coins = 3; // 奖池金币
+    repeated RankReward rank_rewards = 4; // 排行奖励
+}
+
+message MonopolySelfRankInfo {
+    uint32 my_rank = 1; // 0是未上榜
+}
+
+message CGetMonopolyLeaderboardReward {// 获取结束的大富翁排行榜的奖励，大富翁结束后调用一次; 玩家再次登录时再校验一次
+    string activity_id = 1;
+}
+
+message SGetMonopolyLeaderboardReward {
+    bool success = 1;
+}
+
+message CGetActivitiesOpenTime {// 获取将要及正在开放的活动的开启时间
+
+}
+
+message SGetActivitiesOpenTime {
+    message ActivityTimeConfig {
+        string activity_id = 1;
+        string activity_type = 2;
+        uint32 start_time = 3;
+        uint32 end_time = 4;
+        uint32 reward_end_time = 5;
+    }
+    repeated ActivityTimeConfig activities_open_times = 1;//将会开启的活动及时间
+    uint32 server_time_seconds = 2;
+}
+
+message CClaimRushPassRewards {// rushpass 领取当前可领取的奖励
+    string activity_id = 1;
+}
+
+message SClaimRushPassRewards {
+    Reward free_reward_got = 1;
+    Reward paid_reward_got = 2;
+    RushPassPopUpInfo rush_pass_pop_up_info = 3;
+    UserProfile user_profile = 4;
+}

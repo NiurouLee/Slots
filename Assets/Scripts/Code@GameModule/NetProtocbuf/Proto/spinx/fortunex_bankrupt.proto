@@ -1,0 +1,17 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message CBankrupt {}
+
+message SBankrupt {
+  bool available = 1;            // 是否可以领
+  uint32 timestamp_left = 2;     // 不能领的原因之一: 时间没到
+  bool too_much_coins = 3;       // 不能领的原因之二: 还没破产
+  UserProfile user_profile = 4;  // 领完救济之后的用户数据
+  uint64 coins = 5;              // 领取的钱
+}

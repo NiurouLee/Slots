@@ -1,0 +1,15 @@
+<linker>
+    <assembly fullname="UnityEngine" ignoreIfMissing="1">
+        <type fullname="UnityEngine.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="System" ignoreIfMissing="1">
+        <type fullname="System.*" preserve="all"/>
+    </assembly>
+    <assembly fullname="Assembly-CSharp">
+        <type fullname="ShinyEffect" preserve="all"/>
+        <type fullname="MaterialUpdater" preserve="all"/>
+        <type fullname="Hole" preserve="all"/>
+        <type fullname="HoleImage" preserve="all"/>
+    </assembly>   
+    <assembly fullname="MainCodeAssembly" preserve="all"/>
+</linker>

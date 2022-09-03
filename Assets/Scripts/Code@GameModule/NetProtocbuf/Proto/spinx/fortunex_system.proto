@@ -1,0 +1,458 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message Reward {
+    repeated Item items = 1;
+}
+
+message Vip {
+    uint64 level = 1;
+    uint64 point = 2;
+    uint64 total = 3;
+}
+
+// GiftBox内容
+message GiftBox {
+    uint32 countdown_time = 1;    // 倒计时(秒)
+    uint32 progress_max = 2;      // 总体目标
+    uint32 progress_now = 3;      // 当前目标
+    uint64 accumulate_coins = 4;  // 当前累积的coin
+}
+
+message LevelRushGameInfo {
+    string key  = 1;// 游戏标识，用于获取游戏页面信息及play，（可能为空字符串，纯展示用）
+    Reward game_coins_max = 2;// 小游戏中能领取的最大奖励
+    uint32 max_odds = 3;// 最大乘倍
+    float price = 4;// 游戏价格，单位美元 默认为0
+    message BallConfig {
+        uint32 num = 1;// 编号
+        uint32 count = 2;// 数量
+    }
+    repeated BallConfig balls_config = 5;// 乐透游戏的小球配置
+    repeated string params_send = 6;// 传递的参数，客户端无需关注
+    uint64 coin_base = 7;// 金币基值，用于显示在play按钮所在页面
+}
+
+message LevelRushGameResult {
+    uint64 coin_base = 1;// 基础钱数 
+    uint64 odds = 2;//开出的倍数
+    uint64 vipBonusPercentage = 3;//vip 加成百分数
+    Reward reward = 4;//开出的最终奖励
+}
+
+message LevelRushPaidGameInItem {// levelrush 付费lotto游戏道具
+    LevelRushGameInfo game_info_before_play = 1;
+    LevelRushGameResult game_result = 2;
+}
+
+message SuperSpinXGameInItem { 
+    message SpinXGameRule {
+        uint32 word_id = 1;// 字母id
+        uint32 count = 2;// 几个
+        float odds = 3;// 奖多少倍
+    }
+    message SpinXGameResult {
+        repeated uint32 word_ids_result = 1;//最终滚到的字母编号 0-7
+        uint64 coins_base = 2;// 基础金币
+        float odds = 3;// 乘倍
+        Reward reward = 4;// 获得的奖励
+        uint32 rule_index = 5;// 适用的规则序号（rule_list的下表）
+    }
+    repeated uint32 word_ids = 1;// 滚轴的字母id列表
+    repeated SpinXGameRule rule_list = 2;// 奖励规则配置
+    Reward card_reward_extra = 3;// 额外送卡，该值不为null说明送卡活动开了并且可以送卡
+
+    float odds_max = 4;// 展示的最高乘倍
+    SpinXGameResult result = 5;// 游戏结果
+    repeated string params_send = 6;// 参数，客户端忽略
+}
+
+message Item {
+    uint32 id = 1;
+
+    enum Type {
+        COIN = 0;
+        EMERALD = 1;
+        VIP_POINTS = 2;
+        SHOP_COIN = 3;
+        SHOP_EMERALD = 4;
+        SHOP_BOOST = 5;
+        SHOP_GIFT_BOX = 6;
+        LEVEL_UP_BURST = 7;
+        SUPER_WHEEL = 8;
+        MISSION_POINTS = 9;
+        MISSION_STAR = 10;
+        MISSION_PASS = 11;
+        PAY_WHEEL_BONUS = 12;
+        DOUBLE_EXP = 13;
+        CASH_BACK_BUFFS_WIN = 14;
+        CASH_BACK_BUFFS_NOWIN = 15;
+        CASH_BACK_BUFFS_BET = 16;
+        BONUS_COUPON = 17;
+        SEASON_QUEST_STAR = 18;
+        SEASON_QUEST_STAR_BOOST = 19;
+        SEASON_QUEST_COMPLETE = 20;
+        VALENTINE_ACTIVITY_POINT = 21;
+        SILVER_HAMMER = 22;
+        GOLD_HAMMER = 23;
+        CARD = 24;
+        CARD_PACKAGE = 25;
+        AVATAR = 26;
+        NEWBIE_QUEST_BOOST = 27;
+        MONOPOLY_ACTIVITY_TICKET = 28;
+        MONOPOLY_ACTIVITY_BUFF_MORE_TICKET = 29;
+        MONOPOLY_ACTIVITY_BUFF_MORE_DAMAGE = 30;
+        MONOPOLY_ACTIVITY_PORTAL = 31;
+        LEVEL_RUSH_GAME = 32;//一次levelrush的免费游戏
+        LEVEL_RUSH_PAID_GAME = 33;// 一次levelrush的付费游戏
+        INDEPENDENCE_DAY_ACTIVITY_POINT = 34;// 独立日活动的星星
+        SUPER_SPINX_GAME = 35;// superspinx的游戏
+        MONOPOLY_PUZZLE_FRAGMENT = 36;// 大富翁拼图碎片
+    }
+    Type type = 2;
+
+    message Coin {
+        uint64 amount = 1;
+    }
+    Coin coin = 3;
+
+    // 商店物品-金币
+    message ShopCoin {
+        uint64 amount = 1;           // 数量
+        uint64 addition_amount = 2;  // 加成后数量
+    }
+    ShopCoin shop_coin = 4;
+
+    // 商店物品-钻石
+    message ShopEmerald {
+        uint64 amount = 1;
+        uint64 addition_amount = 2;  // 加成后数量
+    }
+    ShopEmerald shop_emerald = 5;
+
+    // 商店物品-boost
+    message ShopBoost {
+        uint32 amount = 1;
+    }
+    ShopBoost shop_boost = 6;
+
+    // 商店物品-giftBox
+    message ShopGiftBox {
+        uint32 amount = 1;
+        GiftBox gift_box = 2;
+    }
+    ShopGiftBox shop_gift_box = 7;
+
+    // 奖励物品-vipPoints
+    message VipPoints {
+        uint32 amount = 1;
+        repeated Item level_up_reward_items = 2;  // 因为vip升级带来的奖励放这里
+    }
+    VipPoints vip_points = 8;
+
+    // 奖励物品-emerald(钻石)
+    message Emerald {
+        uint32 amount = 1;
+    }
+    Emerald emerald = 9;
+
+    // levelup-boost
+    message LevelUpBurst {
+        uint32 amount = 1;
+    }
+    LevelUpBurst level_up_burst = 10;
+
+    // super whell-boost
+    message SuperWheel {
+        uint32 amount = 1;
+    }
+    SuperWheel super_wheel = 11;
+
+    // 每日任务积分
+    message MissionPoints {
+        uint32 amount = 1;
+    }
+    MissionPoints mission_points = 12;
+
+    // 每日任务星星，给通行证积分
+    message MissionStar {
+        uint32 amount = 1;
+    }
+    MissionStar mission_star = 13;
+
+    // 付费wheel的奖励
+    message PayWheelBonus {
+        repeated uint32 hitWedgeIds = 1;
+        uint64 userBuffGodenOdds = 2;  // 用户buff引起的金币加成，仅用于客户端显示；
+    }
+    PayWheelBonus pay_wheel_bonus = 14;
+
+    // 双倍经验物品
+    message DoubleExp {
+        uint32 amount = 1;
+    }
+    DoubleExp double_exp = 15;
+
+    message CashBackBuff {
+        uint32 amount = 1;
+        uint32 buff_type = 2;//buff类型 0 win 1 nowin 2 bet
+        float back_percentage = 3;//返还百分比，如3表 3%
+        int64 back_limited_base_value = 4;//返还金币上限的基础值
+        enum CashBackBuffRewardMode {
+            end_mail = 0;//buff时间结束后立刻发奖
+            next_day_mail = 1;//buff时间结束后第二天发奖
+        }
+        uint32 reward_mode = 5;//发放奖励模式
+    }
+    //返利BUFF：buff结束时通过邮件返回期间win|nowin|bet 的x%
+    CashBackBuff cash_back_buff = 16;
+
+    //用户的加成券
+    BonusCoupon bonus_coupon = 17;
+
+    message BonusCoupon {
+        uint32 amount = 1;// 数量
+        uint32 type = 2;//类型 1普通 2节日
+        uint32 item_id_target = 3;// 影响的道具ID
+        uint32 bonus_percentage = 4;// 对应道具在支付后，获取时的增幅百分比，如50 表50%
+        uint32 effective_time = 5;// 有效时长，单位秒
+        string linked_activity_id = 6;// 关联的活动ID，默认为空字符串
+    }
+    message SeasonQuestStar {
+        uint32 amount = 1;
+    }
+    SeasonQuestStar season_quest_star = 18;
+
+    message SeasonQuestStarBoost {
+        uint32 amount = 1;
+    }
+    SeasonQuestStarBoost season_quest_star_boost = 19;
+
+    message SeasonQuestComplete {
+        uint32 amount = 1;
+    }
+    SeasonQuestComplete season_quest_complete = 20;
+
+    message ValentineActivityPoint {
+        uint32 amount = 1;
+    }
+    ValentineActivityPoint valentine_activity_point = 21;
+
+    message SilverHammer {
+        uint32 amount = 1;
+    }
+    SilverHammer silver_hammer = 22;
+
+    message GoldHammer {
+        uint32 amount = 1;
+    }
+    GoldHammer gold_hammer = 23;
+
+    message Card {//卡牌
+        uint32 card_id = 1;
+        uint32 amount = 2;
+        uint32 card_set_id = 3;
+    }
+    Card card = 24;
+
+    message CardPackage {//表示一个卡包
+        uint32 package_id = 1;
+        enum CardPackageType {
+            NORMAL = 0;
+            GOLDEN = 1;
+            LUCKY = 2;
+        }
+        CardPackageType package_type = 2;//卡包类型
+        uint32 amount = 3;//此处为1
+        repeated Card cards_includes = 4;//卡包内包含的卡牌
+        message CardPackageConfig {
+            uint32 id = 1;
+            CardPackageType card_package_type = 2;
+            uint32 special_card_star = 3;
+            uint32 card_count = 4;
+            uint32 max_star = 5;
+            uint32 mini_star = 6;
+            uint32 mini_star_count = 7;
+            uint32 type_for_show = 8;
+        }
+        CardPackageConfig package_config = 5;// 卡包配置
+        uint32 lucky_spin_new_add_count = 6;   //开卡获得luckyspin的次数
+        uint32 lucky_challenge_reward_count = 7; //开卡导致的获得 lucky challenge奖励的次数
+        uint32 lucky_challenge_new_progress = 8; //lucky challenge 目前的最新进度
+        uint32 card_lucky_spin_count = 9; //开卡后lucky spin 的总次数    
+    }
+    CardPackage card_package = 25;
+
+    message Avatar {
+        uint32 id = 1;// 头像ID，与item表中的ID一致
+        uint32 count = 2;// 数量，最大为1
+    }
+    Avatar avatar = 26; // 头像
+
+    message NewbieQuestBoost {
+        uint32 amount = 1;
+    }
+    NewbieQuestBoost newbie_quest_boost = 27; // 新手加速
+
+    message MonopolyActivityTicket {
+        uint32 amount = 1;
+    }
+    MonopolyActivityTicket monopoly_activity_ticket = 28;// 大富翁活动的票
+
+    message MonopolyActivityBuffMoreTicket {
+        uint32 amount = 1;
+        uint32 more_ticket = 2;// 能量条满之后附加获得多少票
+        uint32 amount_when_no_addition = 3;// 当无加成时的值，该值!=amount时 显示 x% more(x= (amount - amount_when_no_addition)/amount*100)
+    }
+    MonopolyActivityBuffMoreTicket monopoly_activity_buff_more_ticket = 29;
+    
+    message MonopolyActivityBuffMoreDamage {
+        uint32 amount = 1;
+        uint32 more_damage = 2;// 火炮附加伤害加成百分数 100表增加伤害100%
+        uint32 amount_when_no_addition = 3;// 当无加成时的值，该值!=amount时 显示 x% more(x= (amount - amount_when_no_addition)/amount*100)
+    }
+    MonopolyActivityBuffMoreDamage monopoly_activity_buff_more_damage = 30;
+
+    message MonopolyActivityPortal {
+        uint32 amount = 1;
+        uint32 amount_when_no_addition = 2;// 当无加成时的值，该值!=amount时 显示 x% more(x= (amount - amount_when_no_addition)/amount*100)
+    }
+    MonopolyActivityPortal monopoly_activity_portal = 31;
+
+    message LevelRushGame {
+        uint32 amount = 1;
+    }
+    LevelRushGame level_rush_game = 32;
+
+    message LevelRushPaidGame {
+        uint32 amount = 1;
+        LevelRushPaidGameInItem game_info = 2;
+    }
+    LevelRushPaidGame level_rush_paid_game = 33;
+
+    message IndependenceActivityPoint {
+        uint32 amount = 1;
+    }
+    IndependenceActivityPoint independence_activity_point = 34;
+
+    message SuperSpinXGame {
+        uint32 amount = 1;
+        SuperSpinXGameInItem game_info = 2;
+    }
+    SuperSpinXGame super_spinx_game = 35;
+
+    message MonopolyPuzzleFragment {// 大富翁拼图碎片
+        uint32 amount = 1;
+        uint32 position = 2;// 在拼图内的碎片序号 从0开始
+    }
+    MonopolyPuzzleFragment monopoly_puzzle_fragment = 36;
+}
+
+message Mission {
+    enum Type {
+        NONE = 0;
+        WIN_X_TIMES_IN_A_ROW = 1;
+        SPIN_X_TIMES = 2;
+        WIN_X_TIMES = 3;
+        WIN_X_COINS_IN_A_SINGLE_SPIN_Y_TIMES = 4;
+        BET_A_TOTAL_OF_X_COINS = 5;
+        WIN_A_TOTAL_OF_X_COINS = 6;
+        WIN_X_COINS_IN_Y_SPINS = 7;
+        WIN_X_COINS_IN_Y_FREE_SPINS = 8;
+        GET_BIG_WIN_X_TIMES = 9;
+        GET_HUGE_WIN_X_TIMES = 10;
+        GET_5_OF_A_KIND_X_TIMES = 11;
+        LEVEL_UP_X_TIMES = 12;
+        GET_LOCK_IT_LINK_X_TIMES = 13;
+        GET_FREE_GAME_X_TIMES = 14;
+        WIN_X_TIMES_WITH_MINIMUM_BET_OF_Y = 15;
+        BET_X_COINS_WITH_MINIMUM_BET_OF_Y = 16;
+        WIN_X_COINS_IN_LINK_FEATURE = 17;
+        WIN_X_COINS_IN_BINGO = 18;
+        WIN_X_COINS_IN_FEATURE = 19;
+    }
+    Type type = 1;             // 类型
+    uint64 current_coin = 2;   // 当前任务金币累计进度
+    uint64 target_coin = 3;    // 当前任务金币目标
+    uint32 current_times = 4;  // 当前任务次数进度
+    uint32 times = 5;          // 当前任务次数目标
+    uint32 difficulty = 6;  // 当前任务难度， 普通是 1 2 3， 荣誉任务目前大于3
+    repeated string machine_limited = 7;     // 机台限制
+    bool finished = 8;                       // 任务是否完成，可以领取
+    bool collected = 9;                      // 奖励是否领取
+    uint64 diamond = 10;                     // 快速完成钻石消耗
+    repeated Item items = 11;                // 奖励列表
+    repeated Item diamond_extra_items = 12;  // 钻石完成额外奖励
+    string ui = 13;                          // ui
+    uint64 expected_bet = 14;                // bet约束
+}
+
+// 商城计费点配置信息
+message ShopItemConfig {
+    string product_id = 1;     // 商品在GooglePlay/AppStore内的id
+    uint32 payment_id = 2;     // 对应的payment_id(实际商品)
+    string product_type = 3;   // 商品类型(coin/diamond/boost)
+    string shop_type = 4;      // 计费点触发类型
+    string name = 5;           // 名字
+    string description = 6;    // 描述
+    string image = 7;          // 商品图片(对应priority的值)
+    float price = 8;           // 美元价格
+    bool best_value = 9;       // 最有价值
+    bool most_popular = 10;    // 最受欢迎
+    bool on_sale = 11;         // 限时促销
+    uint32 on_sale_time = 12;  // 限时促销倒计时(秒)
+    float show_discount = 13;  // 显示折扣
+    float old_price = 14;  // 如果显示打折价格,这里是打折前的价格
+    string extra = 15;     // 扩展信息
+    repeated Item sub_item_list = 16;  // 实际物品信息
+    uint32 mail_template_id = 17;
+    float show_discount_coupon = 18;// 显示优惠券折扣
+    bool super_spin_behind = 19;// 支付该项后，是否会引发superspin,该值为true时，在该项支付成功后去获取superspin的支付项信息
+
+    // message ExtraInfo {
+    //     bool best_value = 9;                            // 最有价值
+    //     bool most_popular = 10;                         // 最受欢迎
+    //     bool on_sale = 11;                              // 限时促销
+    //     uint32 on_sale_time = 12;                       // 限时促销倒计时(秒)
+    //     float show_discount = 13;                       // 显示折扣
+    //     uint32 vip_point = 14;                          // vip经验
+    //     string extra = 15;                              // 扩展信息
+    //     uint32 mail_template_id = 17;
+    // }
+    // ExtraInfo extra_info = 17;
+}
+
+// 支付流程verify对应的extraInfo数据
+message VerifyExtraInfo {
+    ShopItemConfig item = 1;
+}
+
+// 支付流程fulfill对应的extraInfo
+message FulfillExtraInfo {
+    repeated Item reward_items = 1;
+    UserProfile user_profile = 2;
+}
+
+enum SystemType {
+    DAILY_BONUS = 0;
+    DAILY_MISSION = 1;
+    MISSION_PASS = 2;
+    PIGGY_BANK = 3;
+    TIMER_BONUS = 4;
+}
+
+// 升级信息
+message LevelUpInfo {
+    uint32 level = 1;
+    repeated Item reward_items = 2;
+    uint64 max_bet = 3;
+    repeated string unlocked_machines = 4;
+    repeated SystemType unlocked_systems = 5;
+    uint32 ui = 6;
+    uint32 reward_multiplier = 7;
+    uint32 show_deal = 8;
+}

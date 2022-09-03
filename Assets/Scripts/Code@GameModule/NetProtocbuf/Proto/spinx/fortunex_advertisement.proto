@@ -1,0 +1,117 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message Advertisement {  //广告位
+  uint32 id = 1;         //用于获取广告详情
+  string advertisement = 2;
+  uint32 position = 3;
+  AdvertisementType type = 4;
+  uint32 payment_id = 5;  // 对应advertisementPurchase表中的paymentId
+  uint32 dealId = 6;
+  // uint32 gameId = 7;
+  string desc = 8;
+  string start_time = 9;        // 配置开始时间（北京时间）
+  uint32 start_timestamp = 10;  // 配置开始时间戳
+  string end_time = 11;         // 配置结束时间（北京时间）
+  uint32 end_timestamp = 12;    // 配置结束时间戳
+  DealInfo deal_info = 13;      // deal信息
+  string product_id = 14;       //用于发起支付
+  string product_id_ios = 15;   //用于发起支付
+  string jump = 16;             // 跳转参数1
+  string jump2 = 17;            // 跳转参数2
+  uint32 mutually_exclusive_group = 18; // 互斥组ID， 组ID相同的Advertisement，同时只能显示一个； 默认为0
+	uint32 mutually_exclusive_priority = 19; // 互斥组内优先级，值越大优先级越高
+  repeated uint32 mutually_exclusive_machine_ids = 20; // 机台限制，数组内的机台才显示该Advertisement，默认为空数组
+}
+
+enum AdvertisementType {  // 广告类型
+  QUICKMACHINE = 0;
+  QUICKSYSTEM = 1;
+  DEAL = 2;
+  COMMINGSOON = 3;
+}
+
+message DealInfo {  // deal信息及用户状态，在dealConfig表的基础上增加三个字段
+  uint32 id = 1;
+  uint32 purchase = 2;
+  string desc = 3;
+  uint32 priority = 4;
+  int32 interval = 5;
+  uint32 user_level_min = 6;
+  uint32 user_level_max = 7;
+  uint32 user_life_time_limited = 8;
+  uint32 totalpay_min = 9;
+  uint32 totalpay_max = 10;
+  uint32 last_pop_at = 11;  // 最后一次弹出的时间(北京时间），默认为0
+  uint32 hidden_count_down =
+      12;  // 弹出后，倒计时的毫秒数，最小为0，仅lastPopAt不为空字符串时读取该字段
+  uint32 buy_count = 13;  // deal对应商品的支付次数
+}
+
+message CGetAdvertisement {  //客户端发起
+}
+
+message AdvertisementInfoList {
+  repeated Advertisement advs = 1;
+  uint64 now = 3;  //服务器当前时间，单位秒
+}
+
+message SGetAdvertisement {
+  AdvertisementInfoList advsInfo = 1;
+}
+
+message CGetAdvertisementItem {  //客户端在弹框之前发起
+  uint32 advertId = 1;           // Advertisement.id
+}
+
+message SGetAdvertisementItem {  //服务器返回的广告详情信息
+  Advertisement adv = 1;
+  ShopItemConfig deal_pay_item = 2;
+  uint64 now = 3;  //服务器当前时间，单位秒
+}
+
+message CClaimAdReward {  // 获取广告位奖励
+  uint64 place_id = 1;    // 广告位ID,为AD表，Rules sheet,placeId列的值
+  repeated uint64 item_id_list = 2;  //道具ID列表,为item表的ID列的值
+  repeated uint64 item_count_list = 3;  //道具数量列表
+  string user_group = 4;//用户的广告分组
+}
+
+message SClaimAdReward {
+  repeated Reward rewards = 1;   // 奖励列表
+  UserProfile user_profile = 2;  // userProfile信息
+}
+
+message CGetRVAdvertisingConfig {// 获取RV广告配置
+  string user_group = 1;//用户的广告分组
+}
+
+message SGetRVAdvertisingConfig {
+  message AdTaskInfo {// RV_AdTask
+    uint32 place_id = 1;// 用于领奖
+    repeated Reward rewards = 2;// 数组中的每项代表第index次广告的奖励
+    uint32 task_step = 3;// 用户当日完成观看的次数
+    uint32 last_task_step_update = 4;// 最后一次完成观看的时间，单位秒
+    uint32 next_refresh_count_down = 5;// 下一次刷新任务的事件，单位秒
+  }
+  message MysteryGiftInfo {// RV_AdMysteryGift
+    uint32 place_id = 1;// 用于领奖
+    uint32 limit_per_day = 2;// 每日限制次数
+    uint32 interval = 3; // 广告间隔时间，单位秒
+  }
+  message MysteryBoxInfo {// RV_AdMysteryBox
+    uint32 place_id = 1;// 用于领奖
+    uint32 limit_per_day = 2;// 每日限制次数
+    uint32 interval = 3; // 广告间隔时间，单位秒
+    uint32 show_time = 4;// 广告展示时间，单位秒
+  }
+  AdTaskInfo ad_task_info = 1;
+  MysteryGiftInfo mystery_gift_info = 2;
+  MysteryBoxInfo mystery_box_info = 3;
+  uint64 now = 4;  //服务器当前时间，单位秒
+}

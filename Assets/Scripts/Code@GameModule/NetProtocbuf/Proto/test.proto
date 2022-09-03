@@ -1,0 +1,26 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace="DragonU3DSDK.Network.API.Protocol";
+option go_package="protocols";
+
+import "testAdd.proto";
+
+message CTestInfo {
+    string name = 1;
+    uint32 index = 2;
+    CTestConfig config = 3;
+}
+
+
+message  CTestConfig
+{
+    string name = 1;
+    CTestShow show = 2;
+}
+
+
+message CTestShow
+{
+    string info = 1;
+    TinyGameAdd game_add = 2;
+}

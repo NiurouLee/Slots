@@ -1,0 +1,203 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "spinx_common.proto";
+import "spinx_game.proto";
+import "fortunex_system.proto";
+import "fortunex_daily_mission.proto";
+import "fortunex_piggy_bank.proto";
+import "user_profile.proto";
+
+// 获取用户数据
+message CGetUserProfile {}
+
+// 获取用户数据和配置
+message SGetUserProfile {
+    UserProfile user_profile = 1;  // 用户数据
+}
+
+// 更新用户数据
+message CUpdateUserProfile {
+    UserProfile user_profile = 1;  // 用户数据
+}
+
+// 更新用户数据
+message SUpdateUserProfile {
+    UserProfile user_profile = 1;  // 用户数据
+}
+
+// 拉取游戏列表
+message CListGame {}
+
+// 拉取游戏列表
+message SListGame {
+    repeated GameConfig games = 1;  // 游戏列表
+}
+
+// 进入游戏
+message CEnterGame {
+    string game_id = 1;      // 游戏id
+    GameMode game_mode = 2;  // 模式（未启用）
+}
+
+// 进入游戏
+message SEnterGame {
+    repeated GameConfig game_configs = 1;      // 游戏配置(可能有多个)
+    UserProfile user_profile = 2;              // 用户数据
+    repeated JackpotState jackpot_states = 3;  // jackpot状态
+    GameResult game_result = 4;                // 游戏结果
+    repeated uint64 ultra_bets = 5;            // ultra bets
+}
+
+// 离开游戏
+message CLeaveGame {}
+// 离开游戏
+message SLeaveGame {}
+
+// spin
+message CSpin {
+    uint64 bet = 1;          // 投注额
+    string cheat_id = 2;     // 固定结果id（仅测试服生效 ）
+    string pay_control = 3;  // 赔付控制（仅测试服生效）
+    string request_id = 4;   // 请求唯一标识
+    string replay_id = 5;    // 请求回放id（仅测试服生效)
+    string user_group = 6;   // 用户分层
+}
+
+// spin
+message SSpin {
+    GameResult game_result = 1;             // 游戏结果
+    UserProfile user_profile = 2;           // 用户数据
+    repeated AnyStruct system_content = 3;  // 系统内容
+    string request_id = 4;                  // 请求唯一标识
+}
+
+// 特殊游戏
+message CBonusProcess {
+    string json =
+        1;  // json内容格式参考spinx_bonus_info.proto中对应游戏的定义，***Request
+    string cheat_id = 2;    // 固定结果id（仅测试服生效 ）
+    AnyStruct pb = 3;       // pb格式的Bonus请求
+    string request_id = 4;  // 请求唯一标识
+    string user_group = 5; // 用户分层
+}
+
+//
+message SBonusProcess {
+    GameResult game_result = 1;             // 游戏结果
+    UserProfile user_profile = 2;           // 用户数据
+    repeated AnyStruct system_content = 3;  // 系统内容
+    string request_id = 4;                  // 请求唯一标识
+}
+
+// 最后一步流程结算
+message CSettleProcess {
+    string request_id = 1;  // 请求唯一标识
+    string user_group = 2; // 用户分层
+    string cheat_id = 3;     // 固定结果id（仅测试服生效 ）
+}
+
+//
+message SSettleProcess {
+    GameResult game_result = 1;             // 游戏结果
+    UserProfile user_profile = 2;           // 用户数据
+    repeated AnyStruct system_content = 3;  // 系统内容
+    string request_id = 4;                  // 请求唯一标识
+}
+
+// 特殊流程 可以游离于正常状态
+message CSpecialProcess {
+    string request_id = 1;  // 请求唯一标识
+    string user_group = 2;  // 用户分层
+    string cheat_id = 3;    // 固定结果id（仅测试服生效 ）
+    string json = 4;        // json
+}
+
+//
+message SSpecialProcess {
+    GameResult game_result = 1;             // 游戏结果
+    UserProfile user_profile = 2;           // 用户数据
+    repeated AnyStruct system_content = 3;  // 系统内容
+    string request_id = 4;                  // 请求唯一标识
+}
+
+// debug协议
+message CDebug {
+    string json = 1;
+}
+
+message SDebug {
+    UserProfile user_profile = 1;  // 用户数据
+    string json = 2;               // 附加返回信息
+}
+
+message CSystem {}
+
+message SSystem {
+    string json = 1;
+}
+
+// json协议入口
+message CProtocolEntry {
+    string protocol = 1;  // 协议名(C开头的那个 )
+    string json = 2;      // 协议内容（json格式）
+}
+
+// json协议入口
+message SProtocolEntry {
+    string protocl = 1;  // 协议名(S开头的那个)
+    string json = 2;     // 返回的协议内容
+}
+
+// 推送类型
+enum NotificationType {
+    NOTIFICATION_TYPE_NONE = 0;               // 空，占位无用
+    NOTIFICATION_TYPE_GAME_LIST_UPDATED = 1;  // 游戏列表更新了
+    NOTIFICATION_TYPE_ACTIVITY_UPDATED = 2;   // 活动更新了
+    NOTIFICATION_TYPE_EMAIL_UPDATED = 3;      // 邮箱更新了
+    NOTIFICATION_TYPE_JACKPOT = 4;            // Jackpot通知
+    NOTIFICATION_TYPE_REWARDS = 5;            // 奖励推送
+    NOTIFICATION_TYPE_QUEST_PROGRESS = 6;     // 任务进度更新推送
+    NOTIFICATION_TYPE_BIG_WIN = 7;            // bigWin通知
+}
+
+// 推送
+message PNotification {
+    NotificationType notification_type = 1;  // 推送类型
+    string json = 2;                         // json格式通知
+    AnyStruct pb = 3;                        // pb格式通知
+}
+
+// 根据facebook账号获取对应的角色信息
+message CGetUserInfoByFacebook {
+    string facebook_token = 1;
+}
+
+message SGetUserInfoByFacebook {
+    UserProfile user_profile = 1;  // 用户数据
+    string facebook_id = 2;
+    string facebook_name = 3;
+    string facebook_email = 4;
+}
+
+message CFulfillBigWinMultiple {
+}
+
+message SFulfillBigWinMultiple {
+    UserProfile user_profile = 1;           // 用户数据
+}
+
+message CFulfillExtraFreeSpin {
+}
+
+message SFulfillExtraFreeSpin {
+    GameResult game_result = 1;             // 游戏结果; 简单处理下 这里头只有freeSpinInfo数据
+}
+
+message CFulfillExtraWinBonus {
+}
+
+message SFulfillExtraWinBonus {
+    UserProfile user_profile = 1;           // 用户数据
+}

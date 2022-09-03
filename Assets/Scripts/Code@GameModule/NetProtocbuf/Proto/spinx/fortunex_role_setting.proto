@@ -1,0 +1,64 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+import "fortunex_mail.proto";
+
+message UserProfileInRole {  // profile基本信息
+  UserBasicInfo user_basic_info = 5;  // 基础数据，名字，头像框，邮箱等在此
+  uint64 coins = 1;                   // 金币
+  uint64 diamonds = 2;                // 钻石
+  UserVipLevelInfo user_vip_level_info = 4;  // vip相关
+  uint64 playerId = 6;                       //用户ID
+  UserLevelInfo user_level_info = 7;         // 用户等级结构
+}
+
+message MostPlayedGame {
+  string game_id = 1;
+}
+
+message UserGamesInfoInRole {  // 用户games的统计信息
+  uint64 total_spin = 1;       // 用户一共spin的次数
+  uint64 total_win = 2;        // 用户所有的赢钱
+  uint64 biggest_win = 3;  // 用户total win栏中出现过的最大赢钱数
+  uint64 jackpot_hit = 4;  // 用户jackpot 的次数
+  uint64 big_win = 5;      // 用户获得spicial win的次数
+  repeated MostPlayedGame most_played = 6;  // 用户消耗bet的spin次数最多的前三名
+  string total_win_big_int = 7;  // 用户所有的赢钱-大数版本（数字字符串）
+}
+
+message UserRoleInfo {
+  UserProfileInRole userBaseInfo = 1;    // profile信息
+  UserGamesInfoInRole gameStatInfo = 2;  // games统计信息
+  // repeated Mail mails = 3;// // 邮件列表
+}
+
+message CGetUserProfileInRole {  //客户端发起：获取用户角色面板的信息
+}
+
+message SGetUserProfileInRole {  //服务端返回角色面板的信息
+  UserRoleInfo roleInfo = 1;
+}
+
+//更新角色的名字和头像： CUpdateUserProfile
+//单独获取邮箱列表：CListMail
+//领取邮件的奖励：CClaimMail
+
+message CClaimFacebookBindingReward {  // 获取facebook绑定奖励
+}
+
+message SClaimFacebookBindingReward {
+  repeated Reward rewards = 1;   // 奖励列表
+  UserProfile user_profile = 2;  // userProfile信息
+}
+
+message CClaimAppleBindingReward {  // 获取apple绑定奖励
+}
+
+message SClaimAppleBindingReward {
+  repeated Reward rewards = 1;   // 奖励列表
+  UserProfile user_profile = 2;  // userProfile信息
+}

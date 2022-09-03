@@ -1,0 +1,189 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+// TimerBonus几个阶段
+enum TimerBonusStage {
+  NONE_BONUS = 0;
+  HOURLY_BONUS = 1;        // 倒计时奖励阶段
+  LUCKY_WHEEL_BONUS = 2;   // luckyWheelBonus阶段
+  SUPER_WHEEL_BONUS = 3;   // superWheelBonus阶段
+  GOLDEN_WHEEL_BONUS = 4;  // goldenWheelBonus阶段
+}
+
+// 各个wheel对应的id(hourly不适用)
+enum TimerBonusWheelId {
+  NONE = 0;
+  HOURLY = 1;
+  LUCKY_WHEEL = 2;
+  SUPER_WHEEL = 3;
+  GOLDEN_WHEEL = 4;
+}
+
+// wheel种每个扇叶信息
+message WedgeInfo {
+  uint32 id = 1;           // wheel种每个扇叶id
+  uint32 type = 2;         // 扇叶类型
+  uint32 next_type = 3;    // 0-表示结束,其他表示同类型的其他wheel
+  uint32 weight = 4;       // 权重
+  string reward_type = 5;  // 奖励类型
+  Item item = 6;  // 扇叶的奖励内容(非功能性奖励才有此字段)
+}
+
+// 小时奖励内容
+message HourlyBonus {
+  uint32 hourly_current = 1;  // 当前进度
+  uint32 hourly_target = 2;   // 总进度
+  bool award_status =
+      3;  // 是否可以领奖(当current到达target,如果status为true则表示可以进入luckyWheelBonus阶段了)
+  uint32 award_countdown = 4;  // 领奖倒计时(秒)
+  Item item = 5;               // 当前进度的奖励
+}
+
+// wheelBonus内容
+message WheelBonusInfo {
+  uint32 wheel_current = 1;  // wheel的完成进度
+  uint32 wheel_target = 2;  // wheel的目标进度(达到目标进度进入superWheel)
+  bool award_status = 3;// 是否可以领奖
+  uint32 award_countdown = 4;// 领奖倒计时，单位秒
+  uint64 max_coin_normal_wheel = 5;// 单层转盘最大奖励值
+  uint64 max_coin_super_wheel = 6;//三层转盘最大奖励值
+}
+
+// wheel通用定义
+message CommonWheel {
+  string type = 1;          // wheel类型(lucklyWheel/superWheel/goldenWheel)
+  uint32 id = 2;            // 对应各个类型wheel的id信息
+  uint32 wedge_type = 3;    // 对应的wheel扇叶类型
+  uint32 total_weight = 4;  // wedge的权重之和
+  repeated WedgeInfo wedge =
+      5;  // 整个wheel信息(lucklyWheel/superWheel/goldenWheel通用)
+}
+
+message HourlyTimerBonusInfo {
+  uint64 timer_bonus_multiple_percentage = 1;//timerbonus spin buff的倍数百分数 如100表是原来的100% 150表原来的150%。最低为100
+  uint64 coins = 2;//当前金币
+  uint64 coins_max = 3;//最大金币
+  uint64 inc_speed_per_seconds = 4;// 金币增长速度
+  uint64 refresh_count_down = 5;//刷新倒计时，单位秒
+  uint64 spin_buff_level = 6;// 当前timerbonus spin buff的等级
+  repeated uint64 timer_bonus_multiple_percentage_list = 7;// spinBuff等级-加成百分比列表 等级1的取第零个
+}
+
+message BuffTimerbonusSpin {// timerbonusbuff，在CGetBuff；spin的systemContentList中返回
+  uint64 spin_buff_level = 1;// 当前timerbonus spin buff的等级
+  uint64 exp = 2;//当前等级基础上的经验，取值0-99
+  uint64 timer_bonus_multiple_percentage = 3;//timerbonus spin buff的倍数百分数 如100表是原来的100% 150表原来的150%。最低为100
+}
+
+message FortunexNotifyficationHourlyBonus {// 推送消息：hourlyBonus金币填充速度变化
+  HourlyTimerBonusInfo hourly_timer_bonus_info = 1;
+}
+
+// timerBonus基本信息
+message TimerBonusInfo {
+  // 该值不会等于HOURLY_BONUS
+  TimerBonusStage bonus_stage = 1;
+  // 该字段废弃，用hourly_timer_bonus_info
+  HourlyBonus hourly_bonus = 2;
+  WheelBonusInfo wheel_bonus = 3;
+  uint64 hourly_bonus_interval = 4;  // hourlybonus间隔时间 单位分
+  HourlyTimerBonusInfo hourly_timer_bonus_info = 5;// hourlyBonus信息，增长速度的变化通过FortunexNotifyficationHourlyBonus推送消息通知
+}
+
+// spin结果定义
+message SpinWheelResult {
+  uint32 wheel_id = 1;
+  uint32 wedge_type = 2;
+  uint32 odds = 3;         // multiple
+  repeated Item item = 4;  // 累积的奖励(coin/emerald,同类型的进行累积)
+  repeated uint32 hit_wedge_id = 5;  // 每次命中的wedge
+}
+
+// 客户端拉取timerBonus内容
+message CGetTimerBonus {}
+// 服务器返回timerBonsu内容
+message SGetTimerBonus {
+  TimerBonusInfo timer_bonus_info = 1;
+}
+
+// 客户端拉取wheel内容
+message CGetWheelBonus {}
+// 服务器返回wheel的内容
+message SGetWheelBonus {
+  TimerBonusStage bonus_stage = 1;
+  repeated CommonWheel wheel_bonus = 2;
+  // ShopItemConfig pay_item = 3;         //
+  // 计费点内容(goldenWheelBonus才有此内容)
+  float spin_buff_odds = 3;// spinBuff加成对转盘的加成倍数 如 1.2
+}
+
+// 客户端拉取goldenWheelBonus内容
+message CGetGoldenWheelBonus {}
+// 服务器返回goldenWheelBonus内容
+message SGetGoldenWheelBonus {
+  repeated CommonWheel wheel_bonus = 1;
+  ShopItemConfig pay_item = 2;  // 计费点内容(goldenWheelBonus才有此内容)
+  uint64 goden_odds = 3;        // godenOddsList中的某项
+  float spin_buff_odds = 4;// spinBuff加成对转盘的加成倍数 如 1.2
+}
+
+// 客户端领取hourlyBonus奖励
+message CGetHourlyBonus {
+  bool is_ad_watched = 1;//是否观看了广告 
+}
+// 服务器返回hourlyBonus奖励
+message SGetHourlyBonus {
+  Item item = 1;
+  UserProfile user_profile = 2;
+  TimerBonusInfo timer_bonus_info = 3;
+}
+
+// 客户端请求wheel spin
+message CSpinWheel {
+  TimerBonusWheelId wheel_id = 1;  // wheel的id
+}
+// 服务器返回spin结果
+message SSpinWheel {
+  repeated Item item =
+      1;  // 本次wheel spin奖励内容(如果有多个wheel则会累积到一起)
+  repeated SpinWheelResult result = 2;
+  uint64 userBuffGodenOdds = 4;  // 用户buff引起的金币加成
+}
+
+// 客户端领取wheelBonus奖励
+message CCollectWheelBonus {}
+// 服务器返回wheelBonus奖励
+message SCollectWheelBonus {
+  repeated Item item = 1;
+  UserProfile user_profile = 2;
+  TimerBonusInfo timer_bonus_info = 3;
+}
+
+// 客户端发起一次不记进度的wheelbonus转盘，仅用于发奖；
+// 转盘信息，转盘结果及奖品，一次性下发；
+message CSpinWheelBonusWithNoRecord {
+  uint64 place_id = 1;
+}
+
+message SSpinWheelBonusWithNoRecord {
+  repeated CommonWheel wheel_bonus = 1;
+  repeated Item item = 2;  // 本次wheel spin奖励内容
+  SpinWheelResult result = 3;
+  UserProfile user_profile = 4;
+  uint64 userBuffGodenOdds =
+      5;  // 用户buff引起的金币倍数加成 1表未加成 >1表有加成，如2表金币翻倍
+  float spinBuffOdds = 6;// spinBuff加成对转盘的加成倍数 如 1.2
+}
+
+message CNotifyAdWatchedForWheel {// 通知观看了转盘内的广告
+
+}
+
+message SNotifyAdWatchedForWheel {
+  TimerBonusInfo timer_bonus_info = 1;
+}

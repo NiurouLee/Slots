@@ -1,0 +1,117 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "fortunex_newbie_quest.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message SeasonQuest {
+    bool is_locked = 1;                         // 本系统功能是否锁住
+    uint32 unlock_level = 2;                    // 开锁等级
+    bool newbie_quest_not_over = 3;             // 新手还没搞完； 表示一种is_locked = true 的原因，另一种原因是上面的等级
+    uint64 current_season_timestamp_left = 4;   // 当前赛季剩余时间，单位秒。如果正在空窗期则是0
+    uint32 current_season_id = 5;               // 当前赛季id
+    uint64 season_id = 6;                       // 玩家正在进行的赛季id， 如果没有赛季则是0，如果 season_id != current_season_id; 且current_season_id>0 则要调用refresh api
+    uint64 timestamp_left = 7;                  // 玩家正在进行的赛季倒计时，单位秒。如果过期则是0
+    repeated PhrasedQuest quests = 8;       // 推图,  跟NewbieQuest的quest一样，这次都是is_slot类型
+    uint32 phrase = 10;                         // phrase 0 1 2
+    uint32 difficulty = 11;                     // 难度， 0表示还没选难度
+    uint64 stars = 12;                          // 星星
+    uint32 buff_diamond = 13;                   // buff 钻石消耗
+    uint32 buff_minutes = 14;                   // buff 持续时间
+}
+
+message PhrasedQuest {
+    bool is_slot = 1;     // 是机台进度还是奖励进度
+    string game_id = 2;   // 机台的gameId
+    string asset_id = 3;  // 机台的assetId， 普通机台gameID=assetId,
+    // Quest机台用assetId寻找普通机台里的资源
+    repeated Mission missions = 4;  // 机台进度的任务
+    Reward reward = 5;              // 奖励
+    bool collectable = 6;           // 是否可完成
+    bool collected = 7;             // 是否已完成
+    uint32 phrase = 8;              // phrase
+    uint32 spin_count = 9;          // spin次数
+}
+
+// 读season quest 信息
+message CGetSeasonQuest {}
+
+message SGetSeasonQuest {
+    SeasonQuest season_quest = 1;  // guides
+}
+
+// 刷新
+message CRefreshSeasonQuest {
+}
+
+message SRefreshSeasonQuest {
+    SeasonQuest season_quest = 1;  // 赛季quest
+}
+
+// 收集完成奖励
+message CCollectSeasonQuestReward {
+    uint32 index = 1;  // Quest的index,从0开始
+}
+
+message SCollectSeasonQuestReward {
+    SeasonQuest season_quest = 1;  // 赛季quest
+    UserProfile user_profile = 2;  // 用户数据
+}
+
+// 读难度奖励
+message CGetSeasonQuestDifficultyRewards {
+}
+
+message SGetSeasonQuestDifficultyRewards {
+    repeated Reward rewards = 1;  // 奖励:难度[0,1,2]
+}
+
+// 选难度
+message CChooseSeasonQuestDifficulty {
+    uint32 difficulty = 1; // 难度
+}
+
+message SChooseSeasonQuestDifficulty {
+    SeasonQuest season_quest = 1;  // 赛季quest
+}
+
+// 读商品信息
+message CGetSeasonQuestPaymentItems {}
+
+message SGetSeasonQuestPaymentItems {
+    repeated ShopItemConfig items = 1;
+}
+
+// 钻石买双倍经验物品, 结果体现在userBuff上
+message CSeasonQuestBuyDoubleExp {}
+
+message SSeasonQuestBuyDoubleExp {
+    UserProfile user_profile = 1;  // 用户数据
+}
+
+// 排行榜
+message CSeasonQuestLeaderboard {
+}
+
+message SSeasonQuestLeaderboard {
+    message Rank {
+        string name = 1;
+        uint32 avatar_id = 2;  // 默认头像
+        uint64 stars = 4;
+        string avatar_url = 5;  // facebook头像url，没有就是空
+        uint64 rank = 6;// 玩家排名 如 1，2，3
+        uint64 player_id = 7;// 玩家playerid 机器人的为0
+    }
+    message RankReward {
+        uint32 from = 1;
+        uint32 to = 2;
+        Reward reward = 3;
+    }
+    repeated Rank ranks = 1; // 排行榜
+    uint32 my_rank = 2; // 0是未上榜
+    uint64 coins = 3; // top金币现实
+    repeated RankReward rank_rewards = 4; // 排行奖励
+}

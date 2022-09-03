@@ -1,0 +1,85 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+// payment内容
+message PaymentInfo {
+    uint32 payment_id = 1;          // 商品id
+    string product_id_android = 2;  // 商品在GooglePlay对应的id
+    string product_id_ios = 3;      // 商品在IOS对应的id
+}
+
+// StoreBonus内容
+message StoreBonus {
+    bool can_get = 1;           // 是否可以领取
+    uint32 countdown_time = 2;  // 领取倒计时(秒)
+    uint64 coins = 3;           // 可领取的金币(可以领取的时候展示)
+    string description = 4;     // 描述
+}
+
+// // 商城计费点配置信息
+// message ShopItemConfig {
+//     string product_id = 1;                          //
+//     商品在GooglePlay/AppStore内的id uint32 payment_id = 2; //
+//     对应的payment_id(实际商品) string product_type = 3; //
+//     商品类型(coin/diamond/boost) string shop_type = 4; // 计费点触发类型
+//     string name = 5;                                // 名字
+//     string description = 6;                         // 描述
+//     string image = 7;                               //
+//     商品图片(对应priority的值) float price = 8; // 美元价格 bool best_value =
+//     9;                            // 最有价值 bool most_popular = 10; //
+//     最受欢迎 bool on_sale = 11;                              // 限时促销
+//     uint32 on_sale_time = 12;                       // 限时促销倒计时(秒)
+//     float show_discount = 13;                       // 显示折扣
+//     uint32 vip_point = 14;                          // vip经验
+//     string extra = 15;                              // 扩展信息
+//     repeated Item sub_item_list = 16;               // 实际物品信息
+//     uint32 mail_template_id = 17;
+// }
+
+// 支付相关内容基本信息
+message PaymentBaseInfo {
+    repeated PaymentInfo item_list = 1;  // 所有的商品payment信息
+    StoreBonus store_bonus = 2;          // storeBonus内容
+}
+
+// 客户端获取商店信息
+message CGetShop {}
+// 服务器返回商店信息
+message SGetShop {
+    repeated string ad_content = 1;         // 广告语
+    uint32 vip_level = 2;                   // vip等级
+    float vip_coin_addition = 3;            // vip金币加成
+    repeated ShopItemConfig item_list = 4;  // 商品列表
+    GiftBox gift_box = 5;                   // giftBox内容
+    StoreBonus store_bonus = 6;             // storeBonus内容
+}
+
+// 客户端领取storeBonus奖励
+message CGetStoreBonus {}
+// 服务器返回StoreBonus领取结果
+message SGetStoreBonus {
+    uint64 add_coins = 1;               // 奖励的coin数量
+    uint32 countdown_time = 2;          // 到下次能领取的倒计时(秒)
+    UserProfile user_profile = 3;       // 用户信息
+    repeated Reward extra_rewards = 4;  // 额外奖励reward
+}
+
+// 客户端领取giftBox奖励
+message CGetGiftBox {}
+// 服务器返回giftBox领取结果
+message SGetGiftBox {
+    uint64 add_coins = 1;          // 奖励的coin数量
+    UserProfile user_profile = 2;  // 用户信息
+}
+
+// 客户端拉取支付相关内容基本信息(大厅展示内容相关)
+message CGetPaymentBaseInfo {}
+// 服务器返回支付相关内容基本信息
+message SGetPaymentBaseInfo {
+    PaymentBaseInfo base_info = 1;  // 基本信息
+}

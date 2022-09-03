@@ -1,0 +1,47 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+enum WinLevel {
+    WIN_LEVEL_INVALID = 0;
+    WIN_LEVEL_SMALL = 1;
+    WIN_LEVEL_MIDDLE = 2;
+    WIN_LEVEL_BIG = 3;
+    WIN_LEVEL_HUGE = 4;
+    WIN_LEVEL_MASSIVE = 5;
+    WIN_LEVEL_EPIC = 6;
+    WIN_LEVEL_COLOSSAL = 7;
+}
+
+// 任意类型
+message AnyStruct {
+    string type = 1; // 结构类型
+    bytes data = 2;  // pb格式数据
+}
+
+// 阵营枚举
+enum GameRoomCampType {
+    CAMP_RED = 0;   // 红方
+    CAMP_BLUE = 1;  // 蓝方
+    CAMP_MAX = 2;
+}
+
+// 房间成员信息
+message GameRoomMemberInfo {
+    uint32 player_id = 1;       // 玩家id
+    string avatar_id = 2;       // 玩家头像id
+    string avatar_frame_id = 3; // 头像框id
+    int32 camp = 4;             // 所在阵营id
+}
+
+// 房间信息
+message GameRoomInfo {
+    string room_id = 1;         // 房间id
+    string game_id = 2;         // 房间对应的机台id
+    repeated GameRoomMemberInfo players = 3;    // 房间里的玩家列表
+    uint32 camp_red_player_count = 4;   // 红方玩家数量
+    uint32 camp_blue_player_count = 5;  // 蓝方玩家数量
+    AnyStruct extra_info = 6;           // 房间扩展信息
+    uint32 status = 7;                  // 房间状态，0 正常，1中了bonus，2删除
+    uint64 expire = 8;                  // 房间过期时间
+}

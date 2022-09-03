@@ -1,0 +1,46 @@
+syntax = "proto3";
+option java_package = "com.dragonplus.network.api.protocol";
+option csharp_namespace = "DragonU3DSDK.Network.API.Protocol";
+
+import "fortunex_system.proto";
+import "spinx_common.proto";
+import "user_profile.proto";
+
+message CGetGuide {}
+
+message GuideInfo {
+  repeated Guide guides = 1;  // guides
+}
+
+message SGetGuide {
+  GuideInfo guide_info = 1;
+}
+
+message CCompleteGuide {
+  uint32 id = 1;  // guide id
+}
+
+message SCompleteGuide {
+  GuideInfo guide_info = 1;
+  UserProfile user_profile = 2;  // 用户数据
+}
+
+message CUpdateGuideStep {
+  uint32 id = 1;    // guide id
+  uint32 step = 2;  // 进度更新
+}
+
+message SUpdateGuideStep {
+  GuideInfo guide_info = 1;
+}
+
+message Guide {
+  uint32 id = 1;                // guide id
+  string type = 2;              // guide type
+  bool completed = 3;           //
+  Reward reward = 4;            // 奖励
+  repeated uint32 pre_ids = 5;  // 前戏
+  uint32 step = 6;              // 进度
+  uint32 total_step = 7;        // 总进度
+  string game_id = 8;           // gameId
+}

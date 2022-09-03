@@ -1,0 +1,486 @@
+{
+  "CListGame": {
+    "method": "GET",
+    "uri": "/api/spinx/game/list"
+  },
+  "CEnterGame": {
+    "method": "POST",
+    "uri": "/api/spinx/game/enter"
+  },
+  "CSpin": {
+    "method": "POST",
+    "uri": "/api/spinx/game/spin"
+  },
+  "CProtocolEntry": {
+    "method": "POST",
+    "uri": "/api/spinx/entry"
+  },
+  "CGetUserProfile": {
+    "method": "GET",
+    "uri": "/api/spinx/user"
+  },
+  "CUpdateUserProfile": {
+    "method": "POST",
+    "uri": "/api/spinx/user"
+  },
+  "CBonusProcess": {
+    "method": "POST",
+    "uri": "/api/spinx/game/bonus_process"
+  },
+  "CSettleProcess": {
+    "method": "POST",
+    "uri": "/api/spinx/game/settle_process"
+  },
+  "CSpecialProcess": {
+    "method": "POST",
+    "uri": "/api/spinx/game/special_process"
+  },
+  "CFulfillBigWinMultiple": {
+    "method": "POST",
+    "uri": "/api/spinx/game/fulfill_big_win_multiple"
+  },
+  "CFulfillExtraFreeSpin": {
+    "method": "POST",
+    "uri": "/api/spinx/game/fulfill_extra_free_spin"
+  },
+  "CFulfillExtraWinBonus": {
+    "method": "POST",
+    "uri": "/api/spinx/game/fulfill_extra_win_bonus"
+  },
+  "CDebug": {
+    "method": "POST",
+    "uri": "/api/spinx/debug"
+  },
+  "CSetCoins": {
+    "method": "POST",
+    "uri": "/api/spinx/debug/set_coins"
+  },
+  "CSystem": {
+    "method": "GET",
+    "uri": "/api/spinx/system"
+  },
+  "CGetDailyBonus": {
+    "method": "GET",
+    "uri": "/api/spinx/system/daily_bonus"
+  },
+  "CCollectDailyBonus": {
+    "method": "POST",
+    "uri": "/api/spinx/system/daily_bonus"
+  },
+  "CGetDailyMission": {
+    "method": "GET",
+    "uri": "/api/spinx/system/daily_mission"
+  },
+  "CRefreshDailyMission": {
+    "method": "POST",
+    "uri": "/api/spinx/system/daily_mission/refresh"
+  },
+  "CCollectDailyMission": {
+    "method": "POST",
+    "uri": "/api/spinx/system/daily_mission/collect"
+  },
+  "CCompleteNowDailyMission": {
+    "method": "POST",
+    "uri": "/api/spinx/system/daily_mission/complete_now"
+  },
+  "CGetMissionPass": {
+    "method": "GET",
+    "uri": "/api/spinx/system/mission_pass"
+  },
+  "CGetMissionPassPaymentItems": {
+    "method": "GET",
+    "uri": "/api/spinx/system/mission_pass/payment_items"
+  },
+  "CRefreshMissionPass": {
+    "method": "POST",
+    "uri": "/api/spinx/system/mission_pass/refresh"
+  },
+  "CCollectMissionPass": {
+    "method": "POST",
+    "uri": "/api/spinx/system/mission_pass/collect"
+  },
+  "CCollectAllMissionPass": {
+    "method": "POST",
+    "uri": "/api/spinx/system/mission_pass/collect_all"
+  },
+  "CDiamondBuyLevelMissionPass": {
+    "method": "POST",
+    "uri": "/api/spinx/system/mission_pass/buy_level"
+  },
+  "CGetShop": {
+    "method": "GET",
+    "uri": "/api/spinx/system/shop"
+  },
+  "CGetStoreBonus": {
+    "method": "POST",
+    "uri": "/api/spinx/system/shop/get_store_bonus"
+  },
+  "CGetGiftBox": {
+    "method": "POST",
+    "uri": "/api/spinx/system/shop/get_gift_box"
+  },
+  "CGetPaymentBaseInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/shop/payment_base_info"
+  },
+  "CGetPiggyBank": {
+    "method": "GET",
+    "uri": "/api/spinx/system/piggy_bank"
+  },
+  "CGetTimerBonus": {
+    "method": "GET",
+    "uri": "/api/spinx/system/timer_bonus"
+  },
+  "CGetWheelBonus": {
+    "method": "GET",
+    "uri": "/api/spinx/system/timer_bonus/wheel_info"
+  },
+  "CGetGoldenWheelBonus": {
+    "method": "GET",
+    "uri": "/api/spinx/system/timer_bonus/golden_wheel_info"
+  },
+  "CSpinWheel": {
+    "method": "POST",
+    "uri": "/api/spinx/system/timer_bonus/spin_wheel"
+  },
+  "CGetHourlyBonus": {
+    "method": "POST",
+    "uri": "/api/spinx/system/timer_bonus/get_hourly_bonus"
+  },
+  "CCollectWheelBonus": {
+    "method": "POST",
+    "uri": "/api/spinx/system/timer_bonus/collect_wheel_bonus"
+  },
+  "CSpinWheelBonusWithNoRecord": {
+    "method": "POST",
+    "uri": "/api/spinx/system/timer_bonus/spin_wheel_bonus_norecord"
+  },
+  "CNotifyAdWatchedForWheel": {
+    "method": "POST",
+    "uri": "/api/spinx/system/timer_bonus/notify_ad_watched_for_wheel"
+  },
+  "CGetVipInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/vip"
+  },
+  "CGetBuff": {
+    "method": "GET",
+    "uri": "/api/spinx/system/buff"
+  },
+  "CGetGuide": {
+    "method": "GET",
+    "uri": "/api/spinx/system/guide"
+  },
+  "CCompleteGuide": {
+    "method": "POST",
+    "uri": "/api/spinx/system/guide"
+  },
+  "CUpdateGuideStep": {
+    "method": "POST",
+    "uri": "/api/spinx/system/guide/step"
+  },
+  "CGetNewbieQuest": {
+    "method": "GET",
+    "uri": "/api/spinx/system/newbie_quest"
+  },
+  "CCollectNewbieQuest": {
+    "method": "POST",
+    "uri": "/api/spinx/system/newbie_quest"
+  },
+  "CGetNewbieQuestPaymentItems": {
+    "method": "GET",
+    "uri": "/api/spinx/system/newbie_quest/payment_items"
+  },
+  "CGetAdvertisement": {
+    "method": "GET",
+    "uri": "/api/spinx/system/advertisement/list"
+  },
+  "CGetAdvertisementItem": {
+    "method": "GET",
+    "uri": "/api/spinx/system/advertisement/info"
+  },
+  "CClaimAdReward": {
+    "method": "POST",
+    "uri": "/api/spinx/system/advertisement/claim_ad_reward"
+  },
+  "CGetRVAdvertisingConfig": {
+    "method": "GET",
+    "uri": "/api/spinx/system/advertisement/rv_advertising_config"
+  },
+  "CListMail": {
+    "method": "GET",
+    "uri": "/api/mail"
+  },
+  "CClaimMail": {
+    "method": "POST",
+    "uri": "/api/mail/claim"
+  },
+  "CGetUserProfileInRole": {
+    "method": "GET",
+    "uri": "/api/spinx/system/role"
+  },
+  "CGetUserInfoByFacebook": {
+    "method": "GET",
+    "uri": "/api/spinx/user/get_user_by_facebook"
+  },
+  "CRefreshWeekendVipMail": {
+    "method": "POST",
+    "uri": "/api/spinx/system/mail/refresh"
+  },
+  "CClaimFacebookBindingReward": {
+    "method": "POST",
+    "uri": "/api/spinx/system/role/getFacebookBindingRewards"
+  },
+  "CClaimAppleBindingReward": {
+    "method": "POST",
+    "uri": "/api/spinx/system/role/getAppleBindingRewards"
+  },
+  "CBankrupt": {
+    "method": "POST",
+    "uri": "/api/spinx/system/bankrupt"
+  },
+  "CGetSeasonQuest": {
+    "method": "GET",
+    "uri": "/api/spinx/system/season_quest"
+  },
+  "CRefreshSeasonQuest": {
+    "method": "POST",
+    "uri": "/api/spinx/system/season_quest"
+  },
+  "CCollectSeasonQuestReward": {
+    "method": "POST",
+    "uri": "/api/spinx/system/season_quest/collect"
+  },
+  "CGetSeasonQuestDifficultyRewards": {
+    "method": "GET",
+    "uri": "/api/spinx/system/season_quest/difficulty"
+  },
+  "CChooseSeasonQuestDifficulty": {
+    "method": "POST",
+    "uri": "/api/spinx/system/season_quest/difficulty"
+  },
+  "CSeasonQuestBuyDoubleExp": {
+    "method": "POST",
+    "uri": "/api/spinx/system/season_quest/buy_double_exp"
+  },
+  "CGetSeasonQuestPaymentItems": {
+    "method": "GET",
+    "uri": "/api/spinx/system/season_quest/payment"
+  },
+  "CSeasonQuestLeaderboard": {
+    "method": "POST",
+    "uri": "/api/spinx/system/season_quest/leaderboard"
+  },
+  "CGetActivityUserData": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/getUserData"
+  },
+  "CGetCashBackBuffRewardMail": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/getCashBackBuffRewardMail"
+  },
+  "CGetUserCashBackBuffs": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/getUserCashBackBuffs"
+  },
+  "CGetUserCoupons": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/getUserCoupons"
+  },
+  "CBindCouponToStore": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/bindCouponToStore"
+  },
+  "CGetValentineMainPageInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/getValentineMainPageInfo"
+  },
+  "CCollectValentineRewards": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/collectValentineRewards"
+  },
+  "CGetValentinePayItemInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/getValentinePayItemInfo"
+  },
+  "CGetIndependenceDayMainPageInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/getIndependenceDayMainPageInfo"
+  },
+  "CCollectIndependenceDayRewards": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/collectIndependenceDayRewards"
+  },
+  "CGetIndependenceDayPayItemInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/getIndependenceDayPayItemInfo"
+  },
+  "CGetEggInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/egg"
+  },
+  "CSmashEgg": {
+    "method": "POST",
+    "uri": "/api/spinx/system/egg"
+  },
+  "CGetEggPaymentItems": {
+    "method": "GET",
+    "uri": "/api/spinx/system/egg/payment_items"
+  },
+  "CGetCardAlbumInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/collect/main_page_info"
+  },
+  "CAcceptCardReward": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/accept_card_reward"
+  },
+  "CGetCardLuckySpinInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/collect/lucky_spin_info"
+  },
+  "CCardLuckySpin": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/lucky_spin"
+  },
+  "CCardLuckySpinAll": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/lucky_spin_all"
+  },
+  "CCollectLuckySpinRewards": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/collect_lucky_spin_reward"
+  },
+  "CMarkViewCardSet": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/mark_view_card_set"
+  },
+  "CGetCardRecycleGameInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/collect/recycle_game_info"
+  },
+  "CCardRecycleGameSpin": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/recycle_game_spin"
+  },
+  "CGetCardGotRecords": {
+    "method": "GET",
+    "uri": "/api/spinx/system/collect/card_got_records"
+  },
+  "CHatGameInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/collect/hat_game_info"
+  },
+  "CHatGameSelect": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/hat_game_spin"
+  },
+  "CHatGameHandleRabbit": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/hat_game_handle_rabbit"
+  },
+  "CHatGameCollectRewards": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/hat_game_collect_rewards"
+  },
+  "CGetMonopolyRoundListInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/get_monopoly_round_list_info"
+  },
+  "CGetMonopolyRoundInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/get_monopoly_round_info"
+  },
+  "CMonopolySpin": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/monopoly_spin"
+  },
+  "CMonopolyShootAgain": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/monopoly_shoot_again"
+  },
+  "CMonopolyTicketPaymentInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/monopoly_ticket_payment_info"
+  },
+  "CMonopolyOpenGiftBox": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/monopoly_open_gift_box"
+  },
+  "CMonopolyChangeBeginnerGuideStep": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/monopoly_change_beginner_guide_step"
+  },
+  "CMonopolyTeleport": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/monopoly_teleport"
+  },
+  "CGetMonopolyDailyTaskInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/monopoly_daily_task_info"
+  },
+  "CGetMonopolyPuzzleListInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/monopoly_puzzle_list_info"
+  },
+  "CCollectMonopolyPuzzleReward": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/collect_monopoly_puzzle_reward"
+  },
+  "CGetMonopolyLeaderboard": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/monopoly_leader_board"
+  },
+  "CGetMonopolyLeaderboardReward": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/collect_monopoly_leader_board_reward"
+  },
+  "CGetLevelRushPopUpInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/level_rush/pop_up_info"
+  },
+  "CLevelRushIncrementTime": {
+    "method": "POST",
+    "uri": "/api/spinx/system/level_rush/increment_time"
+  },
+  "CLevelRushGamePlay": {
+    "method": "POST",
+    "uri": "/api/spinx/system/level_rush/game_play"
+  },
+  "CGetActivitiesOpenTime": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/activities_open_time"
+  },
+  "CGetCoinDashInfo": {
+    "method": "GET",
+    "uri": "/api/spinx/system/activity/coin_dash_info"
+  },
+  "CBuyCoinDashFreeGoods":{
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/coin_dash_free_goods"
+  },
+  "CReceiveRewardsInCoupon": {
+    "method": "POST",
+    "uri": "/api/spinx/system/coupon/receive_rewards_in_coupon"
+  },
+  "CIncBeginnersGuideStep": {
+    "method": "POST",
+    "uri": "/api/spinx/system/collect/inc_beginners_guide_step"
+  },
+  "CClaimRushPassRewards": {
+    "method": "POST",
+    "uri": "/api/spinx/system/activity/claim_rush_pass_rewards"
+  },
+  "CGetSuperSpinPaymentInfo": {
+    "method": "POST",
+    "uri": "/api/spinx/system/super_spin/payment_info"
+  },
+  "CGetInfoBeforeEnterLobby": {
+    "method": "GET",
+    "uri": "/api/spinx/system/get_info_before_enter_lobby"
+  },
+  "CGetRequestCache": {
+    "method": "GET",
+    "uri": "/api/spinx/request_cache"
+  }
+}
